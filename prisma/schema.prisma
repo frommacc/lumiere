@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// AUTH & USER MODELS
+// ==========================================
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  emailVerified Boolean       @default(false)
+  image         String?
+  imageId       String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  role          Role          @default(USER)
+  phone         String
+  sessions      Session[]
+  accounts      Account[]
+  reservations  Reservation[]
+  reviews       Review[]
+  orders        Order[]      
+
+  @@map("user")
+}
+
+enum Role {
+  USER       
+  STAFF      
+  KITCHEN    
+  MANAGER    
+  ADMIN      
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ==========================================
+// RESTAURANT DOMAIN MODELS
+// ==========================================
+
+model Category {
+  id           String     @id @default(cuid())
+  slug         String     @unique 
+  name         String     
+  description  String?
+  image        String
+  imageId      String?
+  displayOrder Int        @default(0)
+  menuItems    MenuItem[]
+
+  @@map("category")
+}
+
+model MenuItem {
+  id          String              @id @default(cuid())
+  name        String
+  description String
+  price       Int
+  image       String
+  imageId     String?
+  isPopular   Boolean             @default(false)
+  isExclusive Boolean             @default(false)
+  isSpecial   Boolean             @default(false)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  categoryId  String
+  category    Category            @relation(fields: [categoryId], references: [id])
+
+  provenance  MenuItemProvenance?
+  orderItems  OrderItem[]        
+
+  @@map("menu_item")
+}
+
+model MenuItemProvenance {
+  id         String   @id @default(cuid())
+  title      String
+  origin     String
+  details    String
+  image      String
+  imageId    String?
+  menuItemId String   @unique
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@map("menu_item_provenance")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  text      String
+  name      String
+  role      String
+  rating    Int 
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("review")
+}
+
+// ==========================================
+// ORDER MODELS (Нарачки од најавени корисници)
+// ==========================================
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  total           Int
+  status          OrderStatus @default(PENDING)
+  notes           String?     
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items           OrderItem[]
+
+  @@index([userId])
+  @@map("order")
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  quantity   Int
+  price      Int 
+  notes      String?  
+
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_item")
+}
+
+// ==========================================
+// RESERVATIONS
+// ==========================================
+
+model TableType {
+  id           String        @id @default(cuid())
+  slug         String        @unique 
+  name         String
+  description  String?
+  capacity     Int?
+  reservations Reservation[]
+
+  @@map("table_type")
+}
+
+model Reservation {
+  id              String    @id @default(cuid())
+  date            DateTime
+  time            String
+  guests          Int
+  name            String
+  phone           String
+  email           String
+  specialRequests String?
+
+  tableTypeId     String
+  tableType       TableType @relation(fields: [tableTypeId], references: [id])
+
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("reservation")
+}
