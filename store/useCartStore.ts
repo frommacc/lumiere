@@ -9,6 +9,9 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface CartStore {
+  _hasHydrated: boolean // 1. Следење дали е вчитано од localStorage
+  setHasHydrated: (state: boolean) => void
+
   isOpen: boolean
   openCart: () => void
   closeCart: () => void
@@ -34,12 +37,14 @@ interface CartStore {
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
+      _hasHydrated: false,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
+
       isOpen: false,
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
 
-      // Состојба за методот на достава (стандардно 'ADDRESS')
       deliveryMethod: 'ADDRESS',
       setDeliveryMethod: (method: DeliveryMethod) =>
         set({ deliveryMethod: method }),
@@ -113,12 +118,15 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'cart-storage',
-      // Го зачувуваме и deliveryMethod во localStorage
       partialize: (state) => ({
         cart: state.cart,
         deliveryMethod: state.deliveryMethod,
         paymentMethod: state.paymentMethod,
       }),
+      // 2. Се повикува кога завршува или започнува процесот на хидратација од localStorage
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true)
+      },
     },
   ),
 )

@@ -41,7 +41,7 @@ export default function SideCart() {
       open={isOpen}
       onOpenChange={(open) => !open && handleResetAndClose()}
     >
-      <SheetContent className='w-full max-w-md bg-surface border-l border-outline-variant/30 p-0 flex flex-col z-50 shadow-2xl [&>button]:hidden'>
+      <SheetContent className='w-[90%]! max-w-md bg-surface border-l border-outline-variant/30 p-0 flex flex-col z-50 shadow-2xl [&>button]:hidden'>
         {/* Header */}
         <SheetHeader className='flex flex-row justify-between items-center px-6 py-5 border-b border-outline-variant/20 space-y-0'>
           <div className='flex items-center gap-2'>
@@ -82,7 +82,7 @@ export default function SideCart() {
           /* Items list and checkout details */
           <div className='flex-1 flex flex-col overflow-hidden'>
             {/* Items List */}
-            <div className='flex-1 overflow-y-auto p-6 space-y-4'>
+            <div className='flex-1 overflow-y-auto p-4 md:p-6 space-y-4'>
               <p className='text-[10px] font-sans font-bold uppercase tracking-widest text-primary border-b border-outline-variant/10 pb-2'>
                 Избрани Специјалитети ({getTotalCount()})
               </p>
@@ -153,7 +153,7 @@ export default function SideCart() {
             </div>
 
             {/* Избор на метод на достава */}
-            <div className='space-y-4 mb-8 p-6'>
+            <div className='hidden md:block space-y-4 p-6'>
               <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>
                 Метод на испорака
               </label>

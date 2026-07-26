@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, Montserrat, Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/Layout/Navbar'
-import Footer from '@/components/Layout/Footer'
 import { cn } from '@/lib/utils'
-import ReservationModal from '@/components/ReservationModal'
-import SideCart from '@/components/SideCart'
+
 import { Suspense } from 'react'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -45,14 +43,8 @@ export default function RootLayout({
       )}
     >
       <body className='min-h-full flex flex-col'>
-        <Navbar />
-
         <Suspense fallback={null}>{children}</Suspense>
-        <Footer />
-        <Suspense fallback={null}>
-          <ReservationModal />
-        </Suspense>
-        <SideCart />
+        <Toaster />
       </body>
     </html>
   )

@@ -47,7 +47,7 @@ export function DeliveryAndPayment() {
         </div>
 
         <Link
-          href='/login'
+          href='/login?redirect_url=/cart'
           className='inline-flex items-center justify-center gap-3 w-full bg-primary py-4 px-6 text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase transition-transform active:scale-[0.98] hover:opacity-90'
         >
           <LogIn className='w-4 h-4' />
@@ -57,8 +57,6 @@ export function DeliveryAndPayment() {
     )
   }
 
-  // 3. Формата ја прикажуваме дури кога го имаме усерот
-  // Со key={user.id} гарантираме дека useState ќе ги добие точните податоци
   return <DeliveryAndPaymentForm key={user.id} user={user} />
 }
 
