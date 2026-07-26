@@ -1,3 +1,5 @@
+import { calculateDeliveryFee } from '@/lib/constants/delivery'
+import { DeliveryMethod, PaymentMethod } from '@/lib/generated/prisma'
 import {
   CartItem,
   MenuItemWithRelations,
@@ -12,20 +14,39 @@ interface CartStore {
   closeCart: () => void
   toggleCart: () => void
 
+  deliveryMethod: DeliveryMethod
+  setDeliveryMethod: (method: DeliveryMethod) => void
+
+  paymentMethod: PaymentMethod
+  setPaymentMethod: (method: PaymentMethod) => void
+
   cart: CartItem[]
   addItem: (menuItem: MenuItemWithRelations) => void
   updateQuantity: (itemId: string, newQuantity: number) => void
   removeItem: (itemId: string) => void
   clearCart: () => void
+
+  getTotalPrice: () => number
+  getTotalCount: () => number
+  getDeliveryFee: (method?: DeliveryMethod) => number
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       isOpen: false,
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
+
+      // Состојба за методот на достава (стандардно 'ADDRESS')
+      deliveryMethod: 'ADDRESS',
+      setDeliveryMethod: (method: DeliveryMethod) =>
+        set({ deliveryMethod: method }),
+
+      paymentMethod: 'CARD',
+      setPaymentMethod: (method: PaymentMethod) =>
+        set({ paymentMethod: method }),
 
       cart: [],
 
@@ -37,8 +58,11 @@ export const useCartStore = create<CartStore>()(
           )
 
           if (existingIndex > -1) {
-            const updatedCart = [...state.cart]
-            updatedCart[existingIndex].quantity += 1
+            const updatedCart = state.cart.map((item, index) =>
+              index === existingIndex
+                ? { ...item, quantity: item.quantity + 1 }
+                : item,
+            )
             return { cart: updatedCart, isOpen: true }
           }
 
@@ -69,11 +93,32 @@ export const useCartStore = create<CartStore>()(
           cart: state.cart.filter((item) => item.menuItem.id !== itemId),
         })),
 
-      clearCart: () => set({ cart: [] }),
+      clearCart: () =>
+        set({ cart: [], deliveryMethod: 'ADDRESS', paymentMethod: 'CARD' }),
+
+      getTotalPrice: () => {
+        return get().cart.reduce(
+          (total, item) => total + item.menuItem.price * item.quantity,
+          0,
+        )
+      },
+      getTotalCount: () => {
+        return get().cart.reduce((acc, item) => acc + item.quantity, 0)
+      },
+      getDeliveryFee: (method?: DeliveryMethod) => {
+        const itemsTotal = get().getTotalPrice()
+        const selectedMethod = method || get().deliveryMethod
+        return calculateDeliveryFee(itemsTotal, selectedMethod)
+      },
     }),
     {
       name: 'cart-storage',
-      partialize: (state) => ({ cart: state.cart }),
+      // Го зачувуваме и deliveryMethod во localStorage
+      partialize: (state) => ({
+        cart: state.cart,
+        deliveryMethod: state.deliveryMethod,
+        paymentMethod: state.paymentMethod,
+      }),
     },
   ),
 )

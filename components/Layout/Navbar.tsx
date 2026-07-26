@@ -9,8 +9,9 @@ import Link from 'next/link'
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { openReservation } = useReservationStore()
-  const { cart, openCart } = useCartStore()
-  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0)
+  const { getTotalCount, openCart } = useCartStore()
+
+  const cartCount = getTotalCount()
 
   const navLinks = [
     { label: 'Специјалитети', href: '/#specialties' },
@@ -104,14 +105,14 @@ export default function Navbar() {
         <div className='md:hidden border-t border-outline-variant/15 bg-surface/95 backdrop-blur-2xl'>
           <div className='flex flex-col space-y-4 p-6'>
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className='font-sans text-sm uppercase tracking-wider hover:text-primary transition-colors'
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <button
               onClick={() => {

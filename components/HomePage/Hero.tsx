@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 export default function Hero() {
   const { openReservation } = useReservationStore()
-  const onScrollToMenu = () => {}
+
   return (
     <header
       id='home'
@@ -67,8 +67,7 @@ export default function Hero() {
           className='flex flex-col sm:flex-row items-center justify-center gap-4'
         >
           <Link
-            href='#menu'
-            onClick={onScrollToMenu}
+            href='/menu'
             className='group w-full sm:w-auto bg-primary text-primary-foreground font-sans text-xs uppercase tracking-[0.2em] font-semibold px-10 py-4 hover:shadow-[0_0_25px_rgba(242,202,80,0.4)] hover:bg-primary-container active:scale-95 transition-all duration-300 flex items-center justify-center gap-2'
           >
             НАРАЧАЈ ОНЛАЈН

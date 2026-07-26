@@ -156,35 +156,67 @@ model Review {
 // ==========================================
 
 enum OrderStatus {
+  PENDING       // Внесена нарачка
+  CONFIRMED     // Потврдена од ресторан
+  PREPARING     // Се подготвува во кујна
+  READY         // Подготвена за подигање / преземање од доставувач
+  IN_TRANSIT    // Доставувачот е на пат
+  DELIVERED     // Доставена
+  CANCELLED     // Откажана
+}
+enum DeliveryMethod {
+  ADDRESS      // Достава до адреса
+  PICKUP        // Лично подигање
+}
+
+enum PaymentMethod {
+  CASH          // Готовина
+  CARD          // Картичка
+}
+
+enum PaymentStatus {
   PENDING
-  CONFIRMED
-  PREPARING
-  DELIVERED
-  CANCELLED
+  PAID
+  FAILED
 }
 
 model Order {
-  id              String      @id @default(cuid())
+  id              String         @id @default(cuid())
+  orderNumber     String         @unique @default(uuid())
+ 
+  subtotal        Int            
+  deliveryFee     Int            @default(0) 
   total           Int
-  status          OrderStatus @default(PENDING)
-  notes           String?     
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  
+  status          OrderStatus    @default(PENDING)
+  paymentMethod   PaymentMethod  @default(CASH)
+  paymentStatus   PaymentStatus  @default(PENDING)
+  deliveryMethod  DeliveryMethod @default(ADDRESS)
 
+  customerName    String?
+  phone           String
+  deliveryAddress String?        
+  notes           String?        
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  
   userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   items           OrderItem[]
 
   @@index([userId])
+  @@index([status])
   @@map("order")
 }
 
 model OrderItem {
   id         String   @id @default(cuid())
   quantity   Int
-  price      Int 
-  notes      String?  
+  price      Int      
+  name       String   
 
   orderId    String
   order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
