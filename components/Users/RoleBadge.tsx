@@ -1,5 +1,5 @@
 // components/ui/RoleBadge.tsx
-import { ROLE_CONFIG } from '@/lib/constants/roles'
+import { ROLE_CONFIG } from '@/lib/constants/user-roles'
 import { Role } from '@/lib/generated/prisma'
 
 interface RoleBadgeProps {

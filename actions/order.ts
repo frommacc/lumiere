@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { calculateDeliveryFee } from '@/lib/constants/delivery'
 import { DeliveryMethod } from '@/lib/generated/prisma'
+import { generateUniqueOrderNumber } from '@/lib/utils/generate-order-number'
 
 // 1. Дефинирање на типови за влезните податоци
 export interface CartItemInput {
@@ -149,11 +150,13 @@ export async function createOrder(
       data.deliveryMethod,
     )
     const finalTotal = calculatedSubtotal + deliveryFee
+    const orderNumber = await generateUniqueOrderNumber('LM')
 
     // G. Креирање на нарачката во базата
     const newOrder = await prisma.order.create({
       data: {
         userId,
+        orderNumber,
         customerName,
         phone: data.phone,
         deliveryAddress:

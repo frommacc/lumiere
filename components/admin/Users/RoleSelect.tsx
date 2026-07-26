@@ -1,6 +1,6 @@
 'use client'
 
-import { ROLE_CONFIG } from '@/lib/constants/roles'
+import { ROLE_CONFIG } from '@/lib/constants/user-roles'
 import {
   Select,
   SelectContent,

@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import {
   Truck,
   Store,
@@ -66,6 +68,7 @@ function DeliveryAndPaymentForm({
 }: {
   user: { name: string; phone?: string | null }
 }) {
+  const router = useRouter()
   const {
     cart,
     clearCart,
@@ -77,12 +80,17 @@ function DeliveryAndPaymentForm({
 
   const [isPending, startTransition] = useTransition()
 
-  // Податоците се иницијализираат директно од user пропот без useEffect
+  // Податоците се иницијализираат директно од user пропот
   const [address, setAddress] = useState('')
   const [phone, setPhone] = useState(user.phone || '')
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (cart.length === 0) {
+      toast.error('Кошничката е празна!')
+      return
+    }
 
     const orderPayload = {
       deliveryMethod,
@@ -104,21 +112,29 @@ function DeliveryAndPaymentForm({
         if (response.issues && response.issues.length > 0) {
           response.issues.forEach((issue) => {
             if (issue.reason === 'PRICE_CHANGED') {
-              alert(
-                `Цената за "${issue.name}" е сменета од ${issue.oldPrice} во ${issue.newPrice} денари. Кошничката е ажурирана.`,
+              toast.warning(
+                `Цената за "${issue.name}" е променета од ${issue.oldPrice} во ${issue.newPrice} МКД. Кошничката е ажурирана.`,
               )
             } else if (issue.reason === 'ITEM_UNAVAILABLE') {
-              alert(issue.message)
+              toast.error(issue.message)
             }
           })
         } else {
-          alert(response.message)
+          toast.error(
+            response.message || 'Се појави грешка при креирање на нарачката.',
+          )
         }
         return
       }
 
-      alert(`Успешна нарачка! Број: ${response.orderNumber}`)
+      // Порака за успешна нарачка
+      toast.success(`Нарачката е успешно испратена! (#${response.orderNumber})`)
+
+      // Исчисти ја кошничката
       clearCart()
+
+      // Автоматско пренасочување кон детаљната страница на нарачката
+      router.push(`/orders/${response.orderNumber}`)
     })
   }
 
@@ -254,10 +270,19 @@ function DeliveryAndPaymentForm({
         className='w-full bg-primary py-6 flex items-center justify-center gap-4 group/btn overflow-hidden relative transition-transform active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed'
       >
         <span className='absolute inset-0 bg-white/10 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500 ease-in-out' />
-        <span className='text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase relative z-10'>
-          {isPending ? 'Се процесира...' : 'Потврди Нарачка'}
+        <span className='text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase relative z-10 flex items-center gap-2'>
+          {isPending ? (
+            <>
+              <Loader2 className='w-4 h-4 animate-spin' />
+              Се процесира...
+            </>
+          ) : (
+            'Потврди Нарачка'
+          )}
         </span>
-        <ArrowRight className='w-5 h-5 text-primary-foreground relative z-10 transition-transform group-hover/btn:translate-x-2' />
+        {!isPending && (
+          <ArrowRight className='w-5 h-5 text-primary-foreground relative z-10 transition-transform group-hover/btn:translate-x-2' />
+        )}
       </button>
 
       <p className='text-center text-[9px] text-outline uppercase tracking-widest opacity-60 font-semibold'>

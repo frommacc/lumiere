@@ -182,7 +182,7 @@ enum PaymentStatus {
 
 model Order {
   id              String         @id @default(cuid())
-  orderNumber     String         @unique @default(uuid())
+  orderNumber     String         @unique
  
   subtotal        Int            
   deliveryFee     Int            @default(0) 
