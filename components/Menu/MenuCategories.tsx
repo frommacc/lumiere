@@ -1,5 +1,4 @@
 import { getCategories } from '@/lib/db/categories.services'
-import { cacheLife, cacheTag } from 'next/cache'
 import Link from 'next/link'
 
 interface MenuCategoriesProps {
@@ -9,10 +8,6 @@ interface MenuCategoriesProps {
 export default async function MenuCategories({
   activeCategory,
 }: MenuCategoriesProps) {
-  'use cache'
-  cacheLife('weeks')
-  cacheTag('categories')
-
   const categories = await getCategories()
 
   const allCategories = [{ id: 'all', name: 'Сите' }, ...categories]

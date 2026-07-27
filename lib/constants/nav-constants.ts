@@ -7,7 +7,6 @@ import {
   ClipboardList,
   UserCircle,
   ShoppingBag,
-  Star,
   LucideIcon,
 } from 'lucide-react'
 
@@ -55,5 +54,4 @@ export const USER_LINKS: NavLinkItem[] = [
     Icon: CalendarDays,
   },
   { href: '/profile/orders', label: 'Мои Нарачки', Icon: ShoppingBag },
-  { href: '/profile/reviews', label: 'Мои Оцени', Icon: Star },
 ]

@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 interface MenuItemProps {
   item: MenuItemWithRelations
+  isLcpCandidate: boolean
   isItemAdded: boolean
   onOpenProvenance: (item: MenuItemWithRelations) => void
   handleAddToCart: (item: MenuItemWithRelations) => void
@@ -12,17 +13,17 @@ interface MenuItemProps {
 
 const MenuItemCard = ({
   item,
+  isLcpCandidate,
   isItemAdded,
   onOpenProvenance,
   handleAddToCart,
 }: MenuItemProps) => {
   return (
     <motion.div
-      layout
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.2 }}
       className='group flex flex-col justify-between'
     >
       {/* Media Card */}
@@ -43,8 +44,10 @@ const MenuItemCard = ({
           className='object-cover transition-transform duration-700 group-hover:scale-105'
           src={item.image}
           alt={item.name}
-          loading='lazy'
+          loading={isLcpCandidate ? 'eager' : 'lazy'}
+          fetchPriority={isLcpCandidate ? 'high' : 'auto'}
           fill
+          sizes='(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw'
         />
 
         {/* Hover Action Overlay */}

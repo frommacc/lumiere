@@ -1,6 +1,7 @@
 'use client'
 
 import { Map, AdvancedMarker, Pin } from '@vis.gl/react-google-maps'
+import { GoogleMapsProvider } from '@/components/providers/google-maps-provider'
 
 interface OrderMapProps {
   address?: string | null
@@ -8,7 +9,15 @@ interface OrderMapProps {
   longitude?: number | null
 }
 
-export function OrderMap({ latitude, longitude }: OrderMapProps) {
+export function OrderMap(props: OrderMapProps) {
+  return (
+    <GoogleMapsProvider>
+      <OrderMapContent {...props} />
+    </GoogleMapsProvider>
+  )
+}
+
+function OrderMapContent({ latitude, longitude }: OrderMapProps) {
   // Подразбирливи координати за Скопје (ако нема внесено конкретни)
   const defaultPosition = { lat: 41.9981, lng: 21.4254 }
 

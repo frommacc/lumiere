@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 
 import { useCartStore } from '@/store/useCartStore'
 import { MenuItemWithRelations } from '@/types/default'
@@ -29,22 +29,20 @@ export default function MenuClientGrid({ items }: MenuClientGridProps) {
 
   return (
     <>
-      <motion.div
-        layout
-        className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10'
-      >
-        <AnimatePresence mode='popLayout'>
-          {items.map((item) => (
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10'>
+        <AnimatePresence initial={false} mode='popLayout'>
+          {items.map((item, index) => (
             <MenuItemCard
               key={item.id}
               item={item}
+              isLcpCandidate={index === 0}
               isItemAdded={!!addedItemIds[item.id]}
               onOpenProvenance={(i) => setSelectedProvenanceItem(i)}
               handleAddToCart={handleAddToCart}
             />
           ))}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       <IngredientModal
         item={selectedProvenanceItem}

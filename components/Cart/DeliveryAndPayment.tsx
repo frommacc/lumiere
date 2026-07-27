@@ -18,6 +18,7 @@ import { createOrder } from '@/actions/order'
 import { useSession } from '@/lib/auth-client'
 import { AddressAutocomplete } from './AddressAutocomplete'
 import { DeliveryAddressPicker } from './DeliveryAddressPicker'
+import { GoogleMapsProvider } from '@/components/providers/google-maps-provider'
 
 // Главна компонента која менаџира сесија
 export function DeliveryAndPayment() {
@@ -61,7 +62,11 @@ export function DeliveryAndPayment() {
     )
   }
 
-  return <DeliveryAndPaymentForm key={user.id} user={user} />
+  return (
+    <GoogleMapsProvider>
+      <DeliveryAndPaymentForm key={user.id} user={user} />
+    </GoogleMapsProvider>
+  )
 }
 
 // Внатрешна компонента за формата

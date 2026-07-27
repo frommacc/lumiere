@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 
 import { Suspense } from 'react'
 import { Toaster } from 'sonner'
-import { GoogleMapsProvider } from '@/components/providers/google-maps-provider'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],
@@ -47,9 +46,7 @@ export default function RootLayout({
       )}
     >
       <body className='min-h-full flex flex-col'>
-        <GoogleMapsProvider>
-          <Suspense fallback={null}>{children}</Suspense>
-        </GoogleMapsProvider>
+        <Suspense fallback={null}>{children}</Suspense>
         <Toaster />
       </body>
     </html>

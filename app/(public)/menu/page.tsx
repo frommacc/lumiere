@@ -4,14 +4,20 @@ import MenuCategories from '@/components/Menu/MenuCategories'
 import MenuCategoriesSkeleton from '@/components/Menu/MenuCategoriesSkeleton'
 import MenuGridSkeleton from '@/components/Menu/skeletons/MenuGridSkeleton'
 
-interface MenuPageProps {
-  searchParams?: Promise<{ category?: string }>
+export const unstable_instant = {
+  prefetch: 'runtime',
+  samples: [{ searchParams: { category: 'sample-category' } }],
 }
 
-export default async function MenuPage({ searchParams }: MenuPageProps) {
-  const resolvedParams = await searchParams
-  const activeCategory = resolvedParams?.category || 'all'
+type MenuSearchParams = {
+  category?: string | string[]
+}
 
+interface MenuPageProps {
+  searchParams: Promise<MenuSearchParams>
+}
+
+export default function MenuPage({ searchParams }: MenuPageProps) {
   return (
     <main className='flex-1 px-4 py-20 sm:px-8 lg:px-12 w-full max-w-7xl mx-auto'>
       {/* Top Title Section */}
@@ -26,12 +32,32 @@ export default async function MenuPage({ searchParams }: MenuPageProps) {
       </div>
 
       <Suspense fallback={<MenuCategoriesSkeleton />}>
-        <MenuCategories activeCategory={activeCategory} />
+        <MenuCategoriesContent searchParams={searchParams} />
       </Suspense>
 
-      <Suspense key={activeCategory} fallback={<MenuGridSkeleton count={8} />}>
-        <Menu categoryId={activeCategory} />
+      <Suspense fallback={<MenuGridSkeleton count={8} />}>
+        <MenuContent searchParams={searchParams} />
       </Suspense>
     </main>
   )
+}
+
+async function MenuCategoriesContent({
+  searchParams,
+}: MenuPageProps) {
+  const activeCategory = getActiveCategory(await searchParams)
+
+  return <MenuCategories activeCategory={activeCategory} />
+}
+
+async function MenuContent({ searchParams }: MenuPageProps) {
+  const activeCategory = getActiveCategory(await searchParams)
+
+  return <Menu categoryId={activeCategory} />
+}
+
+function getActiveCategory(searchParams: MenuSearchParams) {
+  const category = searchParams.category
+
+  return typeof category === 'string' && category.length > 0 ? category : 'all'
 }
