@@ -152,7 +152,7 @@ function DeliveryAndPaymentForm({
       }
 
       toast.success(`Нарачката е успешно испратена! (#${response.orderNumber})`)
-      router.push(`/orders/${response.orderNumber}`)
+      router.push(`/profile/orders/${response.orderNumber}`)
       setTimeout(() => {
         clearCart()
       }, 600)
