@@ -195,7 +195,9 @@ model Order {
 
   customerName    String?
   phone           String
-  deliveryAddress String?        
+  deliveryAddress String?  
+  latitude        Float?
+  longitude       Float?      
   notes           String?        
 
   createdAt       DateTime       @default(now())

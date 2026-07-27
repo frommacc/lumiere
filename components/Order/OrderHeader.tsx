@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { OrderStatus } from '@/lib/generated/prisma'
 import { Calendar, Clock } from 'lucide-react'
 
@@ -25,7 +26,20 @@ export function OrderHeader({
 
   return (
     <section className='relative w-full py-12 md:py-16 px-6 md:px-12 bg-background border-b border-border/20 overflow-hidden'>
-      <div className='max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6'>
+      {/* Позадинска слика со Overlay за добар контраст */}
+      <div className='absolute inset-0 z-0'>
+        <Image
+          src='/images/order-page-bg.jpg'
+          alt='Order Background'
+          fill
+          priority
+          className='object-cover object-center opacity-25'
+        />
+        {/* Градиент за мазен премин кон позадината */}
+        <div className='absolute inset-0 bg-linear-to-t from-background via-background/60 to-background/30' />
+      </div>
+
+      <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-xs font-semibold text-primary uppercase tracking-[0.3em]'>
             Детали за нарачката
@@ -46,7 +60,7 @@ export function OrderHeader({
         </div>
 
         <div className='flex flex-col items-start md:items-end'>
-          <div className='bg-primary/10 border border-primary/30 px-5 py-2.5 rounded-full flex items-center gap-3'>
+          <div className='bg-primary/10 border border-primary/30 backdrop-blur-md px-5 py-2.5 rounded-full flex items-center gap-3'>
             <span className='relative flex h-3 w-3'>
               <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75'></span>
               <span className='relative inline-flex rounded-full h-3 w-3 bg-primary'></span>
@@ -59,6 +73,7 @@ export function OrderHeader({
           </div>
         </div>
       </div>
+
       <div className='absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none' />
     </section>
   )

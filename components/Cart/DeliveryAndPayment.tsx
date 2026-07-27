@@ -16,6 +16,8 @@ import Link from 'next/link'
 import { useCartStore } from '@/store/useCartStore'
 import { createOrder } from '@/actions/order'
 import { useSession } from '@/lib/auth-client'
+import { AddressAutocomplete } from './AddressAutocomplete'
+import { DeliveryAddressPicker } from './DeliveryAddressPicker'
 
 // Главна компонента која менаџира сесија
 export function DeliveryAndPayment() {
@@ -80,9 +82,25 @@ function DeliveryAndPaymentForm({
 
   const [isPending, startTransition] = useTransition()
 
-  // Податоците се иницијализираат директно од user пропот
+  // Податоците за адреса и координати
   const [address, setAddress] = useState('')
+  const [addressDetails, setAddressDetails] = useState('')
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+    null,
+  )
   const [phone, setPhone] = useState(user.phone || '')
+
+  // Кога се избира улица/населба од Google Autocomplete
+  const handleStreetSelect = (
+    selectedAddress: string,
+    lat?: number,
+    lng?: number,
+  ) => {
+    setAddress(selectedAddress)
+    if (lat && lng) {
+      setCoords({ lat, lng })
+    }
+  }
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,11 +110,17 @@ function DeliveryAndPaymentForm({
       return
     }
 
+    const fullAddress = addressDetails
+      ? `${address}, ${addressDetails}`
+      : address
+
     const orderPayload = {
       deliveryMethod,
       paymentMethod,
       phone,
-      deliveryAddress: address,
+      deliveryAddress: fullAddress,
+      latitude: coords?.lat ?? null,
+      longitude: coords?.lng ?? null,
       notes: '',
       items: cart.map((item) => ({
         menuItemId: item.menuItem.id,
@@ -127,14 +151,11 @@ function DeliveryAndPaymentForm({
         return
       }
 
-      // Порака за успешна нарачка
       toast.success(`Нарачката е успешно испратена! (#${response.orderNumber})`)
-
-      // Исчисти ја кошничката
-      clearCart()
-
-      // Автоматско пренасочување кон детаљната страница на нарачката
       router.push(`/orders/${response.orderNumber}`)
+      setTimeout(() => {
+        clearCart()
+      }, 600)
     })
   }
 
@@ -190,21 +211,37 @@ function DeliveryAndPaymentForm({
         </div>
 
         {deliveryMethod !== 'PICKUP' && (
-          <div className='relative group'>
-            <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
-              Адреса за Достава{' '}
-              <span className='ml-1 text-[8px] text-muted-foreground'>
-                (Скопје)
-              </span>
-            </label>
-            <input
-              type='text'
-              required={deliveryMethod === 'ADDRESS'}
+          <div className='space-y-4'>
+            {/* Google Autocomplete за Улица / Населба */}
+            <AddressAutocomplete
               value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder='ул. Питу Гули бр. 24, Центар'
-              className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
+              onChange={handleStreetSelect}
+              disabled={isPending}
             />
+
+            {/* Текстуално поле за Број, Влез, Стан (не влијае врз координатите на мапата) */}
+            <div>
+              <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
+                Број / Влез / Стан / Кат
+              </label>
+              <input
+                type='text'
+                required={deliveryMethod === 'ADDRESS'}
+                value={addressDetails}
+                onChange={(e) => setAddressDetails(e.target.value)}
+                placeholder='напр. бр. 24, влез 1, кат 3, стан 12'
+                disabled={isPending}
+                className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
+              />
+            </div>
+
+            {/* Интерактивна мапа со Drag & Drop за прецизирање на пинот */}
+            {coords && (
+              <DeliveryAddressPicker
+                coords={coords}
+                onCoordsChange={(lat, lng) => setCoords({ lat, lng })}
+              />
+            )}
           </div>
         )}
 

@@ -19,6 +19,8 @@ export interface CreateOrderInput {
   paymentMethod: 'CASH' | 'CARD'
   phone: string
   deliveryAddress?: string
+  latitude?: number | null
+  longitude?: number | null
   notes?: string
   items: CartItemInput[]
 }
@@ -161,6 +163,8 @@ export async function createOrder(
         phone: data.phone,
         deliveryAddress:
           data.deliveryMethod === 'ADDRESS' ? data.deliveryAddress : null,
+        latitude: data.latitude,
+        longitude: data.longitude,
         deliveryMethod: data.deliveryMethod,
         paymentMethod: data.paymentMethod,
         subtotal: calculatedSubtotal,

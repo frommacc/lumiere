@@ -5,17 +5,21 @@ import { cn } from '@/lib/utils'
 
 import { Suspense } from 'react'
 import { Toaster } from 'sonner'
+import { GoogleMapsProvider } from '@/components/providers/google-maps-provider'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-sans',
+})
 
 const playfair = Playfair_Display({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   variable: '--font-playfair',
   display: 'swap',
 })
 
 const montserrat = Montserrat({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   variable: '--font-montserrat',
   display: 'swap',
 })
@@ -32,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang='en'
+      lang='mk'
       className={cn(
         'h-full',
         'antialiased',
@@ -43,7 +47,9 @@ export default function RootLayout({
       )}
     >
       <body className='min-h-full flex flex-col'>
-        <Suspense fallback={null}>{children}</Suspense>
+        <GoogleMapsProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+        </GoogleMapsProvider>
         <Toaster />
       </body>
     </html>

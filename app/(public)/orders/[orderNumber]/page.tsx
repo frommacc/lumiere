@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation'
-import { prisma } from '@/lib/prisma' // Прилагоди ја патеката според твојот проект
+import { prisma } from '@/lib/prisma'
 
 import { OrderHeader } from '@/components/Order/OrderHeader'
 import { OrderStatusTracker } from '@/components/Order/OrderStatusTracker'
 import { OrderItemsList } from '@/components/Order/OrderItemsList'
 import { OrderDeliveryCard } from '@/components/Order/OrderDeliveryCard'
 import { OrderSummaryCard } from '@/components/Order/OrderSummaryCard'
+import { OrderMap } from '@/components/Order/OrderMap'
 
 interface PageProps {
   params: Promise<{
@@ -70,6 +71,14 @@ export default async function OrderDetailsPage({ params }: PageProps) {
             />
           </div>
         </div>
+
+        {order.deliveryMethod === 'ADDRESS' && (
+          <OrderMap
+            address={order.deliveryAddress}
+            latitude={order.latitude}
+            longitude={order.longitude}
+          />
+        )}
       </section>
     </main>
   )

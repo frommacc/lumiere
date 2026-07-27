@@ -19,7 +19,7 @@ export default function Navbar() {
   const pathname = usePathname()
 
   const hasHydrated = useCartStore((state) => state._hasHydrated)
-  const getTotalCount = useCartStore((state) => state.getTotalCount)
+  const { getTotalCount } = useCartStore()
   const openCart = useCartStore((state) => state.openCart)
 
   const cartCount = getTotalCount()
