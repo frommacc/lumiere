@@ -143,12 +143,19 @@ model Review {
   text      String
   name      String
   role      String
-  rating    Int 
+  rating    Int
+  status    ReviewStatus @default(PENDING)
   userId    String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@map("review")
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 // ==========================================
@@ -234,28 +241,50 @@ model OrderItem {
 // ==========================================
 
 model TableType {
-  id           String        @id @default(cuid())
-  slug         String        @unique 
-  name         String
-  description  String?
-  capacity     Int?
-  reservations Reservation[]
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String?
+  tables      Table[]
 
   @@map("table_type")
 }
 
+model Table {
+  id           String        @id @default(cuid())
+  number       String        @unique
+  capacity     Int
+  tableTypeId  String
+  tableType    TableType     @relation(fields: [tableTypeId], references: [id], onDelete: Restrict)
+  reservations Reservation[]
+
+  @@index([tableTypeId, capacity])
+  @@map("table")
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  SEATED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
 model Reservation {
   id              String    @id @default(cuid())
-  date            DateTime
-  time            String
   guests          Int
   name            String
   phone           String
   email           String
   specialRequests String?
+  status          ReservationStatus @default(PENDING)
+  durationMinutes Int               @default(90)
+  startTime       DateTime
+  endTime         DateTime
 
-  tableTypeId     String
-  tableType       TableType @relation(fields: [tableTypeId], references: [id])
+  tableId         String
+  table           Table     @relation(fields: [tableId], references: [id], onDelete: Restrict)
 
   userId          String?
   user            User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
@@ -263,5 +292,27 @@ model Reservation {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
+  @@index([tableId, startTime, endTime])
+  @@index([startTime, endTime, status])
+  @@index([userId, startTime])
   @@map("reservation")
+}
+
+model WorkingHours {
+  id        String  @id @default(uuid())
+  dayOfWeek Int     @unique
+  isWorking Boolean @default(true)
+  slots     Json
+
+  @@map("working_hours")
+}
+
+model ScheduleOverride {
+  id         String  @id @default(uuid())
+  dateString String  @unique
+  isWorking  Boolean
+  slots      Json
+  reason     String?
+
+  @@map("schedule_override")
 }

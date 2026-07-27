@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Users, Settings, LogOut } from 'lucide-react'
@@ -27,6 +26,7 @@ import {
 } from '@/lib/constants/nav-constants'
 import { getUserInitials } from '@/lib/utils'
 import { ROLE_LABELS } from '@/lib/constants/user-roles'
+import { useEditProfileStore } from '@/store/useEditProfileStore'
 
 type UserMenuProps = {
   user: SessionUser
@@ -34,7 +34,7 @@ type UserMenuProps = {
 
 export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter()
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const openEditProfile = useEditProfileStore((state) => state.open)
   const userRole: Role = (user.role as Role) || Role.USER
 
   const isManagement = userRole === 'ADMIN' || userRole === 'MANAGER'
@@ -160,7 +160,7 @@ export function UserMenu({ user }: UserMenuProps) {
 
           {/* General Option */}
           <DropdownMenuItem
-            onSelect={() => setIsProfileModalOpen(true)}
+            onSelect={openEditProfile}
             className='flex w-full items-center gap-2.5 px-3 py-2 text-xs font-label-caps uppercase tracking-wider text-on-surface hover:text-gold-accent focus:bg-gold-accent/10 focus:text-gold-accent rounded-none cursor-pointer transition-colors'
           >
             <Settings className='h-4 w-4' />

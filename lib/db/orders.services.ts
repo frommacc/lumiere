@@ -1,3 +1,4 @@
+import { OrderStatus } from '@/lib/generated/prisma'
 import { prisma } from '@/lib/prisma'
 
 export interface GetUserOrdersParams {
@@ -51,4 +52,24 @@ export async function getUserOrders({
     totalCount,
     hasMore: orders.length < totalCount,
   }
+}
+
+export async function getRecentUserOrders(userId: string, limit = 3) {
+  return prisma.order.findMany({
+    where: { userId },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    include: { items: true },
+  })
+}
+
+export async function getUserOrderStats(userId: string) {
+  return prisma.order.aggregate({
+    where: {
+      userId,
+      status: { not: OrderStatus.CANCELLED },
+    },
+    _count: { id: true },
+    _sum: { total: true },
+  })
 }

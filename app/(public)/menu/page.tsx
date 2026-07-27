@@ -3,6 +3,7 @@ import Menu from '@/components/Menu/Menu'
 import MenuCategories from '@/components/Menu/MenuCategories'
 import MenuCategoriesSkeleton from '@/components/Menu/MenuCategoriesSkeleton'
 import MenuGridSkeleton from '@/components/Menu/skeletons/MenuGridSkeleton'
+import { getCategories } from '@/lib/db/categories.services'
 
 export const unstable_instant = {
   prefetch: 'runtime',
@@ -42,22 +43,30 @@ export default function MenuPage({ searchParams }: MenuPageProps) {
   )
 }
 
-async function MenuCategoriesContent({
-  searchParams,
-}: MenuPageProps) {
-  const activeCategory = getActiveCategory(await searchParams)
+async function MenuCategoriesContent({ searchParams }: MenuPageProps) {
+  const activeCategory = await getActiveCategory(await searchParams)
 
   return <MenuCategories activeCategory={activeCategory} />
 }
 
 async function MenuContent({ searchParams }: MenuPageProps) {
-  const activeCategory = getActiveCategory(await searchParams)
+  const activeCategory = await getActiveCategory(await searchParams)
 
   return <Menu categoryId={activeCategory} />
 }
 
-function getActiveCategory(searchParams: MenuSearchParams) {
+function getSelectedCategory(searchParams: MenuSearchParams) {
   const category = searchParams.category
 
-  return typeof category === 'string' && category.length > 0 ? category : 'all'
+  return typeof category === 'string' && category.length > 0
+    ? category
+    : undefined
+}
+
+async function getActiveCategory(searchParams: MenuSearchParams) {
+  const selectedCategory = getSelectedCategory(searchParams)
+  if (selectedCategory) return selectedCategory
+
+  const categories = await getCategories()
+  return categories[0]?.id
 }

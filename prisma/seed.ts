@@ -1,4 +1,4 @@
-import { Role } from '@/lib/generated/prisma'
+import { ReviewStatus, Role } from '@/lib/generated/prisma'
 import { prisma } from '@/lib/prisma'
 
 async function main() {
@@ -54,6 +54,7 @@ async function main() {
       name: 'Александар Петров',
       role: 'Критичар за храна',
       rating: 5,
+      status: ReviewStatus.APPROVED,
       userId: user1.id, // Поврзување со креираниот корисник
     },
     {
@@ -62,6 +63,7 @@ async function main() {
       name: 'Елена Стојанова',
       role: 'Уредник на гастро-магазин',
       rating: 5,
+      status: ReviewStatus.APPROVED,
       userId: user2.id,
     },
     {
@@ -70,6 +72,7 @@ async function main() {
       name: 'Марко Иванов',
       role: 'Претприемач',
       rating: 5,
+      status: ReviewStatus.APPROVED,
       userId: user3.id,
     },
   ]

@@ -2,7 +2,7 @@ import { getMenuItems } from '@/lib/db/menu-items.services'
 import MenuClientGrid from './MenuClientGrid'
 
 interface MenuListProps {
-  categoryId: string
+  categoryId?: string
 }
 
 export default async function Menu({ categoryId }: MenuListProps) {

@@ -3,6 +3,9 @@ import Navbar from '@/components/Layout/Navbar'
 import Footer from '@/components/Layout/Footer'
 import ReservationModal from '@/components/ReservationModal'
 import SideCart from '@/components/SideCart'
+import { EditProfileModal } from '@/components/Profile/EditProfileModal'
+import { ReviewDialog } from '@/components/Reviews/ReviewDialog'
+import { ChangePasswordModal } from '@/components/Profile/ChangePasswordModal'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,6 +25,9 @@ export default function RootLayout({
 
       <ReservationModal />
       <SideCart />
+      <EditProfileModal />
+      <ReviewDialog />
+      <ChangePasswordModal />
     </>
   )
 }

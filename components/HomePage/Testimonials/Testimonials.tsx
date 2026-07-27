@@ -1,6 +1,7 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import TestimonialsClient from './TestimonialsClient'
 import { getReviews } from '@/lib/db/reviews.services'
+import { ReviewButton } from '@/components/Reviews/ReviewButton'
 
 export default async function Testimonials() {
   'use cache'
@@ -8,10 +9,6 @@ export default async function Testimonials() {
   cacheTag('reviews')
 
   const reviews = await getReviews()
-
-  if (!reviews || reviews.length === 0) {
-    return null
-  }
 
   return (
     <section
@@ -27,10 +24,18 @@ export default async function Testimonials() {
           <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold'>
             Осврти од Нашите Посетители
           </h2>
+          <div className='mt-6 flex justify-center'>
+            <ReviewButton compact />
+          </div>
         </div>
 
-        {/* Client Carousel component */}
-        <TestimonialsClient reviews={reviews} />
+        {reviews.length ? (
+          <TestimonialsClient reviews={reviews} />
+        ) : (
+          <p className='text-center text-sm text-on-surface-variant'>
+            Сè уште нема одобрени reviews. Бидете први што ќе сподели искуство.
+          </p>
+        )}
       </div>
     </section>
   )

@@ -2,7 +2,7 @@ import { getCategories } from '@/lib/db/categories.services'
 import Link from 'next/link'
 
 interface MenuCategoriesProps {
-  activeCategory: string
+  activeCategory?: string
 }
 
 export default async function MenuCategories({
@@ -10,14 +10,14 @@ export default async function MenuCategories({
 }: MenuCategoriesProps) {
   const categories = await getCategories()
 
-  const allCategories = [{ id: 'all', name: 'Сите' }, ...categories]
+  const resolvedActiveCategory = activeCategory ?? categories[0]?.id
 
   return (
     <div className='mb-8 border-b border-outline-variant/30 pb-2 overflow-x-auto no-scrollbar'>
       <nav className='flex space-x-6 sm:space-x-8 min-w-max'>
-        {allCategories.map((cat) => {
-          const isActive = activeCategory === cat.id
-          const href = cat.id === 'all' ? '/menu' : `/menu?category=${cat.id}`
+        {categories.map((cat) => {
+          const isActive = resolvedActiveCategory === cat.id
+          const href = `/menu?category=${cat.id}`
 
           return (
             <Link
