@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { OrderStatus } from '@/lib/generated/prisma'
-import { Calendar, Clock } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock } from 'lucide-react'
+import Link from 'next/link'
 
 interface OrderHeaderProps {
   orderNumber: string
@@ -39,8 +40,17 @@ export function OrderHeader({
         <div className='absolute inset-0 bg-linear-to-t from-background via-background/60 to-background/30' />
       </div>
 
-      <div className='relative z-10 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6'>
+      <div className='relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6'>
         <div className='flex flex-col gap-2'>
+          <Link
+            href='/profile/orders'
+            className='mb-4 flex items-center gap-2 group text-outline hover:text-primary transition-colors'
+          >
+            <ArrowLeft className='w-5 h-5' />
+            <span className='font-label-caps text-label-caps uppercase'>
+              Назад кон Нарачки
+            </span>
+          </Link>
           <span className='text-xs font-semibold text-primary uppercase tracking-[0.3em]'>
             Детали за нарачката
           </span>

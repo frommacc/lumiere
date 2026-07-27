@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 
-import { OrderHeader } from '@/components/Order/OrderHeader'
-import { OrderStatusTracker } from '@/components/Order/OrderStatusTracker'
-import { OrderItemsList } from '@/components/Order/OrderItemsList'
-import { OrderDeliveryCard } from '@/components/Order/OrderDeliveryCard'
-import { OrderSummaryCard } from '@/components/Order/OrderSummaryCard'
-import { OrderMap } from '@/components/Order/OrderMap'
+import { OrderHeader } from '@/components/Orders/OrderPage/OrderHeader'
+import { OrderStatusTracker } from '@/components/Orders/OrderPage/OrderStatusTracker'
+import { OrderItemsList } from '@/components/Orders/OrderPage/OrderItemsList'
+import { OrderDeliveryCard } from '@/components/Orders/OrderPage/OrderDeliveryCard'
+import { OrderSummaryCard } from '@/components/Orders/OrderPage/OrderSummaryCard'
+import { OrderMap } from '@/components/Orders/OrderPage/OrderMap'
 
 interface PageProps {
   params: Promise<{
@@ -38,7 +38,7 @@ export default async function OrderDetailsPage({ params }: PageProps) {
   }
 
   return (
-    <main className='min-h-screen w-full bg-background text-foreground py-20'>
+    <main className='min-h-screen w-full bg-background text-foreground py-16'>
       <OrderHeader
         orderNumber={order.orderNumber}
         createdAt={order.createdAt}
