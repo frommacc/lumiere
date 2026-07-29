@@ -11,16 +11,30 @@ datasource db {
 // AUTH & USER MODELS
 // ==========================================
 
+enum Role {
+  USER       
+  STAFF      
+  KITCHEN    
+  MANAGER    
+  ADMIN      
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+}
+
 model User {
-  id            String        @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String
-  email         String        @unique
-  emailVerified Boolean       @default(false)
+  email         String      @unique
+  emailVerified Boolean     @default(false)
   image         String?
   imageId       String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  role          Role          @default(USER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  role          Role        @default(USER)
+  status        UserStatus  @default(ACTIVE)
   phone         String
   sessions      Session[]
   accounts      Account[]
@@ -31,13 +45,7 @@ model User {
   @@map("user")
 }
 
-enum Role {
-  USER       
-  STAFF      
-  KITCHEN    
-  MANAGER    
-  ADMIN      
-}
+
 
 model Session {
   id        String   @id @default(cuid())

@@ -3,8 +3,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { Camera, ImageIcon, Upload, X } from 'lucide-react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
 interface ImageUploadFieldProps {
   value?: File
@@ -56,7 +56,9 @@ export function ImageUploadField({
           <p className='font-label-caps text-[10px] tracking-widest uppercase text-on-surface-variant'>
             {label}
           </p>
-          <p className='mt-1 text-xs text-outline'>JPG, PNG или WebP · до 5 MB</p>
+          <p className='mt-1 text-xs text-outline'>
+            JPG, PNG или WebP · до 5 MB
+          </p>
         </div>
         {value && (
           <Button
@@ -75,14 +77,22 @@ export function ImageUploadField({
 
       <div className='flex flex-col sm:flex-row sm:items-center gap-5 rounded-xl border border-outline-variant/20 bg-surface-container-low/50 p-4'>
         <div className='relative shrink-0 self-start'>
-          <Avatar className='size-24 border border-primary/20 bg-surface'>
-            {(previewUrl || currentImage) && (
-              <AvatarImage src={previewUrl || currentImage || ''} alt={label} />
+          <div className='relative flex size-24 items-center justify-center overflow-hidden rounded-xl border border-primary/20 bg-surface-container-high text-primary font-display text-2xl font-semibold'>
+            {previewUrl || currentImage ? (
+              <Image
+                src={previewUrl || currentImage || ''}
+                alt={label}
+                fill
+                sizes='96px'
+                className='object-cover'
+                unoptimized={Boolean(previewUrl)} // Го заобиколува Next.js оптимизаторот за локални blob preview URL-и
+              />
+            ) : (
+              <span>{fallback}</span>
             )}
-            <AvatarFallback className='bg-surface-container-high text-primary font-display text-2xl'>
-              {fallback}
-            </AvatarFallback>
-          </Avatar>
+          </div>
+
+          {/* Икончето за камера */}
           <span className='absolute -right-1 -bottom-1 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground ring-4 ring-surface-container-low'>
             <Camera className='size-3.5' />
           </span>
@@ -90,7 +100,7 @@ export function ImageUploadField({
 
         <div className='min-w-0 flex-1'>
           <p className='text-sm text-on-surface'>
-            {value ? value.name : 'Поставете нова профилна слика.'}
+            {value ? value.name : 'Поставете нова слика.'}
           </p>
           <p className='mt-1 text-xs leading-relaxed text-on-surface-variant'>
             Новата слика ќе ја замени претходната по успешно зачувување.

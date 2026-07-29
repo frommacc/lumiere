@@ -1,4 +1,8 @@
-import { OrderStatus, ReservationStatus, ReviewStatus } from '@/lib/generated/prisma'
+import {
+  OrderStatus,
+  ReservationStatus,
+  ReviewStatus,
+} from '@/lib/generated/prisma'
 import { prisma } from '../prisma'
 
 export const getReviews = async () => {
@@ -88,15 +92,5 @@ export async function createReview({
         status: ReviewStatus.PENDING,
       },
     })
-  })
-}
-
-export async function updateReviewStatus(
-  reviewId: string,
-  status: ReviewStatus,
-) {
-  return prisma.review.update({
-    where: { id: reviewId },
-    data: { status },
   })
 }

@@ -5,6 +5,7 @@ import { getResetPasswordEmailHtml } from './templates/reset-password'
 import { getVerifyEmailHtml } from './templates/verify-email'
 import { FROM_EMAIL, resend } from './resend'
 import { nextCookies } from 'better-auth/next-js'
+import { Role, UserStatus } from './generated/prisma'
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
@@ -18,13 +19,18 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: 'string',
-        required: false,
-        defaultValue: 'USER',
+        defaultValue: Role.USER,
         input: false,
+        required: false,
       },
       phone: {
         type: 'string',
         required: false,
+      },
+      // ADD THIS: Додајте го status во зачуваните полиња на корисникот
+      status: {
+        type: 'string',
+        defaultValue: UserStatus.ACTIVE,
       },
     },
   },

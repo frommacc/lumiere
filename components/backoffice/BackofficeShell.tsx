@@ -26,6 +26,28 @@ type BackofficeShellProps = {
   children: React.ReactNode
 }
 
+function isLinkActive(href: string, pathname: string, allHrefs: string[]) {
+  if (pathname === href) return true
+
+  // Не правиме prefix match за dashboard
+  if (href === '/admin/dashboard') return false
+
+  // Ако страницата почнува со овој href + '/'
+  if (pathname.startsWith(`${href}/`)) {
+    // Проверуваме дали има поспецифичен линк од листата што одговара подобро
+    const hasMoreSpecificMatch = allHrefs.some(
+      (otherHref) =>
+        otherHref !== href &&
+        otherHref.length > href.length &&
+        (pathname === otherHref || pathname.startsWith(`${otherHref}/`)),
+    )
+
+    return !hasMoreSpecificMatch
+  }
+
+  return false
+}
+
 export function BackofficeShell({ user, children }: BackofficeShellProps) {
   const role = (user.role as Role) || Role.USER
   const links = getRoleNavigation(role)
@@ -48,10 +70,16 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
     })
   }
 
+  const allHrefs = links.map((l) => l.href)
+
   const navigation = (
-    <nav className='flex flex-1 flex-col gap-1' aria-label='Оперативна навигација'>
+    <nav
+      className='flex flex-1 flex-col gap-1'
+      aria-label='Оперативна навигација'
+    >
       {links.map(({ href, label, Icon }) => {
-        const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(`${href}/`))
+        // const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(`${href}/`))
+        const active = isLinkActive(href, pathname, allHrefs)
         return (
           <Link
             key={href}
@@ -81,7 +109,9 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
           </AvatarFallback>
         </Avatar>
         <div className='min-w-0'>
-          <p className='truncate text-sm font-medium text-on-surface'>{user.name}</p>
+          <p className='truncate text-sm font-medium text-on-surface'>
+            {user.name}
+          </p>
           <p className='mt-0.5 font-label-caps text-[9px] uppercase tracking-[0.16em] text-primary'>
             {getRoleLabel(role, true)}
           </p>
@@ -102,7 +132,10 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
   return (
     <div className='min-h-screen bg-surface text-on-surface lg:grid lg:grid-cols-[17rem_1fr]'>
       <aside className='fixed inset-y-0 left-0 z-40 hidden w-68 flex-col border-r border-outline-variant/20 bg-surface-container-low/85 p-5 backdrop-blur-xl lg:flex'>
-        <Link href={links[0]?.href ?? '/'} className='mb-10 px-3 font-display text-2xl tracking-[0.22em] text-primary'>
+        <Link
+          href={links[0]?.href ?? '/'}
+          className='mb-10 px-3 font-display text-2xl tracking-[0.22em] text-primary'
+        >
           LUMIÈRE
         </Link>
         {navigation}
@@ -113,14 +146,28 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
         <p className='font-display tracking-[0.18em] text-primary'>LUMIÈRE</p>
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button variant='ghost' size='icon' aria-label='Отвори оперативно мени'>
+            <Button
+              variant='ghost'
+              size='icon'
+              aria-label='Отвори оперативно мени'
+            >
               <Menu className='size-5' />
             </Button>
           </SheetTrigger>
-          <SheetContent side='left' className='flex w-72 flex-col border-outline-variant/20 bg-surface-container p-5 text-on-surface'>
+          <SheetContent
+            side='left'
+            className='flex w-72 flex-col border-outline-variant/20 bg-surface-container p-5 text-on-surface'
+          >
             <div className='mb-10 flex items-center justify-between px-3'>
-              <p className='font-display text-2xl tracking-[0.18em] text-primary'>LUMIÈRE</p>
-              <Button variant='ghost' size='icon' onClick={() => setOpen(false)} aria-label='Затвори мени'>
+              <p className='font-display text-2xl tracking-[0.18em] text-primary'>
+                LUMIÈRE
+              </p>
+              <Button
+                variant='ghost'
+                size='icon'
+                onClick={() => setOpen(false)}
+                aria-label='Затвори мени'
+              >
                 <X className='size-5' />
               </Button>
             </div>

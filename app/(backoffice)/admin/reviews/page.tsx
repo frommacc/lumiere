@@ -1,16 +1,69 @@
-import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
-import { ReviewActions } from '@/components/backoffice/ReviewActions'
-import { requireRouteAccess } from '@/lib/authorization'
-import { getAdminReviews } from '@/lib/db/admin.services'
 import { ReviewStatus } from '@/lib/generated/prisma'
-import { formatBackofficeDateTime } from '@/components/backoffice/formatters'
+import { requireRouteAccess } from '@/lib/authorization'
+import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 
-const reviewStatusStyle: Record<ReviewStatus, string> = { PENDING: 'bg-primary/10 text-primary', APPROVED: 'bg-emerald-500/10 text-emerald-400', REJECTED: 'bg-destructive/10 text-destructive' }
+import { ReviewTabs } from '@/components/backoffice/Reviews/ReviewTabs'
+import { ReviewCard } from '@/components/backoffice/Reviews/ReviewCard'
+import { getAdminReviews } from '@/lib/db/backoffice/reviews.services'
+import { PaginationControls } from '@/components/backoffice/shared/pagination-controls'
 
-export default async function AdminReviewsPage() {
+const PAGE_SIZE = 8
+
+interface PageProps {
+  searchParams: Promise<{
+    status?: ReviewStatus
+    page?: string
+  }>
+}
+
+export default async function AdminReviewsPage({ searchParams }: PageProps) {
   await requireRouteAccess('/admin/reviews')
-  const reviews = await getAdminReviews()
-  return <><BackofficeHeader eyebrow='Модерација' title='Рецензии' description='Одобрете само рецензии што одговараат на стандардот на ресторанот.' />
-    <div className='grid gap-4 px-6 py-8 md:px-10 xl:grid-cols-2'>{reviews.map((review) => <article key={review.id} className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'><div className='flex flex-wrap items-start justify-between gap-4'><div><p className='font-medium'>{review.name}</p><p className='mt-1 text-xs text-on-surface-variant'>{review.user.email} · {formatBackofficeDateTime(review.createdAt)}</p></div><span className={`rounded-full px-3 py-1 text-[10px] uppercase tracking-widest ${reviewStatusStyle[review.status]}`}>{review.status}</span></div><div className='mt-5 flex gap-1 text-primary'>{Array.from({ length: review.rating }, (_, index) => <span key={index}>★</span>)}</div><p className='mt-3 leading-relaxed text-on-surface-variant'>{review.text}</p>{review.status === ReviewStatus.PENDING ? <div className='mt-6 border-t border-outline-variant/15 pt-4'><ReviewActions reviewId={review.id} /></div> : null}</article>)}{!reviews.length ? <p className='py-16 text-center text-sm text-on-surface-variant xl:col-span-2'>Nema reviews za moderacija.</p> : null}</div>
-  </>
+
+  const resolvedSearchParams = await searchParams
+  const currentStatus = resolvedSearchParams.status || ReviewStatus.PENDING
+  const currentPage = Number(resolvedSearchParams.page) || 1
+
+  const { reviews, totalPages, totalCount, counts } = await getAdminReviews({
+    status: currentStatus,
+    page: currentPage,
+    limit: PAGE_SIZE,
+  })
+
+  return (
+    <>
+      <BackofficeHeader
+        eyebrow='Модерација'
+        title='Рецензии'
+        description='Прегледајте ги и модерирајте ги корисничките рецензии.'
+      />
+
+      <div className='px-6 py-8 md:px-10 space-y-6'>
+        {/* Табови */}
+        <ReviewTabs currentStatus={currentStatus} counts={counts} />
+
+        {/* Мрежа со картички */}
+        {reviews.length > 0 ? (
+          <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))}
+          </div>
+        ) : (
+          <div className='rounded-xl border border-dashed p-12 text-center text-muted-foreground'>
+            <p className='text-sm'>Нема рецензии за овој статус.</p>
+          </div>
+        )}
+
+        {/* Вашата реупотреблива пагинација */}
+        <div className='rounded-xl border border-outline-variant/20 overflow-hidden'>
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={totalCount}
+            pageSize={PAGE_SIZE}
+          />
+        </div>
+      </div>
+    </>
+  )
 }

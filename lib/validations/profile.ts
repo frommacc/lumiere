@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { Role, UserStatus } from '../generated/prisma'
 
 const phonePattern = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/
 
@@ -27,10 +28,21 @@ export const editProfileSchema = z.object({
       'Сликата може да биде најмногу 5 MB.',
     )
     .refine(
-      (file) => !file || ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+      (file) =>
+        !file || ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
       'Дозволени се само JPG, PNG или WebP слики.',
     )
     .optional(),
 })
 
 export type EditProfileFormValues = z.infer<typeof editProfileSchema>
+
+// ADMIN
+export const updateUserSchema = z.object({
+  userId: z.string().min(1),
+  name: z.string().min(2, 'Името мора да содржи барем 2 карактери.'),
+  phone: z.string().min(6, 'Внесете валиден телефонски број.'),
+  role: z.enum(Role),
+  status: z.enum(UserStatus),
+})
+export type UpdateUserFormValues = z.infer<typeof updateUserSchema>

@@ -1,7 +1,4 @@
-import {
-  OrderStatus,
-  ReservationStatus,
-} from '@/lib/generated/prisma'
+import { OrderStatus, ReservationStatus } from '@/lib/generated/prisma'
 import { cacheLife, cacheTag } from 'next/cache'
 import { getReservationDateKey, zonedDateTimeToUtc } from '@/lib/reservations'
 import { prisma } from '@/lib/prisma'
@@ -11,7 +8,9 @@ function getDayRange(dateKey = getReservationDateKey(new Date())) {
     dateKey,
     start: zonedDateTimeToUtc(dateKey, '00:00'),
     end: zonedDateTimeToUtc(
-      getReservationDateKey(new Date(zonedDateTimeToUtc(dateKey, '00:00').getTime() + 86_400_000)),
+      getReservationDateKey(
+        new Date(zonedDateTimeToUtc(dateKey, '00:00').getTime() + 86_400_000),
+      ),
       '00:00',
     ),
   }
@@ -28,30 +27,48 @@ export async function getAdminDashboard() {
     ReservationStatus.SEATED,
   ]
 
-  const [newOrders, activeReservations, totalTables, occupiedTables, recentOrders, pendingReservations] =
-    await Promise.all([
-      prisma.order.count({ where: { createdAt: { gte: start, lt: end }, status: OrderStatus.PENDING } }),
-      prisma.reservation.count({
-        where: { startTime: { gte: start, lt: end }, status: { in: activeReservationStatuses } },
-      }),
-      prisma.table.count(),
-      prisma.reservation.findMany({
-        where: { startTime: { lt: end }, endTime: { gt: start }, status: { in: activeReservationStatuses } },
-        distinct: ['tableId'],
-        select: { tableId: true },
-      }),
-      prisma.order.findMany({
-        take: 6,
-        orderBy: { createdAt: 'desc' },
-        include: { items: true, user: { select: { name: true } } },
-      }),
-      prisma.reservation.findMany({
-        where: { status: ReservationStatus.PENDING },
-        take: 6,
-        orderBy: { startTime: 'asc' },
-        include: { table: { include: { tableType: true } } },
-      }),
-    ])
+  const [
+    newOrders,
+    activeReservations,
+    totalTables,
+    occupiedTables,
+    recentOrders,
+    pendingReservations,
+  ] = await Promise.all([
+    prisma.order.count({
+      where: {
+        createdAt: { gte: start, lt: end },
+        status: OrderStatus.PENDING,
+      },
+    }),
+    prisma.reservation.count({
+      where: {
+        startTime: { gte: start, lt: end },
+        status: { in: activeReservationStatuses },
+      },
+    }),
+    prisma.table.count(),
+    prisma.reservation.findMany({
+      where: {
+        startTime: { lt: end },
+        endTime: { gt: start },
+        status: { in: activeReservationStatuses },
+      },
+      distinct: ['tableId'],
+      select: { tableId: true },
+    }),
+    prisma.order.findMany({
+      take: 6,
+      orderBy: { createdAt: 'desc' },
+      include: { items: true, user: { select: { name: true } } },
+    }),
+    prisma.reservation.findMany({
+      where: { status: ReservationStatus.PENDING },
+      take: 6,
+      orderBy: { startTime: 'asc' },
+      include: { table: { include: { tableType: true } } },
+    }),
+  ])
 
   return {
     newOrders,
@@ -63,7 +80,10 @@ export async function getAdminDashboard() {
   }
 }
 
-export async function getAdminOrders({ query, status }: { query?: string; status?: OrderStatus } = {}) {
+export async function getAdminOrders({
+  query,
+  status,
+}: { query?: string; status?: OrderStatus } = {}) {
   const term = query?.trim()
   return prisma.order.findMany({
     where: {
@@ -86,7 +106,11 @@ export async function getAdminOrders({ query, status }: { query?: string; status
 
 export async function getKitchenOrders() {
   return prisma.order.findMany({
-    where: { status: { in: [OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.READY] } },
+    where: {
+      status: {
+        in: [OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.READY],
+      },
+    },
     take: 100,
     orderBy: { createdAt: 'asc' },
     include: { items: true },
@@ -102,7 +126,10 @@ export async function getStaffOrders() {
   })
 }
 
-export async function getAdminReservations({ date, status }: { date?: string; status?: ReservationStatus } = {}) {
+export async function getAdminReservations({
+  date,
+  status,
+}: { date?: string; status?: ReservationStatus } = {}) {
   const { start, end } = getDayRange(date)
   return prisma.reservation.findMany({
     where: {
@@ -132,7 +159,9 @@ export async function getAdminTables() {
         where: {
           startTime: { lt: end },
           endTime: { gt: start },
-          status: { in: [ReservationStatus.CONFIRMED, ReservationStatus.SEATED] },
+          status: {
+            in: [ReservationStatus.CONFIRMED, ReservationStatus.SEATED],
+          },
         },
         orderBy: { startTime: 'asc' },
         take: 1,
@@ -142,36 +171,55 @@ export async function getAdminTables() {
 }
 
 export async function getAdminTableTypes() {
-  return prisma.tableType.findMany({ orderBy: { name: 'asc' }, include: { _count: { select: { tables: true } } } })
-}
-
-export async function getAdminMenu() {
-  return Promise.all([
-    prisma.category.findMany({ orderBy: { displayOrder: 'asc' } }),
-    prisma.menuItem.findMany({ orderBy: { createdAt: 'desc' }, include: { category: true } }),
-  ])
-}
-
-export async function getAdminReviews() {
-  return prisma.review.findMany({
-    orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
-    include: { user: { select: { email: true } } },
+  return prisma.tableType.findMany({
+    orderBy: { name: 'asc' },
+    include: { _count: { select: { tables: true } } },
   })
 }
 
-export async function getAdminUsers(query?: string) {
-  const term = query?.trim()
-  return prisma.user.findMany({
-    where: term
-      ? {
-          OR: [
-            { name: { contains: term, mode: 'insensitive' } },
-            { email: { contains: term, mode: 'insensitive' } },
-          ],
-        }
-      : undefined,
-    take: 100,
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, name: true, email: true, image: true, phone: true, role: true, createdAt: true },
+export async function getAdminMenuItems(
+  page: number = 1,
+  pageSize: number = 10,
+) {
+  const skip = (page - 1) * pageSize
+
+  const [items, totalItems, categories] = await Promise.all([
+    prisma.menuItem.findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { category: true },
+      skip,
+      take: pageSize,
+    }),
+    prisma.menuItem.count(),
+
+    prisma.category.findMany({
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
+    }),
+  ])
+
+  const totalPages = Math.ceil(totalItems / pageSize)
+
+  return {
+    items,
+    categories,
+    pagination: {
+      currentPage: page,
+      pageSize,
+      totalItems,
+      totalPages,
+    },
+  }
+}
+
+// 2. За посебната страница /admin/menu/categories
+export async function getAdminCategories() {
+  return prisma.category.findMany({
+    orderBy: { displayOrder: 'asc' },
+    include: {
+      _count: {
+        select: { menuItems: true },
+      },
+    },
   })
 }

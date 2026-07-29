@@ -42,7 +42,12 @@ export const updateUserRoleSchema = z.object({
 export const tableTypeSchema = z.object({
   id: z.string().min(1).optional(),
   name: z.string().trim().min(2).max(80),
-  slug: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .trim()
+    .min(2)
+    .max(80)
+    .regex(/^[a-z0-9-]+$/),
   description: z.string().trim().max(240).optional(),
 })
 
@@ -54,12 +59,17 @@ export const tableSchema = z.object({
 })
 
 export const categorySchema = z.object({
-  id: z.string().min(1).optional(),
-  name: z.string().trim().min(2).max(80),
-  slug: z.string().trim().min(2).max(80).regex(/^[a-z0-9-]+$/),
-  description: z.string().trim().max(240).optional(),
-  image: z.string().url(),
-  displayOrder: z.coerce.number().int().min(0).max(999).default(0),
+  id: z.string().optional(),
+  name: z.string().min(1, 'Името е задолжително'),
+  slug: z.string().min(1, 'Slug е задолжителен'),
+  description: z.string().nullable().optional(),
+  displayOrder: z.number(),
+  image: z.string().nullable().optional(),
+  imageId: z.string().nullable().optional(),
+  imageFile: z
+    .custom<File>((val) => val instanceof File)
+    .optional()
+    .nullable(),
 })
 
 export const menuItemSchema = z.object({
@@ -67,7 +77,12 @@ export const menuItemSchema = z.object({
   name: z.string().trim().min(2).max(120),
   description: z.string().trim().min(2).max(1000),
   price: z.coerce.number().int().min(1).max(1_000_000),
-  image: z.string().url(),
+  image: z.string().nullable().optional(),
+  imageId: z.string().nullable().optional(),
+  imageFile: z
+    .custom<File>((val) => val instanceof File)
+    .optional()
+    .nullable(),
   categoryId: z.string().min(1),
   isPopular: z.boolean().default(false),
   isExclusive: z.boolean().default(false),

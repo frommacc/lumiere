@@ -2,6 +2,7 @@ import {
   CalendarDays,
   ChefHat,
   ClipboardList,
+  Layers,
   LayoutDashboard,
   Receipt,
   ShoppingBag,
@@ -34,23 +35,30 @@ const MANAGEMENT_LINKS: RoleNavLink[] = [
   { href: '/admin/reservations', label: 'Резервации', Icon: CalendarDays },
   { href: '/admin/tables', label: 'Маси', Icon: TableProperties },
   { href: '/admin/menu', label: 'Мени', Icon: UtensilsCrossed },
+  { href: '/admin/menu/categories', label: 'Мени Категории', Icon: Layers },
   { href: '/admin/reviews', label: 'Рецензии', Icon: Star },
 ]
 
 export const ROLE_NAVIGATION: Record<Role, RoleNavLink[]> = {
   USER: [
     { href: '/profile', label: 'Мој профил', Icon: Users },
-    { href: '/profile/reservations', label: 'Мои резервации', Icon: CalendarDays },
+    {
+      href: '/profile/reservations',
+      label: 'Мои резервации',
+      Icon: CalendarDays,
+    },
     { href: '/profile/orders', label: 'Мои нарачки', Icon: ShoppingBag },
   ],
   STAFF: [
     { href: '/staff/tables', label: 'Активни маси', Icon: ClipboardList },
-    { href: '/staff/reservations', label: 'Денешни резервации', Icon: CalendarDays },
+    {
+      href: '/staff/reservations',
+      label: 'Денешни резервации',
+      Icon: CalendarDays,
+    },
     { href: '/staff/orders', label: 'Предавање нарачки', Icon: ShoppingBag },
   ],
-  KITCHEN: [
-    { href: '/kitchen/orders', label: 'Кујнски екран', Icon: ChefHat },
-  ],
+  KITCHEN: [{ href: '/kitchen/orders', label: 'Кујнски екран', Icon: ChefHat }],
   MANAGER: MANAGEMENT_LINKS,
   ADMIN: [
     ...MANAGEMENT_LINKS,
@@ -77,7 +85,10 @@ export function getRoleNavigation(role: Role | string | null | undefined) {
   return ROLE_NAVIGATION[role as Role] ?? ROLE_NAVIGATION.USER
 }
 
-export function canAccessPath(role: Role | string | null | undefined, pathname: string) {
+export function canAccessPath(
+  role: Role | string | null | undefined,
+  pathname: string,
+) {
   const rule = routeRules.find(
     ({ prefix }) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   )
@@ -85,7 +96,10 @@ export function canAccessPath(role: Role | string | null | undefined, pathname: 
   return !rule || rule.roles.includes(role as Role)
 }
 
-export function hasAnyRole(role: Role | string | null | undefined, roles: Role[]) {
+export function hasAnyRole(
+  role: Role | string | null | undefined,
+  roles: Role[],
+) {
   return roles.includes(role as Role)
 }
 

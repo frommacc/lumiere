@@ -1,16 +1,13 @@
 'use server'
 
 import { headers } from 'next/headers'
-import { updateTag } from 'next/cache'
 
 import { auth } from '@/lib/auth'
+import { createReview, getReviewEligibility } from '@/lib/db/reviews.services'
 import {
-  createReview,
-  getReviewEligibility,
-  updateReviewStatus,
-} from '@/lib/db/reviews.services'
-import { ReviewStatus } from '@/lib/generated/prisma'
-import { createReviewSchema, type CreateReviewValues } from '@/lib/validations/review'
+  createReviewSchema,
+  type CreateReviewValues,
+} from '@/lib/validations/review'
 
 type ReviewActionError = {
   success: false
@@ -84,21 +81,7 @@ export async function createReviewAction(
 
   return {
     success: true,
-    message: 'Review-от е испратен на одобрување. Ќе биде јавно видлив по проверка.',
+    message:
+      'Review-от е испратен на одобрување. Ќе биде јавно видлив по проверка.',
   }
-}
-
-export async function moderateReviewAction(
-  reviewId: string,
-  status: 'APPROVED' | 'REJECTED',
-) {
-  const user = await getAuthenticatedUser()
-  if (!user || !user.role || !['ADMIN', 'MANAGER'].includes(user.role)) {
-    return { success: false, message: 'Немате дозвола за модерирање reviews.' }
-  }
-
-  await updateReviewStatus(reviewId, status as ReviewStatus)
-  updateTag('reviews')
-
-  return { success: true, message: 'Статусот на review-от е ажуриран.' }
 }
