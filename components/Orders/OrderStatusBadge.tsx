@@ -1,33 +1,43 @@
 import { OrderStatus } from '@/lib/generated/prisma'
 
+export const orderStatusLabels: Record<OrderStatus, string> = {
+  [OrderStatus.PENDING]: 'Примена',
+  [OrderStatus.CONFIRMED]: 'Потврдена',
+  [OrderStatus.PREPARING]: 'Во подготовка',
+  [OrderStatus.READY]: 'Подготвена',
+  [OrderStatus.IN_TRANSIT]: 'Во испорака',
+  [OrderStatus.DELIVERED]: 'Доставено',
+  [OrderStatus.CANCELLED]: 'Откажано',
+}
+
 const statusConfig: Record<OrderStatus, { label: string; className: string }> =
   {
     [OrderStatus.PENDING]: {
-      label: 'Примена',
+      label: orderStatusLabels[OrderStatus.PENDING],
       className: 'text-primary bg-primary/10',
     },
     [OrderStatus.CONFIRMED]: {
-      label: 'Потврдена',
+      label: orderStatusLabels[OrderStatus.CONFIRMED],
       className: 'text-primary bg-primary/10',
     },
     [OrderStatus.PREPARING]: {
-      label: 'Во подготовка',
+      label: orderStatusLabels[OrderStatus.PREPARING],
       className: 'text-primary bg-primary/10',
     },
     [OrderStatus.READY]: {
-      label: 'Подготвена',
+      label: orderStatusLabels[OrderStatus.READY],
       className: 'text-primary bg-primary/10',
     },
     [OrderStatus.IN_TRANSIT]: {
-      label: 'Во испорака',
+      label: orderStatusLabels[OrderStatus.IN_TRANSIT],
       className: 'text-primary bg-primary/10',
     },
     [OrderStatus.DELIVERED]: {
-      label: 'Доставено',
+      label: orderStatusLabels[OrderStatus.DELIVERED],
       className: 'text-on-surface-variant bg-surface-container-highest',
     },
     [OrderStatus.CANCELLED]: {
-      label: 'Откажано',
+      label: orderStatusLabels[OrderStatus.CANCELLED],
       className: 'text-error bg-error/10',
     },
   }

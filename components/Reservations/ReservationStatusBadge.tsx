@@ -1,31 +1,40 @@
 import { ReservationStatus } from '@/lib/generated/prisma'
 
+export const reservationStatusLabels: Record<ReservationStatus, string> = {
+  [ReservationStatus.PENDING]: 'Испратена',
+  [ReservationStatus.CONFIRMED]: 'Потврдена',
+  [ReservationStatus.SEATED]: 'Во тек',
+  [ReservationStatus.COMPLETED]: 'Завршена',
+  [ReservationStatus.CANCELLED]: 'Откажана',
+  [ReservationStatus.NO_SHOW]: 'Не е посетена',
+}
+
 const statusConfig: Record<
   ReservationStatus,
   { label: string; className: string }
 > = {
   [ReservationStatus.PENDING]: {
-    label: 'Испратена',
+    label: reservationStatusLabels[ReservationStatus.PENDING],
     className: 'bg-primary/10 text-primary',
   },
   [ReservationStatus.CONFIRMED]: {
-    label: 'Потврдена',
+    label: reservationStatusLabels[ReservationStatus.CONFIRMED],
     className: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
   },
   [ReservationStatus.SEATED]: {
-    label: 'Во тек',
+    label: reservationStatusLabels[ReservationStatus.SEATED],
     className: 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
   },
   [ReservationStatus.COMPLETED]: {
-    label: 'Завршена',
+    label: reservationStatusLabels[ReservationStatus.COMPLETED],
     className: 'bg-surface-container-highest text-on-surface-variant',
   },
   [ReservationStatus.CANCELLED]: {
-    label: 'Откажана',
+    label: reservationStatusLabels[ReservationStatus.CANCELLED],
     className: 'bg-destructive/10 text-destructive',
   },
   [ReservationStatus.NO_SHOW]: {
-    label: 'Не е посетена',
+    label: reservationStatusLabels[ReservationStatus.NO_SHOW],
     className: 'bg-destructive/10 text-destructive',
   },
 }

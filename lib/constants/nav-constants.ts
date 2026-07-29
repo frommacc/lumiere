@@ -1,57 +1,16 @@
-import {
-  LayoutDashboard,
-  CalendarDays,
-  Receipt,
-  UtensilsCrossed,
-  ChefHat,
-  ClipboardList,
-  UserCircle,
-  ShoppingBag,
-  LucideIcon,
-} from 'lucide-react'
+import { ROLE_NAVIGATION, type RoleNavLink } from '@/lib/constants/access-control'
 
-export interface NavLinkItem {
-  href: string
-  label: string
-  Icon: LucideIcon
-}
+export type NavLinkItem = RoleNavLink
 
-// 1. Главни навигациски линкови на страницата
 export const NAV_LINKS = [
-  { label: 'Специјалитети', href: '/#specialties' },
-  { label: 'Мени', href: '/menu' },
-  { label: 'За Нас', href: '/#about' },
-  { label: 'Препораки', href: '/#reviews' },
-  { label: 'Контакт', href: '/#contact' },
+  { label: 'Specijaliteti', href: '/#specialties' },
+  { label: 'Meni', href: '/menu' },
+  { label: 'Za nas', href: '/#about' },
+  { label: 'Preporaki', href: '/#reviews' },
+  { label: 'Kontakt', href: '/#contact' },
 ]
 
-// 2. Сите групирани линкови по улоги
-export const MANAGEMENT_LINKS: NavLinkItem[] = [
-  { href: '/admin/dashboard', label: 'Дашборд', Icon: LayoutDashboard },
-  { href: '/admin/reservations', label: 'Резервации', Icon: CalendarDays },
-  { href: '/admin/orders', label: 'Нарачки', Icon: Receipt },
-  { href: '/admin/menu', label: 'Мени & Јадења', Icon: UtensilsCrossed },
-]
-
-export const KITCHEN_LINKS: NavLinkItem[] = [
-  { href: '/kitchen/orders', label: 'Кујнски Екран', Icon: ChefHat },
-]
-
-export const STAFF_LINKS: NavLinkItem[] = [
-  { href: '/staff/tables', label: 'Активни Маси', Icon: ClipboardList },
-  {
-    href: '/staff/reservations',
-    label: 'Денешни Резервации',
-    Icon: CalendarDays,
-  },
-]
-
-export const USER_LINKS: NavLinkItem[] = [
-  { href: '/profile', label: 'Мој Профил', Icon: UserCircle },
-  {
-    href: '/profile/reservations',
-    label: 'Мои Резервации',
-    Icon: CalendarDays,
-  },
-  { href: '/profile/orders', label: 'Мои Нарачки', Icon: ShoppingBag },
-]
+export const MANAGEMENT_LINKS = ROLE_NAVIGATION.MANAGER
+export const KITCHEN_LINKS = ROLE_NAVIGATION.KITCHEN
+export const STAFF_LINKS = ROLE_NAVIGATION.STAFF
+export const USER_LINKS = ROLE_NAVIGATION.USER

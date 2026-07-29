@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
+import { canAccessPath, getRoleHome } from '@/lib/constants/access-control'
 
 // Дефинирање на помошни функции за рутите
 const isProfileRoute = (pathname: string) => pathname.startsWith('/profile')
@@ -47,6 +48,12 @@ export default async function proxy(request: NextRequest) {
 
   // 3. Контрола на пристап според Роли (Role Authorization)
   if (session) {
+    if (!canAccessPath(session.user.role, pathname)) {
+      return NextResponse.redirect(
+        new URL(getRoleHome(session.user.role), request.url),
+      )
+    }
+
     const role = session.user.role
 
     // Админ рути: Достапни за ADMIN и MANAGER

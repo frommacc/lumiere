@@ -12,7 +12,10 @@ export async function getMenuItems(categoryId?: string) {
   }
 
   return await prisma.menuItem.findMany({
-    where: categoryId && categoryId !== 'all' ? { categoryId } : undefined,
+    where: {
+      isAvailable: true,
+      ...(categoryId ? { categoryId } : {}),
+    },
     select: {
       id: true,
       name: true,
@@ -48,6 +51,7 @@ export async function getSpecialties() {
   return await prisma.menuItem.findMany({
     where: {
       isSpecial: true,
+      isAvailable: true,
     },
     select: {
       id: true,

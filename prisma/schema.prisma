@@ -113,6 +113,7 @@ model MenuItem {
   isPopular   Boolean             @default(false)
   isExclusive Boolean             @default(false)
   isSpecial   Boolean             @default(false)
+  isAvailable Boolean             @default(true)
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
 

@@ -97,6 +97,7 @@ export async function createOrder(
         id: true,
         name: true,
         price: true,
+        isAvailable: true,
       },
     })
 
@@ -116,6 +117,16 @@ export async function createOrder(
           name: 'Непознат артикл',
           reason: 'ITEM_UNAVAILABLE',
           message: 'Артиклот повеќе не е достапен во менито.',
+        })
+        continue
+      }
+
+      if (!dbItem.isAvailable) {
+        issues.push({
+          menuItemId: dbItem.id,
+          name: dbItem.name,
+          reason: 'ITEM_UNAVAILABLE',
+          message: `Artiklot "${dbItem.name}" momentalno ne e dostapen.`,
         })
         continue
       }
