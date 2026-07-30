@@ -112,39 +112,34 @@ model Category {
 }
 
 model MenuItem {
-  id          String              @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  description String
+  description String   
   price       Int
   image       String
-  imageId     String?
-  isPopular   Boolean             @default(false)
-  isExclusive Boolean             @default(false)
-  isSpecial   Boolean             @default(false)
-  isAvailable Boolean             @default(true)
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  imageId     String?  
+  
+  ingredients String[] 
+  allergens   String[] 
+  dietary     String[] 
+ 
+  origin      String?  
+  preparation String?  
+  pairing     String? 
+  
+  isPopular   Boolean  @default(false)
+  isExclusive Boolean  @default(false)
+  isSpecial   Boolean  @default(false)
+  isAvailable Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   categoryId  String
-  category    Category            @relation(fields: [categoryId], references: [id])
-
-  provenance  MenuItemProvenance?
-  orderItems  OrderItem[]        
+  category    Category @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
 
   @@map("menu_item")
-}
-
-model MenuItemProvenance {
-  id         String   @id @default(cuid())
-  title      String
-  origin     String
-  details    String
-  image      String
-  imageId    String?
-  menuItemId String   @unique
-  menuItem   MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
-
-  @@map("menu_item_provenance")
 }
 
 model Review {

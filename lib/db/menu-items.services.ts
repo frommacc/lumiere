@@ -1,46 +1,49 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 
+const menuItemSelect = {
+  id: true,
+  name: true,
+  description: true,
+  price: true,
+  image: true,
+  isPopular: true,
+  isExclusive: true,
+  isSpecial: true,
+  isAvailable: true,
+  ingredients: true,
+  allergens: true,
+  dietary: true,
+  origin: true,
+  preparation: true,
+  pairing: true,
+  categoryId: true,
+  category: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+} as const
+
 export async function getMenuItems(categoryId?: string) {
   'use cache'
 
   cacheLife('weeks')
-
   cacheTag('menu-items')
-  if (categoryId && categoryId !== 'all') {
+
+  const filterCategory = categoryId && categoryId !== 'all'
+
+  if (filterCategory) {
     cacheTag(`menu-items-${categoryId}`)
   }
 
   return await prisma.menuItem.findMany({
     where: {
       isAvailable: true,
-      ...(categoryId ? { categoryId } : {}),
+      ...(filterCategory ? { categoryId } : {}),
     },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      image: true,
-      isPopular: true,
-      isExclusive: true,
-      categoryId: true,
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      provenance: {
-        select: {
-          id: true,
-          title: true,
-          origin: true,
-          image: true,
-          details: true,
-        },
-      },
-    },
+    select: menuItemSelect,
     orderBy: {
       createdAt: 'desc',
     },
@@ -53,31 +56,7 @@ export async function getSpecialties() {
       isSpecial: true,
       isAvailable: true,
     },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      price: true,
-      image: true,
-      isPopular: true,
-      isExclusive: true,
-      categoryId: true,
-      category: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      provenance: {
-        select: {
-          id: true,
-          title: true,
-          origin: true,
-          image: true,
-          details: true,
-        },
-      },
-    },
+    select: menuItemSelect,
     orderBy: {
       createdAt: 'desc',
     },

@@ -172,3 +172,13 @@
     margin-right: 0 !important;
   }
 }
+
+@utility no-scrollbar {
+  /* Chrome, Safari, Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  /* IE, Edge, Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

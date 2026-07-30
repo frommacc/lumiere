@@ -7,7 +7,7 @@ interface MenuItemProps {
   item: MenuItemWithRelations
   isLcpCandidate: boolean
   isItemAdded: boolean
-  onOpenProvenance: (item: MenuItemWithRelations) => void
+  onOpenDetails: (item: MenuItemWithRelations) => void
   handleAddToCart: (item: MenuItemWithRelations) => void
 }
 
@@ -15,7 +15,7 @@ const MenuItemCard = ({
   item,
   isLcpCandidate,
   isItemAdded,
-  onOpenProvenance,
+  onOpenDetails,
   handleAddToCart,
 }: MenuItemProps) => {
   return (
@@ -24,10 +24,10 @@ const MenuItemCard = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className='group flex flex-col justify-between'
+      className='group flex flex-col'
     >
       {/* Media Card */}
-      <div className='relative aspect-4/5 overflow-hidden mb-6 bg-surface-container-high rounded-xl'>
+      <div className='relative aspect-square overflow-hidden mb-4 bg-surface-container-high'>
         {/* Badges */}
         {item.isPopular && (
           <div className='absolute top-4 left-4 z-10 bg-primary text-primary-foreground font-sans text-[9px] font-bold tracking-widest px-3 py-1 uppercase rounded-sm'>
@@ -53,11 +53,11 @@ const MenuItemCard = ({
         {/* Hover Action Overlay */}
         <div className='absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-4'>
           <button
-            onClick={() => onOpenProvenance(item)}
+            onClick={() => onOpenDetails(item)}
             className='flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-wider bg-surface/90 border border-outline px-6 py-2.5 hover:bg-primary hover:text-primary-foreground transition-all duration-300'
           >
             <Eye size={14} />
-            Потекло &amp; Детали
+            Детали
           </button>
 
           <button
@@ -81,31 +81,32 @@ const MenuItemCard = ({
 
       {/* Title & Price Header */}
       <div>
-        <div className='flex items-end justify-between mb-2'>
-          <h3 className='font-display text-xl text-on-surface font-semibold tracking-wide'>
+        <div className='flex flex-col mb-3'>
+          <h3 className='font-display text-base md:text-lg font-semibold tracking-wide line-clamp-1 md:line-clamp-2 min-h-6 md:min-h-12 leading-snug'>
             {item.name}
           </h3>
-          <div className='dot-leader hidden sm:block'></div>
-          <span className='font-sans text-sm font-semibold text-primary shrink-0'>
+
+          {/* Цена: Секогаш порамнета под насловот */}
+          <span className='font-sans text-sm font-semibold text-primary shrink-0 mt-2'>
             {item.price.toLocaleString()} МКД
           </span>
         </div>
 
-        <p className='font-sans text-sm text-on-surface-variant/90 leading-relaxed mb-4'>
+        <p className='hidden md:blok font-sans text-sm text-on-surface-variant/90 leading-relaxed mb-4 line-clamp-2'>
           {item.description}
         </p>
 
         {/* Interactive mobile trigger to make actions clear on touch devices */}
         <div className='flex justify-between items-center sm:hidden pt-2 border-t border-outline-variant/10'>
           <button
-            onClick={() => onOpenProvenance(item)}
-            className='text-xs font-semibold tracking-wider font-sans text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1'
+            onClick={() => onOpenDetails(item)}
+            className='text-sm font-semibold tracking-wider font-sans text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1'
           >
-            <Eye size={12} /> Потекло
+            <Eye size={12} /> Детали
           </button>
           <button
             onClick={() => handleAddToCart(item)}
-            className='text-xs font-semibold tracking-wider font-sans text-primary hover:text-primary-container transition-colors flex items-center gap-1'
+            className='text-sm font-semibold tracking-wider font-sans text-primary hover:text-primary-container transition-colors flex items-center gap-1'
           >
             {isItemAdded ? <Check size={12} /> : <Plus size={12} />}
             {isItemAdded ? 'Додадено' : 'Нарачај'}
