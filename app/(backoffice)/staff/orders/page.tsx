@@ -4,10 +4,10 @@ import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 import { OrderStatusActions } from '@/components/backoffice/StatusActionButtons'
 import { OrderStatusBadge } from '@/components/Orders/OrderStatusBadge'
 import { requireRouteAccess } from '@/lib/authorization'
-import { getStaffOrders } from '@/lib/db/admin.services'
 import { formatDeliveryMethod } from '@/lib/utils/order'
 import { Role } from '@/lib/generated/prisma'
 import { formatBackofficeDateTime } from '@/components/backoffice/formatters'
+import { getStaffOrders } from '@/lib/db/backoffice/orders.services'
 
 export default async function StaffOrdersPage() {
   const user = await requireRouteAccess('/staff/orders')

@@ -2,7 +2,7 @@ import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 import CategoryEditor from '@/components/backoffice/Categories/CategoryEditor'
 import { CategoriesTable } from '@/components/backoffice/Categories/CategoriesTable'
 import { requireRouteAccess } from '@/lib/authorization'
-import { getAdminCategories } from '@/lib/db/admin.services'
+import { getAdminCategories } from '@/lib/db/backoffice/categories.services'
 
 export default async function AdminMenuCategoriesPage() {
   await requireRouteAccess('/admin/menu/categories')

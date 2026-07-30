@@ -9,7 +9,7 @@ import { useCartStore } from '@/store/useCartStore'
 import { useSession } from '@/lib/auth-client'
 import { NAV_LINKS } from '@/lib/constants/nav-constants'
 
-import { UserMenu } from '../Users/UserMenu'
+import { UserMenu } from '../Profile/UserMenu'
 import { Skeleton } from '../ui/skeleton'
 import { MobileNav } from './MobileNav'
 

@@ -1,13 +1,16 @@
-import { ROLE_NAVIGATION, type RoleNavLink } from '@/lib/constants/access-control'
+import {
+  ROLE_NAVIGATION,
+  type RoleNavLink,
+} from '@/lib/constants/access-control'
 
 export type NavLinkItem = RoleNavLink
 
 export const NAV_LINKS = [
-  { label: 'Specijaliteti', href: '/#specialties' },
-  { label: 'Meni', href: '/menu' },
-  { label: 'Za nas', href: '/#about' },
-  { label: 'Preporaki', href: '/#reviews' },
-  { label: 'Kontakt', href: '/#contact' },
+  { label: 'Специјалитети', href: '/#specialties' },
+  { label: 'Мени', href: '/menu' },
+  { label: 'За нас', href: '/#about' },
+  { label: 'Препораки', href: '/#reviews' },
+  { label: 'Контакт', href: '/#contact' },
 ]
 
 export const MANAGEMENT_LINKS = ROLE_NAVIGATION.MANAGER

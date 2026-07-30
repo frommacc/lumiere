@@ -1,10 +1,10 @@
 import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
-import { ReservationStatusActions } from '@/components/backoffice/StatusActionButtons'
 import { ReservationStatusBadge } from '@/components/Reservations/ReservationStatusBadge'
 import { requireRouteAccess } from '@/lib/authorization'
-import { getStaffReservations } from '@/lib/db/admin.services'
 import { Role } from '@/lib/generated/prisma'
 import { formatBackofficeTime } from '@/components/backoffice/formatters'
+import { getStaffReservations } from '@/lib/db/reservations.services'
+import { ReservationActions } from '@/components/backoffice/Reservations/ReservationActions'
 
 export default async function StaffReservationsPage() {
   const user = await requireRouteAccess('/staff/reservations')
@@ -43,7 +43,7 @@ export default async function StaffReservationsPage() {
               </div>
               <ReservationStatusBadge status={reservation.status} />
             </div>
-            <ReservationStatusActions
+            <ReservationActions
               reservationId={reservation.id}
               status={reservation.status}
               role={role}

@@ -11,11 +11,13 @@ export function formatBackofficeDateTime(value: Date) {
   }).format(value)
 }
 
-export function formatBackofficeTime(value: Date) {
+export function formatBackofficeTime(value: Date | string) {
+  const dateObj = typeof value === 'string' ? new Date(value) : value
+
   return new Intl.DateTimeFormat('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
     timeZone: RESTAURANT_TIMEZONE,
-  }).format(value)
+  }).format(dateObj)
 }

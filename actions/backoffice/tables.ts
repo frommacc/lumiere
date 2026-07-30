@@ -51,3 +51,67 @@ export async function saveTableAction(input: unknown): Promise<ActionResult> {
   updateTag('reservations')
   return { success: true, message: 'Масата е зачувана.' }
 }
+
+export async function deleteTableAction(id: string): Promise<ActionResult> {
+  if (!id) {
+    return { success: false, message: 'Невалиден ID на маса.' }
+  }
+
+  if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
+
+  try {
+    await prisma.table.delete({
+      where: { id },
+    })
+
+    updateTag('tables')
+    updateTag('reservations')
+
+    return { success: true, message: 'Масата е успешно избришана.' }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message:
+        'Настана грешка при бришење на масата (можно е да има поврзани резервации).',
+    }
+  }
+}
+
+export async function deleteTableTypeAction(id: string): Promise<ActionResult> {
+  if (!id) {
+    return { success: false, message: 'Невалиден ID на тип на маса.' }
+  }
+
+  if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
+
+  try {
+    // Проверка дали има маси со овој тип пред бришење
+    const tablesCount = await prisma.table.count({
+      where: { tableTypeId: id },
+    })
+
+    if (tablesCount > 0) {
+      return {
+        success: false,
+        message:
+          'Типот не може да се избрише бидејќи има поврзани маси со него.',
+      }
+    }
+
+    await prisma.tableType.delete({
+      where: { id },
+    })
+
+    updateTag('tables')
+    updateTag('reservations')
+
+    return { success: true, message: 'Типот на маса е успешно избришан.' }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: 'Настана грешка при бришење на типот на маса.',
+    }
+  }
+}

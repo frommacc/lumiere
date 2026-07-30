@@ -1,12 +1,12 @@
 import { TableProperties } from 'lucide-react'
 
 import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
-import { ReservationStatusActions } from '@/components/backoffice/StatusActionButtons'
 import { ReservationStatusBadge } from '@/components/Reservations/ReservationStatusBadge'
 import { requireRouteAccess } from '@/lib/authorization'
-import { getAdminTables } from '@/lib/db/admin.services'
 import { Role } from '@/lib/generated/prisma'
 import { formatBackofficeTime } from '@/components/backoffice/formatters'
+import { ReservationActions } from '@/components/backoffice/Reservations/ReservationActions'
+import { getAdminTables } from '@/lib/db/backoffice/tables.services'
 
 export default async function StaffTablesPage() {
   const user = await requireRouteAccess('/staff/tables')
@@ -54,7 +54,7 @@ export default async function StaffTablesPage() {
                       {formatBackofficeTime(reservation.endTime)}
                     </p>
                   </div>
-                  <ReservationStatusActions
+                  <ReservationActions
                     reservationId={reservation.id}
                     status={reservation.status}
                     role={role}

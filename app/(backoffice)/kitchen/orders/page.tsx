@@ -4,9 +4,9 @@ import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 import { OrderStatusActions } from '@/components/backoffice/StatusActionButtons'
 import { OrderStatusBadge } from '@/components/Orders/OrderStatusBadge'
 import { requireRouteAccess } from '@/lib/authorization'
-import { getKitchenOrders } from '@/lib/db/admin.services'
 import { Role } from '@/lib/generated/prisma'
 import { formatBackofficeDateTime } from '@/components/backoffice/formatters'
+import { getKitchenOrders } from '@/lib/db/backoffice/orders.services'
 
 export default async function KitchenOrdersPage() {
   const user = await requireRouteAccess('/kitchen/orders')

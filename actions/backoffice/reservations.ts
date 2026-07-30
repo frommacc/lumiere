@@ -45,3 +45,33 @@ export async function updateReservationStatusAction(
 
   return { success: true, message: 'Статусот на резервацијата е ажуриран.' }
 }
+
+export async function deleteReservationAction(
+  reservationId: string,
+): Promise<ActionResult> {
+  if (!reservationId || typeof reservationId !== 'string') {
+    return { success: false, message: 'Невалиден ID на резервација.' }
+  }
+
+  // Само ADMIN и MANAGER смеат да бришат резервација
+  const user = await getAuthorizedUser([Role.ADMIN, Role.MANAGER])
+
+  if (!user) return forbidden()
+
+  const reservation = await prisma.reservation.findUnique({
+    where: { id: reservationId },
+    select: { id: true },
+  })
+
+  if (!reservation) {
+    return { success: false, message: 'Резервацијата не постои.' }
+  }
+
+  await prisma.reservation.delete({
+    where: { id: reservationId },
+  })
+
+  refreshOperations()
+
+  return { success: true, message: 'Резервацијата е успешно избришана.' }
+}

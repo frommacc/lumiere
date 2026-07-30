@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import {
   generateReservationSlots,
   getDayOfWeek,
+  getDayRange,
   isReservationSlotInPast,
   parseWorkingTimeRanges,
   type ReservationSlot,
@@ -15,7 +16,9 @@ export type ReservationTableType = {
   description: string | null
 }
 
-export async function getReservationTableTypes(): Promise<ReservationTableType[]> {
+export async function getReservationTableTypes(): Promise<
+  ReservationTableType[]
+> {
   const tableTypes = await prisma.tableType.findMany({
     select: {
       id: true,
@@ -39,7 +42,9 @@ type EffectiveSchedule = {
   slots: unknown
 }
 
-export async function getEffectiveSchedule(date: string): Promise<EffectiveSchedule | null> {
+export async function getEffectiveSchedule(
+  date: string,
+): Promise<EffectiveSchedule | null> {
   const scheduleOverride = await prisma.scheduleOverride.findUnique({
     where: { dateString: date },
     select: { isWorking: true, slots: true },
@@ -135,7 +140,8 @@ export async function createReservation(data: CreateReservationData) {
     data.durationMinutes,
   )
   const selectedSlot = slots.find((slot) => slot.time === data.time)
-  if (!selectedSlot || isReservationSlotInPast(data.date, data.time)) return null
+  if (!selectedSlot || isReservationSlotInPast(data.date, data.time))
+    return null
 
   const lockKey = `${data.tableTypeId}:${selectedSlot.startTime.toISOString()}`
 
@@ -162,8 +168,12 @@ export async function createReservation(data: CreateReservationData) {
       },
       select: { tableId: true },
     })
-    const reservedTableIds = new Set(reservations.map((reservation) => reservation.tableId))
-    const table = tables.find((candidate) => !reservedTableIds.has(candidate.id))
+    const reservedTableIds = new Set(
+      reservations.map((reservation) => reservation.tableId),
+    )
+    const table = tables.find(
+      (candidate) => !reservedTableIds.has(candidate.id),
+    )
     if (!table) return null
 
     return transaction.reservation.create({
@@ -235,4 +245,43 @@ export async function getUserReservations({
     totalCount,
     hasMore: reservations.length < totalCount,
   }
+}
+
+// ADMIN RESERVATIONS
+// export async function getAdminReservations({
+//   date,
+//   status,
+// }: { date?: string; status?: ReservationStatus } = {}) {
+//   const { start, end } = getDayRange(date)
+//   return prisma.reservation.findMany({
+//     where: {
+//       startTime: { gte: start, lt: end },
+//       ...(status ? { status } : {}),
+//     },
+//     take: 100,
+//     orderBy: { startTime: 'asc' },
+//     include: {
+//       table: { include: { tableType: true } },
+//       user: { select: { name: true, email: true } },
+//     },
+//   })
+// }
+
+export async function getAdminReservations({ date }: { date?: string } = {}) {
+  const { start, end } = getDayRange(date)
+  return prisma.reservation.findMany({
+    where: {
+      startTime: { gte: start, lt: end },
+    },
+    take: 100,
+    orderBy: { startTime: 'asc' },
+    include: {
+      table: { include: { tableType: true } },
+      user: { select: { name: true, email: true } },
+    },
+  })
+}
+
+export async function getStaffReservations() {
+  return getAdminReservations()
 }

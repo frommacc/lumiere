@@ -148,9 +148,7 @@ export function generateReservationSlots(
       slots.push({
         time: formatReservationTime(startTime),
         startTime,
-        endTime: new Date(
-          startTime.getTime() + durationMinutes * 60_000,
-        ),
+        endTime: new Date(startTime.getTime() + durationMinutes * 60_000),
       })
     }
 
@@ -174,7 +172,11 @@ function formatReservationTime(date: Date) {
   return `${values.hour}:${values.minute}`
 }
 
-export function isReservationSlotInPast(date: string, time: string, now = new Date()) {
+export function isReservationSlotInPast(
+  date: string,
+  time: string,
+  now = new Date(),
+) {
   return zonedDateTimeToUtc(date, time).getTime() <= now.getTime()
 }
 
@@ -190,4 +192,17 @@ export function isReservationDateBookable(date: string, now = new Date()) {
 
 export function getReservationReference(id: string) {
   return `LUM-${id.slice(-8).toUpperCase()}`
+}
+
+export function getDayRange(dateKey = getReservationDateKey(new Date())) {
+  return {
+    dateKey,
+    start: zonedDateTimeToUtc(dateKey, '00:00'),
+    end: zonedDateTimeToUtc(
+      getReservationDateKey(
+        new Date(zonedDateTimeToUtc(dateKey, '00:00').getTime() + 86_400_000),
+      ),
+      '00:00',
+    ),
+  }
 }

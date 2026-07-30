@@ -2,8 +2,8 @@ import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 import { MenuTable } from '@/components/backoffice/Menu/MenuTable'
 
 import { requireRouteAccess } from '@/lib/authorization'
-import { getAdminMenuItems } from '@/lib/db/admin.services'
 import MenuItemEditor from '@/components/backoffice/Menu/MenuItemEditor'
+import { getAdminMenuItems } from '@/lib/db/backoffice/menu-items.services'
 
 interface PageProps {
   searchParams: Promise<{ page?: string }>
