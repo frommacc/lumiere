@@ -24,7 +24,7 @@ export default function MenuClientGrid({ items }: MenuClientGridProps) {
     setAddedItemIds((prev) => ({ ...prev, [item.id]: true }))
     setTimeout(() => {
       setAddedItemIds((prev) => ({ ...prev, [item.id]: false }))
-    }, 1500)
+    }, 3000)
   }
 
   return (

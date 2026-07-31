@@ -90,9 +90,9 @@ export default function SideCart() {
               {cart.map((item) => (
                 <div
                   key={item.menuItem.id}
-                  className='flex gap-4 bg-surface-container-high/40 p-3 rounded-lg border border-outline-variant/10'
+                  className='flex gap-4 bg-surface-container-high/40 p-3 border border-outline-variant/10'
                 >
-                  <div className='relative w-16 h-16 rounded-md object-cover border border-outline-variant/20 overflow-hidden'>
+                  <div className='relative w-16 h-16 object-cover border border-outline-variant/20 overflow-hidden'>
                     <Image
                       src={item.menuItem.image}
                       alt={item.menuItem.name}

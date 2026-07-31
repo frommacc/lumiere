@@ -24,7 +24,7 @@ const MenuItemCard = ({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className='group flex flex-col h-full overflow-hidden bg-surface border border-outline-variant/20 shadow-sm'
+      className='group flex flex-col h-full overflow-hidden bg-surface-container/80 backdrop-blur-xl border-b border-primary/20'
     >
       {/* Media Card */}
       <div
@@ -79,7 +79,7 @@ const MenuItemCard = ({
           </h3>
 
           {/* Опис: Скриен на мобилен, видлив на desktop (со поправен `hidden md:block`) */}
-          <p className='font-sans text-xs text-on-surface-variant/80 leading-relaxed line-clamp-2 mt-2'>
+          <p className='font-sans text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-2'>
             {item.description}
           </p>
         </div>
@@ -106,9 +106,8 @@ const MenuItemCard = ({
               onClick={() => handleAddToCart(item)}
               className={`flex items-center gap-1.5 font-sans text-xs font-semibold px-3 py-2 rounded-none transition-all duration-200 active:scale-95 ${
                 isItemAdded
-                  ? 'bg-emerald-600 text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : 'bg-transpaent text-foreground border border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary'
-                // : 'bg-primary text-primary-foreground hover:bg-primary-container'
               }`}
             >
               {isItemAdded ? (
