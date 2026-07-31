@@ -14,7 +14,7 @@ export default async function AdminMenuPage({ searchParams }: PageProps) {
 
   const resolvedSearchParams = await searchParams
   const currentPage = Number(resolvedSearchParams.page) || 1
-  const PAGE_SIZE = 3
+  const PAGE_SIZE = 10
 
   const { categories, items, pagination } = await getAdminMenuItems(
     currentPage,

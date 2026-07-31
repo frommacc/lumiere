@@ -50,7 +50,7 @@ export default function MenuItemDetails({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       {/* 1. Додадено: flex flex-col */}
-      <DialogContent className='p-0 border border-outline-variant bg-background text-foreground max-w-[90%] md:max-w-lg overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] [&>button]:hidden max-h-[90vh] rounded-2xl backdrop-blur-2xl flex flex-col'>
+      <DialogContent className='p-0 border border-outline-variant bg-background text-foreground max-w-[90%] md:max-w-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] [&>button]:hidden max-h-[90vh] rounded-2xl backdrop-blur-2xl flex flex-col'>
         {/* Banner Image & Overlay */}
         {/* 2. Додадено: shrink-0 */}
         <div className='relative h-64 w-full bg-card shrink-0'>
