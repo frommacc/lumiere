@@ -103,12 +103,45 @@ model Category {
   slug         String     @unique 
   name         String     
   description  String?
+
   image        String
   imageId      String?
+
   displayOrder Int        @default(0)
+
+  isPublished  Boolean        @default(true)
+
+  subcategories Subcategory[]
   menuItems    MenuItem[]
 
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([displayOrder])
   @@map("category")
+}
+
+model Subcategory {
+  id           String     @id @default(cuid())
+  slug         String
+  name         String
+  description  String?
+
+  displayOrder Int        @default(0)
+
+  isPublished  Boolean    @default(true)
+
+  categoryId   String
+  category     Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  menuItems    MenuItem[]
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([categoryId, slug])
+  @@index([categoryId, displayOrder])
+  @@map("subcategory")
 }
 
 model MenuItem {
@@ -116,8 +149,20 @@ model MenuItem {
   name        String
   description String   
   price       Int
+
   image       String
   imageId     String?  
+
+  displayOrder Int     @default(0)
+
+  isPublished Boolean  @default(true)
+  isAvailable Boolean  @default(true)
+
+  isOrderable Boolean  @default(false)
+
+  isPopular   Boolean  @default(false)
+  isExclusive Boolean  @default(false)
+  isSpecial   Boolean  @default(false)
   
   ingredients String[] 
   allergens   String[] 
@@ -127,18 +172,19 @@ model MenuItem {
   preparation String?  
   pairing     String? 
   
-  isPopular   Boolean  @default(false)
-  isExclusive Boolean  @default(false)
-  isSpecial   Boolean  @default(false)
-  isAvailable Boolean  @default(true)
-  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
+
+  subcategoryId String?
+  subcategory   Subcategory? @relation(fields: [subcategoryId], references: [id])
+
   orderItems  OrderItem[]
 
+  @@index([categoryId, displayOrder])
+  @@index([subcategoryId, displayOrder])
   @@map("menu_item")
 }
 

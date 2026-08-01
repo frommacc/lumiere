@@ -1,13 +1,4 @@
-import { getMenuItems } from '@/lib/db/menu-items.services'
-import { Prisma } from '@/lib/generated/prisma'
-
-// 1. Го извлекуваме типот за ЦЕЛАТА ЛИСТА (низа од сите мени ставки)
-export type MenuItemsWithRelations = Prisma.PromiseReturnType<
-  typeof getMenuItems
->
-
-// 2. Го извлекуваме типот за ЕДНЕШНА СТАВКА (корисно за props во MenuItemCard, IngredientModal, итн.)
-export type MenuItemWithRelations = MenuItemsWithRelations[number]
+import { MenuItemWithRelations } from './menu-item'
 
 export interface CartMenuItem {
   id: string

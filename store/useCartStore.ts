@@ -1,10 +1,7 @@
 import { calculateDeliveryFee } from '@/lib/constants/delivery'
 import { DeliveryMethod, PaymentMethod } from '@/lib/generated/prisma'
-import {
-  CartItem,
-  MenuItemWithRelations,
-  toCartMenuItem,
-} from '@/types/default'
+import { CartItem, toCartMenuItem } from '@/types/default'
+import { MenuItemWithRelations } from '@/types/menu-item'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 

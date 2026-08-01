@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { MenuItemWithRelations } from '@/types/default'
+import { MenuItemWithRelations } from '@/types/menu-item'
 import {
   AlertCircle,
   ChefHat,

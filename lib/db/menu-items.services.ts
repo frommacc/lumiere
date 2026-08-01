@@ -1,26 +1,43 @@
 import { cacheLife, cacheTag } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 
-const menuItemSelect = {
+export const menuItemSelect = {
   id: true,
   name: true,
   description: true,
   price: true,
   image: true,
+
+  isPublished: true,
+  isAvailable: true,
+  isOrderable: true,
+
   isPopular: true,
   isExclusive: true,
   isSpecial: true,
-  isAvailable: true,
+
   ingredients: true,
   allergens: true,
   dietary: true,
   origin: true,
   preparation: true,
   pairing: true,
+
   categoryId: true,
+  subcategoryId: true,
+
   category: {
     select: {
       id: true,
+      slug: true,
+      name: true,
+    },
+  },
+
+  subcategory: {
+    select: {
+      id: true,
+      slug: true,
       name: true,
     },
   },
@@ -40,13 +57,22 @@ export async function getMenuItems(categoryId?: string) {
 
   return await prisma.menuItem.findMany({
     where: {
-      isAvailable: true,
-      ...(filterCategory ? { categoryId } : {}),
+      isPublished: true,
+      ...(filterCategory
+        ? {
+            category: {
+              OR: [{ id: categoryId }, { slug: categoryId }],
+            },
+          }
+        : {}),
     },
     select: menuItemSelect,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy: [
+      // Прво сортираме според редоследот на подкатегоријата, па според артикалот
+      { subcategory: { displayOrder: 'asc' } },
+      { displayOrder: 'asc' },
+      { createdAt: 'desc' },
+    ],
   })
 }
 
@@ -54,11 +80,11 @@ export async function getSpecialties() {
   return await prisma.menuItem.findMany({
     where: {
       isSpecial: true,
+      isPublished: true,
       isAvailable: true,
     },
+    take: 8,
     select: menuItemSelect,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy: [{ displayOrder: 'asc' }, { createdAt: 'desc' }],
   })
 }

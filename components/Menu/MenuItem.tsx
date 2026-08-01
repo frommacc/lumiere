@@ -1,6 +1,5 @@
-import { MenuItemWithRelations } from '@/types/default'
+import { MenuItemWithRelations } from '@/types/menu-item'
 import { Check, Eye, ShoppingBag } from 'lucide-react'
-import { motion } from 'motion/react'
 import Image from 'next/image'
 
 interface MenuItemProps {
@@ -19,13 +18,7 @@ const MenuItemCard = ({
   handleAddToCart,
 }: MenuItemProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.2 }}
-      className='group flex flex-col h-full overflow-hidden bg-surface-container/80 backdrop-blur-xl border-b border-primary/20'
-    >
+    <div className='group flex flex-col h-full overflow-hidden bg-surface-container/80 backdrop-blur-xl border-b border-primary/20'>
       {/* Media Card */}
       <div
         className='relative aspect-square overflow-hidden bg-surface-container-high cursor-pointer'
@@ -53,7 +46,7 @@ const MenuItemCard = ({
           sizes='(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw'
         />
 
-        {/* Hover Action Overlay za Desktop */}
+        {/* Hover Action Overlay за Desktop */}
         <div className='hidden md:flex absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3'>
           <button
             onClick={(e) => {
@@ -78,7 +71,6 @@ const MenuItemCard = ({
             {item.name}
           </h3>
 
-          {/* Опис: Скриен на мобилен, видлив на desktop (со поправен `hidden md:block`) */}
           <p className='font-sans text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-2'>
             {item.description}
           </p>
@@ -91,7 +83,7 @@ const MenuItemCard = ({
             <span className='text-xs font-normal'>МКД</span>
           </span>
 
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-2'>
             {/* Око за детали (мобилен) */}
             <button
               onClick={() => onOpenDetails(item)}
@@ -101,31 +93,38 @@ const MenuItemCard = ({
               <Eye size={16} />
             </button>
 
-            {/* Копче за нарачка (активно и удобно за мобилен) */}
-            <button
-              onClick={() => handleAddToCart(item)}
-              className={`flex items-center gap-1.5 font-sans text-xs font-semibold px-3 py-2 rounded-none transition-all duration-200 active:scale-95 ${
-                isItemAdded
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-transpaent text-foreground border border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary'
-              }`}
-            >
-              {isItemAdded ? (
-                <>
-                  <Check size={14} />
-                  <span>Додадено</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag size={14} />
-                  <span>Нарачај</span>
-                </>
-              )}
-            </button>
+            {/* Копче за нарачка (Се прикажува само доколку предметот може да се нарача: isOrderable === true) */}
+            {item.isOrderable ? (
+              <button
+                onClick={() => handleAddToCart(item)}
+                disabled={!item.isAvailable}
+                className={`flex items-center gap-1.5 font-sans text-xs font-semibold px-3 py-2 rounded-none transition-all duration-200 active:scale-95 ${
+                  isItemAdded
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-transparent text-foreground border border-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary'
+                } ${!item.isAvailable ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {isItemAdded ? (
+                  <>
+                    <Check size={14} />
+                    <span>Додадено</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={14} />
+                    <span>Нарачај</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <p className='font-sans text-[10px] text-muted-foreground'>
+                само во ресторан*
+              </p>
+            )}
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 

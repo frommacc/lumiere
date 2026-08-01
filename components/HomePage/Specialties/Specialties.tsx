@@ -40,8 +40,8 @@ export default async function Specialties() {
         </Link>
       </div>
 
-      {/* Интерактивниот клиентски грид */}
-      <MenuClientGrid items={specialties} />
+      {/* Го користиме истиот компонент, но без категории */}
+      <MenuClientGrid items={specialties} showCategories={false} />
     </section>
   )
 }
