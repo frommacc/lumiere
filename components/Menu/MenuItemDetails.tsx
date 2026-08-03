@@ -44,8 +44,8 @@ export default function MenuItemDetails({
 }: MenuItemDetailsProps) {
   if (!item) return null
 
-  const categoryDisplayName =
-    categoryLabels[item.category.name] || item.category.name
+  const categoryName = item.category?.name || 'Општо'
+  const categoryDisplayName = categoryLabels[categoryName] || categoryName
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>

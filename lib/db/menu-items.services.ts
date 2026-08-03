@@ -60,15 +60,26 @@ export async function getMenuItems(categoryId?: string) {
       isPublished: true,
       ...(filterCategory
         ? {
-            category: {
-              OR: [{ id: categoryId }, { slug: categoryId }],
-            },
+            OR: [
+              {
+                category: {
+                  OR: [{ id: categoryId }, { slug: categoryId }],
+                },
+              },
+              {
+                subcategory: {
+                  category: {
+                    OR: [{ id: categoryId }, { slug: categoryId }],
+                  },
+                },
+              },
+            ],
           }
         : {}),
     },
     select: menuItemSelect,
     orderBy: [
-      // Прво сортираме според редоследот на подкатегоријата, па според артикалот
+      // Прво сортираме според редоследот на поткатегоријата, па според артикалот
       { subcategory: { displayOrder: 'asc' } },
       { displayOrder: 'asc' },
       { createdAt: 'desc' },

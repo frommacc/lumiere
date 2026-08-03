@@ -9,15 +9,30 @@ export async function getAdminMenuItems(
   const [items, totalItems, categories] = await Promise.all([
     prisma.menuItem.findMany({
       orderBy: { createdAt: 'desc' },
-      include: { category: true },
+      include: {
+        category: true,
+        subcategory: {
+          include: {
+            category: true,
+          },
+        },
+      },
       skip,
       take: pageSize,
     }),
     prisma.menuItem.count(),
 
+    // Ги влечеме сите категории заедно со нивните поткатегории
     prisma.category.findMany({
-      orderBy: { name: 'asc' },
-      select: { id: true, name: true },
+      orderBy: { displayOrder: 'asc' },
+      select: {
+        id: true,
+        name: true,
+        subcategories: {
+          orderBy: { displayOrder: 'asc' },
+          select: { id: true, name: true },
+        },
+      },
     }),
   ])
 

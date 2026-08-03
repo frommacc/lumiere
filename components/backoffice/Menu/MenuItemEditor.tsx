@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useState, useMemo } from 'react'
 import { LoaderCircle, Pencil, Plus } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -24,9 +24,37 @@ import {
 } from '@/components/ui/select'
 
 import { useSavedAction } from '@/hooks/use-saved-action'
-import { MenuItem } from '@/lib/generated/prisma'
 import { ImageUploadField } from '@/components/shared/ImageUploadField'
 import { saveMenuItemAction } from '@/actions/backoffice/menu-items'
+
+export interface CategoryWithSubcategories {
+  id: string
+  name: string
+  subcategories: { id: string; name: string }[]
+}
+
+export interface MenuItemWithRelationsData {
+  id?: string
+  name: string
+  description: string
+  price: number
+  image?: string | null
+  imageId?: string | null
+  categoryId?: string | null
+  subcategoryId?: string | null
+  isAvailable: boolean
+  isOrderable: boolean
+  isPopular: boolean
+  isExclusive: boolean
+  isSpecial: boolean
+  ingredients: string[]
+  allergens: string[]
+  dietary: string[]
+  origin?: string | null
+  preparation?: string | null
+  pairing?: string | null
+  subcategory?: { categoryId: string } | null
+}
 
 export default function MenuItemEditor({
   item,
@@ -34,8 +62,8 @@ export default function MenuItemEditor({
   open: externalOpen,
   onOpenChange: setExternalOpen,
 }: {
-  item?: MenuItem
-  categories: { id: string; name: string }[]
+  item?: MenuItemWithRelationsData
+  categories: CategoryWithSubcategories[]
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
@@ -44,17 +72,34 @@ export default function MenuItemEditor({
 
   const isControlled = externalOpen !== undefined
   const open = isControlled ? externalOpen : internalOpen
-  const setOpen = isControlled ? setExternalOpen : setInternalOpen
 
-  // Состојби за формата
-  const [categoryId, setCategoryId] = useState(
-    item?.categoryId ?? categories[0]?.id ?? '',
-  )
+  const handleOpenChange = (newOpen: boolean) => {
+    if (isControlled) {
+      setExternalOpen?.(newOpen)
+    } else {
+      setInternalOpen(newOpen)
+    }
+  }
+
+  // Одредување на почетна категорија
+  const initialCategoryId =
+    item?.categoryId ?? item?.subcategory?.categoryId ?? categories[0]?.id ?? ''
+  const initialSubcategoryId = item?.subcategoryId ?? 'none'
+
+  const [selectedCategoryId, setSelectedCategoryId] =
+    useState(initialCategoryId)
+  const [selectedSubcategoryId, setSelectedSubcategoryId] =
+    useState(initialSubcategoryId)
   const [imageFile, setImageFile] = useState<File | undefined>()
 
-  // Состојби за булови знаменца (за Radix Checkbox)
+  const availableSubcategories = useMemo(() => {
+    const found = categories.find((c) => c.id === selectedCategoryId)
+    return found?.subcategories ?? []
+  }, [categories, selectedCategoryId])
+
   const [flags, setFlags] = useState({
     isAvailable: item?.isAvailable ?? true,
+    isOrderable: item?.isOrderable ?? false,
     isPopular: item?.isPopular ?? false,
     isExclusive: item?.isExclusive ?? false,
     isSpecial: item?.isSpecial ?? false,
@@ -64,13 +109,26 @@ export default function MenuItemEditor({
     setFlags((prev) => ({ ...prev, [key]: checked }))
   }
 
+  const handleCategoryChange = (catId: string) => {
+    setSelectedCategoryId(catId)
+    setSelectedSubcategoryId('none')
+  }
+
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
 
-    if (imageFile) {
-      form.set('imageFile', imageFile)
-    }
+    const ingredientsRaw = form.get('ingredients') as string
+    const allergensRaw = form.get('allergens') as string
+    const dietaryRaw = form.get('dietary') as string
+
+    const parseCSV = (val: string) =>
+      val
+        ? val
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : []
 
     run(
       () =>
@@ -79,24 +137,33 @@ export default function MenuItemEditor({
           name: form.get('name') as string,
           description: form.get('description') as string,
           price: Number(form.get('price')),
-          image: item?.image ?? null, // Постоечки URL
-          imageId: item?.imageId ?? null, // Постоечки Cloudinary ID (додадено)
-          imageFile: imageFile, // Новиот File
-          categoryId,
+          image: item?.image ?? null,
+          imageId: item?.imageId ?? null,
+          imageFile,
+          categoryId: selectedCategoryId,
+          subcategoryId:
+            selectedSubcategoryId === 'none' ? null : selectedSubcategoryId,
+          isAvailable: flags.isAvailable,
+          isOrderable: flags.isOrderable,
           isPopular: flags.isPopular,
           isExclusive: flags.isExclusive,
           isSpecial: flags.isSpecial,
-          isAvailable: flags.isAvailable,
+          ingredients: parseCSV(ingredientsRaw),
+          allergens: parseCSV(allergensRaw),
+          dietary: parseCSV(dietaryRaw),
+          origin: (form.get('origin') as string) || null,
+          preparation: (form.get('preparation') as string) || null,
+          pairing: (form.get('pairing') as string) || null,
         }),
       () => {
-        setImageFile?.(undefined)
-        setOpen?.(false)
+        setImageFile(undefined)
+        handleOpenChange(false)
       },
     )
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {!isControlled && (
         <DialogTrigger asChild>
           <Button
@@ -114,12 +181,13 @@ export default function MenuItemEditor({
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-xl'>
+      <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-2xl'>
         <DialogHeader>
           <DialogTitle>{item ? 'Уреди артикл' : 'Нов артикл'}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={submit} className='grid gap-5 sm:gap-8 sm:grid-cols-2'>
-          {/* Име */}
+
+        <form onSubmit={submit} className='grid gap-5 sm:gap-6 sm:grid-cols-2'>
+          {/* Form Content */}
           <div className='space-y-2 sm:col-span-2'>
             <Label htmlFor='item-name'>Име</Label>
             <Input
@@ -130,10 +198,12 @@ export default function MenuItemEditor({
             />
           </div>
 
-          {/* Категорија */}
           <div className='space-y-2'>
             <Label>Категорија</Label>
-            <Select value={categoryId} onValueChange={setCategoryId}>
+            <Select
+              value={selectedCategoryId}
+              onValueChange={handleCategoryChange}
+            >
               <SelectTrigger className='w-full'>
                 <SelectValue placeholder='Избери категорија' />
               </SelectTrigger>
@@ -147,24 +217,49 @@ export default function MenuItemEditor({
             </Select>
           </div>
 
-          {/* Цена */}
           <div className='space-y-2'>
+            <Label>Поткатегорија (Опционално)</Label>
+            <Select
+              value={selectedSubcategoryId}
+              onValueChange={setSelectedSubcategoryId}
+              disabled={!availableSubcategories.length}
+            >
+              <SelectTrigger className='w-full'>
+                <SelectValue
+                  placeholder={
+                    availableSubcategories.length
+                      ? 'Без поткатегорија'
+                      : 'Нема поткатегории'
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='none'>Без поткатегорија</SelectItem>
+                {availableSubcategories.map((sub) => (
+                  <SelectItem key={sub.id} value={sub.id}>
+                    {sub.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className='space-y-2 sm:col-span-2'>
             <Label htmlFor='item-price'>Цена (МКД)</Label>
             <Input
               id='item-price'
               name='price'
               type='number'
-              step='0.01'
+              step='1'
               defaultValue={item?.price}
               required
             />
           </div>
 
-          {/* Custom Image Upload Component */}
           <div className='sm:col-span-2'>
             <ImageUploadField
               label='Слика на артикл'
-              currentImage={item?.image}
+              currentImage={item?.image ?? undefined}
               value={imageFile}
               fallback={item?.name?.slice(0, 2).toUpperCase() ?? 'МЕ'}
               onChange={setImageFile}
@@ -172,7 +267,6 @@ export default function MenuItemEditor({
             />
           </div>
 
-          {/* Опис */}
           <div className='space-y-2 sm:col-span-2'>
             <Label htmlFor='item-description'>Опис</Label>
             <Textarea
@@ -180,14 +274,70 @@ export default function MenuItemEditor({
               name='description'
               defaultValue={item?.description ?? ''}
               required
-              className='min-h-24 resize-y'
+              className='min-h-20 resize-y'
             />
           </div>
 
-          {/* Опции (Чекбоксови со Shadcn UI) */}
+          <div className='space-y-2 sm:col-span-2'>
+            <Label htmlFor='item-ingredients'>
+              Состојки (одвоени со запирка)
+            </Label>
+            <Input
+              id='item-ingredients'
+              name='ingredients'
+              defaultValue={item?.ingredients?.join(', ') ?? ''}
+              placeholder='Домати, Моцарела, Босилек'
+            />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='item-allergens'>Алергени (со запирка)</Label>
+            <Input
+              id='item-allergens'
+              name='allergens'
+              defaultValue={item?.allergens?.join(', ') ?? ''}
+              placeholder='Глутен, Млеко'
+            />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='item-dietary'>Ознаки за исхрана (со запирка)</Label>
+            <Input
+              id='item-dietary'
+              name='dietary'
+              defaultValue={item?.dietary?.join(', ') ?? ''}
+              placeholder='Вегетаријанско, Веганско'
+            />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='item-origin'>Потекло</Label>
+            <Input
+              id='item-origin'
+              name='origin'
+              defaultValue={item?.origin ?? ''}
+              placeholder='Италија / Локално'
+            />
+          </div>
+
+          <div className='space-y-2'>
+            <Label htmlFor='item-pairing'>Препорачана комбинација</Label>
+            <Input
+              id='item-pairing'
+              name='pairing'
+              defaultValue={item?.pairing ?? ''}
+              placeholder='Црвено вино / Вранец'
+            />
+          </div>
+
           <div className='sm:col-span-2 flex flex-wrap gap-x-6 gap-y-3 pt-2'>
             {[
               { id: 'isAvailable', label: 'Достапно', key: 'isAvailable' },
+              {
+                id: 'isOrderable',
+                label: 'Може да се нарача',
+                key: 'isOrderable',
+              },
               { id: 'isPopular', label: 'Популарно', key: 'isPopular' },
               { id: 'isExclusive', label: 'Ексклузивно', key: 'isExclusive' },
               { id: 'isSpecial', label: 'Специјалитет', key: 'isSpecial' },
@@ -205,7 +355,7 @@ export default function MenuItemEditor({
                 />
                 <Label
                   htmlFor={id}
-                  className='text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer'
+                  className='text-sm font-normal cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
                 >
                   {label}
                 </Label>
@@ -213,15 +363,12 @@ export default function MenuItemEditor({
             ))}
           </div>
 
-          {/* Копче за зачувување */}
           <Button
-            disabled={pending || !categoryId}
+            disabled={pending}
             type='submit'
             className='sm:col-span-2 mt-2'
           >
-            {pending ? (
-              <LoaderCircle className='size-4 animate-spin mr-2' />
-            ) : null}
+            {pending && <LoaderCircle className='size-4 animate-spin mr-2' />}
             Зачувај
           </Button>
         </form>

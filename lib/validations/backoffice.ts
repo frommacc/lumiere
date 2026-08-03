@@ -84,19 +84,33 @@ export const subcategorySchema = z.object({
 export type SubcategoryFormValues = z.infer<typeof subcategorySchema>
 
 export const menuItemSchema = z.object({
-  id: z.string().min(1).optional(),
-  name: z.string().trim().min(2).max(120),
-  description: z.string().trim().min(2).max(1000),
-  price: z.coerce.number().int().min(1).max(1_000_000),
+  id: z.string().optional(),
+  name: z.string().min(1, 'Името е задолжително'),
+  description: z.string().min(1, 'Описот е задолжителен'),
+  price: z.number().min(0, 'Цената мора да биде позитивен број'),
   image: z.string().nullable().optional(),
   imageId: z.string().nullable().optional(),
-  imageFile: z
-    .custom<File>((val) => val instanceof File)
-    .optional()
-    .nullable(),
-  categoryId: z.string().min(1),
+  imageFile: z.instanceof(File).optional(),
+
+  // Селекција
+  categoryId: z.string().nullable().optional(),
+  subcategoryId: z.string().nullable().optional(),
+
+  // Знаменца
+  isAvailable: z.boolean().default(true),
+  isOrderable: z.boolean().default(false),
   isPopular: z.boolean().default(false),
   isExclusive: z.boolean().default(false),
   isSpecial: z.boolean().default(false),
-  isAvailable: z.boolean().default(true),
+
+  // Дополнителни детали
+  ingredients: z.array(z.string()).default([]),
+  allergens: z.array(z.string()).default([]),
+  dietary: z.array(z.string()).default([]),
+
+  origin: z.string().nullable().optional(),
+  preparation: z.string().nullable().optional(),
+  pairing: z.string().nullable().optional(),
 })
+
+export type MenuItemInput = z.infer<typeof menuItemSchema>

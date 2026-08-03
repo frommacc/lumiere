@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Eye, EyeOff, MoreHorizontal, Pencil, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,9 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 import { useSavedAction } from '@/hooks/use-saved-action'
-import MenuItemEditor from './MenuItemEditor'
-import { MenuItem } from '@/lib/generated/prisma'
+import MenuItemEditor, {
+  CategoryWithSubcategories,
+  MenuItemWithRelationsData,
+} from './MenuItemEditor'
 import {
   deleteMenuItemAction,
   toggleMenuItemAvailabilityAction,
@@ -25,8 +27,8 @@ export default function MenuItemActions({
   item,
   categories,
 }: {
-  item: MenuItem
-  categories: { id: string; name: string }[]
+  item: MenuItemWithRelationsData
+  categories: CategoryWithSubcategories[]
 }) {
   const { pending: isDeleting, run: runDelete } = useSavedAction()
   const { pending: isToggling, run: runToggle } = useSavedAction()
@@ -51,12 +53,11 @@ export default function MenuItemActions({
           <DropdownMenuLabel>Акции</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
-          {/* Акција: Брза промена на достапност */}
           <DropdownMenuItem
             disabled={isToggling}
             onClick={() =>
               runToggle(() =>
-                toggleMenuItemAvailabilityAction(item.id, !item.isAvailable),
+                toggleMenuItemAvailabilityAction(item.id!, !item.isAvailable),
               )
             }
             className='cursor-pointer'
@@ -74,7 +75,6 @@ export default function MenuItemActions({
             )}
           </DropdownMenuItem>
 
-          {/* Акција: Измени */}
           <DropdownMenuItem
             onClick={() => setIsEditOpen(true)}
             className='cursor-pointer'
@@ -85,12 +85,11 @@ export default function MenuItemActions({
 
           <DropdownMenuSeparator />
 
-          {/* Акција: Избриши */}
           <DropdownMenuItem
             disabled={isDeleting}
             onClick={() => {
               if (window.confirm('Да го избришам артиклот?')) {
-                runDelete(() => deleteMenuItemAction(item.id))
+                runDelete(() => deleteMenuItemAction(item.id!))
               }
             }}
             className='cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive'
@@ -101,7 +100,6 @@ export default function MenuItemActions({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Форма за измена активирана директно од Dropdown опцијата */}
       <MenuItemEditor
         item={item}
         categories={categories}
