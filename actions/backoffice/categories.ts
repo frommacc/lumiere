@@ -61,6 +61,10 @@ export async function saveCategoryAction(
     updateTag('categories')
     updateTag('menu-items')
 
+    if (parsed.data.id) {
+      updateTag(`menu-items-${parsed.data.id}`)
+    }
+
     return { success: true, message: 'Категоријата е зачувана.' }
   } catch (error) {
     console.error('Грешка при зачувување во база:', error)
@@ -87,7 +91,7 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
 
   const category = await prisma.category.findUnique({
     where: { id },
-    select: { imageId: true },
+    select: { id: true, imageId: true },
   })
 
   if (!category) {
@@ -107,6 +111,10 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
 
   updateTag('categories')
   updateTag('menu-items')
+
+  if (category.id) {
+    updateTag(`menu-items-${category.id}`)
+  }
 
   return { success: true, message: 'Категоријата е избришана.' }
 }

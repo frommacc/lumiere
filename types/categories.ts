@@ -7,3 +7,14 @@ export type CategoryWithCount = Prisma.CategoryGetPayload<{
     }
   }
 }>
+
+export type SubcategoryWithRelations = Prisma.SubcategoryGetPayload<{
+  include: {
+    category: {
+      select: { id: true; name: true }
+    }
+    _count: {
+      select: { menuItems: true }
+    }
+  }
+}>

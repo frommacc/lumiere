@@ -72,6 +72,17 @@ export const categorySchema = z.object({
     .nullable(),
 })
 
+export const subcategorySchema = z.object({
+  id: z.string().optional(),
+  categoryId: z.string().min(1, 'Изберете категорија'),
+  name: z.string().min(1, 'Името е задолжително'),
+  slug: z.string().min(1, 'Слагот е задолжителен'),
+  description: z.string().optional().nullable(),
+  displayOrder: z.coerce.number().default(0),
+})
+
+export type SubcategoryFormValues = z.infer<typeof subcategorySchema>
+
 export const menuItemSchema = z.object({
   id: z.string().min(1).optional(),
   name: z.string().trim().min(2).max(120),
