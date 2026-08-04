@@ -18,6 +18,7 @@ interface MenuPageProps {
   searchParams: Promise<MenuSearchParams>
 }
 
+// 1. ГО МЕНУВАМЕ ВО СИНХРОНА ФУНКЦИЈА (Без async/await!)
 export default function MenuPage({ searchParams }: MenuPageProps) {
   return (
     <main className='flex-1 px-4 py-20 sm:px-8 lg:px-12 w-full max-w-7xl mx-auto'>
@@ -35,21 +36,30 @@ export default function MenuPage({ searchParams }: MenuPageProps) {
         <MenuCategoriesContent searchParams={searchParams} />
       </Suspense>
 
+      {/* 2. MenuContentWrapper го решава searchParams внатре зад Suspense boundary */}
       <Suspense fallback={<MenuGridSkeleton count={8} />}>
-        <MenuContent searchParams={searchParams} />
+        <MenuContentWrapper searchParams={searchParams} />
       </Suspense>
     </main>
+  )
+}
+
+// Помошна асинхрона компонента што ги содржи сите `await` повици
+async function MenuContentWrapper({ searchParams }: MenuPageProps) {
+  const resolvedSearchParams = await searchParams
+  const activeCategory = await getActiveCategory(resolvedSearchParams)
+
+  return (
+    // Овој внатрешен Suspense со key гарантира скелетон при менување категорија!
+    <Suspense key={activeCategory} fallback={<MenuGridSkeleton count={8} />}>
+      <Menu categoryId={activeCategory} />
+    </Suspense>
   )
 }
 
 async function MenuCategoriesContent({ searchParams }: MenuPageProps) {
   const activeCategory = await getActiveCategory(await searchParams)
   return <MenuCategories activeCategory={activeCategory} />
-}
-
-async function MenuContent({ searchParams }: MenuPageProps) {
-  const activeCategory = await getActiveCategory(await searchParams)
-  return <Menu categoryId={activeCategory} />
 }
 
 function getSelectedCategory(searchParams: MenuSearchParams) {
