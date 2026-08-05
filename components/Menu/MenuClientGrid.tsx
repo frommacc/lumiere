@@ -30,6 +30,7 @@ export default function MenuClientGrid({
           handleAddToCart={handleAddToCart}
           isItemAdded={isItemAdded}
           onOpenDetails={onOpenDetails}
+          horizontalScroll={showCategories === false}
         />
 
         <MenuItemDetails

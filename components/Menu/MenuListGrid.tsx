@@ -1,4 +1,5 @@
 'use client'
+
 import { MenuItemWithRelations } from '@/types/menu-item'
 import MenuItemCard from './MenuItem'
 
@@ -7,6 +8,7 @@ interface MenuListGridProps {
   isItemAdded: (itemId: string) => boolean
   onOpenDetails: (item: MenuItemWithRelations) => void
   handleAddToCart: (item: MenuItemWithRelations) => void
+  horizontalScroll?: boolean
 }
 
 const MenuListGrid = ({
@@ -14,18 +16,36 @@ const MenuListGrid = ({
   isItemAdded,
   onOpenDetails,
   handleAddToCart,
+  horizontalScroll = false,
 }: MenuListGridProps) => {
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 md:gap-10 px-4 md:px-0'>
+    <div
+      className={
+        horizontalScroll
+          ? // Horizontal Scroll Snap за Mobile -> Grid од md: па нагоре
+            'flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 pt-2 px-4 no-scrollbar -mx-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-10 md:pb-0 md:overflow-visible'
+          : // Стандарден Grid за сите екрани
+            'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 md:gap-10 px-4 md:px-0'
+      }
+    >
       {items.map((item, index) => (
-        <MenuItemCard
+        <div
           key={item.id}
-          item={item}
-          isLcpCandidate={index === 0}
-          isItemAdded={isItemAdded(item.id)}
-          onOpenDetails={onOpenDetails}
-          handleAddToCart={handleAddToCart}
-        />
+          className={
+            horizontalScroll
+              ? // Ширина на картичката на мобилен (80% од екранот за да се гледа следната картичка)
+                'w-[82vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none'
+              : 'w-full'
+          }
+        >
+          <MenuItemCard
+            item={item}
+            isLcpCandidate={index === 0}
+            isItemAdded={isItemAdded(item.id)}
+            onOpenDetails={onOpenDetails}
+            handleAddToCart={handleAddToCart}
+          />
+        </div>
       ))}
     </div>
   )
