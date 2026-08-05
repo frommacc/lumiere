@@ -145,13 +145,13 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-.no-scrollbar::-webkit-scrollbar {
+/* .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
+} */
 
 @layer base {
   * {
@@ -181,4 +181,36 @@
   /* IE, Edge, Firefox */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+@utility custom-scrollbar {
+  /* За Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline-variant) transparent;
+
+  /* За Chrome, Edge, Safari и Opera */
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: var(--radius);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    /* Користиме color-mix за перфектно прилагодување на проѕирноста во OKLCH */
+    background-color: color-mix(
+      in oklch,
+      var(--outline-variant) 60%,
+      transparent
+    );
+    border-radius: var(--radius);
+    transition: background-color 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--outline-);
+  }
 }

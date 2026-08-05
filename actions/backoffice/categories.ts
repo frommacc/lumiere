@@ -46,6 +46,7 @@ export async function saveCategoryAction(
     image: image ?? '',
     imageId,
     displayOrder: parsed.data.displayOrder,
+    isPublished: parsed.data.isPublished,
   }
 
   try {
@@ -78,6 +79,18 @@ export async function saveCategoryAction(
 
 export async function deleteCategoryAction(id: string): Promise<ActionResult> {
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
+
+  const subcategoriesCount = await prisma.subcategory.count({
+    where: { categoryId: id },
+  })
+
+  if (subcategoriesCount > 0) {
+    return {
+      success: false,
+      message:
+        'Прво избришете ги или преместете ги сите подкатегории од оваа категорија.',
+    }
+  }
 
   // 1. Проверка дали категоријата се користи во мени артикли
   const used = await prisma.menuItem.count({ where: { categoryId: id } })

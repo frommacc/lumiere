@@ -112,7 +112,7 @@ export function ReservationActions({
         <Button
           type='button'
           size='sm'
-          variant='outline'
+          variant='ghost'
           disabled={pending}
           onClick={() => update(ReservationStatus.CANCELLED)}
         >

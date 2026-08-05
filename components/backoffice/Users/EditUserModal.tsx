@@ -198,10 +198,10 @@ export function EditUserModal({
             </div>
           </div>
 
-          <DialogFooter className='pt-4 gap-2 sm:gap-0'>
+          <DialogFooter className='pt-4 gap-2'>
             <Button
               type='button'
-              variant='outline'
+              variant='ghost'
               onClick={() => onOpenChange(false)}
               disabled={pending}
             >

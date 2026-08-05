@@ -35,10 +35,21 @@ export async function saveMenuItemAction(
 
   const { id, imageFile, categoryId, subcategoryId, ...itemData } = parsed.data
 
-  // Правило: Ако е избрана поткатегорија, categoryId мора да биде NULL
+  // 1. Утврдување на subcategoryId
   const finalSubcategoryId =
     subcategoryId && subcategoryId !== 'none' ? subcategoryId : null
-  const finalCategoryId = finalSubcategoryId ? null : categoryId || null
+
+  let finalCategoryId = categoryId || null
+
+  if (finalSubcategoryId) {
+    const subcategory = await prisma.subcategory.findUnique({
+      where: { id: finalSubcategoryId },
+      select: { categoryId: true },
+    })
+    if (subcategory) {
+      finalCategoryId = subcategory.categoryId
+    }
+  }
 
   const data = {
     ...itemData,
@@ -59,7 +70,20 @@ export async function saveMenuItemAction(
     }
 
     await cleanupOldImage()
+
+    // Кеш ревалидација
     updateTag('menu-items')
+    if (finalCategoryId) {
+      updateTag(`menu-items-${finalCategoryId}`)
+    }
+    // Зачистување кеш и за претходната категорија доколку е сменета
+    if (
+      existingItem?.categoryId &&
+      existingItem.categoryId !== finalCategoryId
+    ) {
+      updateTag(`menu-items-${existingItem.categoryId}`)
+    }
+
     return { success: true, message: 'Артиклот е зачуван.' }
   } catch (error) {
     console.error('Грешка при зачувување на артиклот:', error)

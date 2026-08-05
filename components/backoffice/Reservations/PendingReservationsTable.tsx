@@ -1,5 +1,8 @@
 import { Role } from '@/lib/generated/prisma'
-import { formatBackofficeTime } from '@/components/backoffice/formatters'
+import {
+  formatBackofficeTime,
+  formatBackofficeDate,
+} from '@/components/backoffice/formatters'
 import {
   Table,
   TableBody,
@@ -23,7 +26,7 @@ export function PendingReservationsTable({
   if (!reservations.length) {
     return (
       <div className='rounded-xl border border-dashed border-outline-variant/25 bg-surface-container-low/20 p-8 text-center text-sm text-on-surface-variant'>
-        Нема нови барања за резервација за овој ден.
+        Нема нови барања за резервација.
       </div>
     )
   }
@@ -33,7 +36,7 @@ export function PendingReservationsTable({
       <Table className='min-w-230'>
         <TableHeader className='border-b border-amber-500/20 text-[10px] uppercase tracking-[0.16em] text-amber-800 dark:text-amber-300'>
           <TableRow className='hover:bg-transparent'>
-            <TableHead className='px-5 py-3.5'>Време / Гост</TableHead>
+            <TableHead className='px-5 py-3.5'>Датум / Време / Гост</TableHead>
             <TableHead className='px-5 py-3.5'>Маса</TableHead>
             <TableHead className='px-5 py-3.5'>Контакт</TableHead>
             <TableHead className='px-5 py-3.5'>Брза акција</TableHead>
@@ -47,11 +50,20 @@ export function PendingReservationsTable({
             >
               <TableCell className='px-5 py-4'>
                 <div className='flex items-center gap-3.5'>
-                  <div className='flex flex-col items-center justify-center rounded-lg border border-amber-500/40 bg-background px-2.5 py-1.5 shadow-xs'>
-                    <span className='font-mono text-xl font-bold text-on-surface'>
+                  {/* Баџ со датум (горе) и час (долу) */}
+                  <div className='flex flex-col items-center justify-center rounded-lg border border-amber-500/40 bg-background px-3 py-1.5 shadow-xs text-center min-w-22'>
+                    <span
+                      className='text-[11px] font-semibold text-amber-700 dark:text-amber-400 capitalize whitespace-nowrap'
+                      suppressHydrationWarning
+                    >
+                      {formatBackofficeDate(reservation.startTime)}
+                    </span>
+                    <span className='font-mono text-lg font-bold text-on-surface leading-tight'>
                       {formatBackofficeTime(reservation.startTime)}
                     </span>
                   </div>
+
+                  {/* Информации за гостот */}
                   <div>
                     <p className='font-semibold text-on-surface text-sm'>
                       {reservation.name}

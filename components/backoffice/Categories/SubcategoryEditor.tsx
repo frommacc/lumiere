@@ -26,6 +26,7 @@ import { useSavedAction } from '@/hooks/use-saved-action'
 import { saveSubcategoryAction } from '@/actions/backoffice/subcategories'
 import { SubcategoryWithRelations } from '@/types/categories'
 import { Category } from '@/lib/generated/prisma'
+import { Switch } from '@/components/ui/switch'
 
 interface SubcategoryEditorProps {
   subcategory?: SubcategoryWithRelations
@@ -52,6 +53,9 @@ export default function SubcategoryEditor({
   )
   const [name, setName] = useState(subcategory?.name ?? '')
   const [slug, setSlug] = useState(subcategory?.slug ?? '')
+  const [isPublished, setIsPublished] = useState<boolean>(
+    subcategory?.isPublished ?? true,
+  )
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
@@ -79,6 +83,7 @@ export default function SubcategoryEditor({
           slug: form.get('slug') as string,
           description: form.get('description') as string,
           displayOrder: Number(form.get('displayOrder')),
+          isPublished,
         }),
       () => {
         setOpen?.(false)
@@ -173,6 +178,28 @@ export default function SubcategoryEditor({
               name='description'
               defaultValue={subcategory?.description ?? ''}
               className='min-h-20 resize-y'
+            />
+          </div>
+
+          {/* Статус (isPublished Switch) */}
+          <div className='flex items-center justify-between rounded-lg border border-outline-variant/20 bg-surface-container-low p-3 shadow-sm'>
+            <div className='space-y-0.5'>
+              <Label
+                htmlFor='subcategory-published'
+                className='text-sm font-medium'
+              >
+                Објавена подкатегорија
+              </Label>
+              <p className='text-xs text-muted-foreground'>
+                Ако е оневозможено, подкатегоријата нема да биде видлива на
+                менито.
+              </p>
+            </div>
+            <Switch
+              id='subcategory-published'
+              checked={isPublished}
+              onCheckedChange={setIsPublished}
+              disabled={pending}
             />
           </div>
 

@@ -21,3 +21,13 @@ export function formatBackofficeTime(value: Date | string) {
     timeZone: RESTAURANT_TIMEZONE,
   }).format(dateObj)
 }
+
+export function formatBackofficeDate(value: Date | string) {
+  const dateObj = typeof value === 'string' ? new Date(value) : value
+
+  return new Intl.DateTimeFormat('mk-MK', {
+    day: '2-digit',
+    month: 'short',
+    timeZone: RESTAURANT_TIMEZONE,
+  }).format(dateObj)
+}

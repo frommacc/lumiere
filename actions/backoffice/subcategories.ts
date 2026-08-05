@@ -27,18 +27,41 @@ export async function saveSubcategoryAction(
     slug: parsed.data.slug,
     description: parsed.data.description || null,
     displayOrder: parsed.data.displayOrder,
+    isPublished: parsed.data.isPublished,
   }
 
   try {
     if (parsed.data.id) {
+      // 1. Прво ја земаме постоечката подкатегорија за да ја видиме старата categoryId (за кешот)
+      const existingSubcategory = await prisma.subcategory.findUnique({
+        where: { id: parsed.data.id },
+        select: { categoryId: true },
+      })
+
+      // 2. Ја ажурираме подкатегоријата
       await prisma.subcategory.update({
         where: { id: parsed.data.id },
         data,
       })
+
+      // 3. АВТОМАТСКИ ги ажурираме сите menuItems што припаѓаат на оваа подкатегорија
+      await prisma.menuItem.updateMany({
+        where: { subcategoryId: parsed.data.id },
+        data: { categoryId: parsed.data.categoryId },
+      })
+
+      // Ревалидација за старата категорија ако се сменила
+      if (
+        existingSubcategory &&
+        existingSubcategory.categoryId !== parsed.data.categoryId
+      ) {
+        updateTag(`menu-items-${existingSubcategory.categoryId}`)
+      }
     } else {
       await prisma.subcategory.create({ data })
     }
 
+    // Кеш ревалидација
     updateTag('categories')
     updateTag('subcategories')
     updateTag('menu-items')

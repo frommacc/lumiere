@@ -1,13 +1,27 @@
+import { Prisma } from '@/lib/generated/prisma'
 import { prisma } from '@/lib/prisma'
 
 export async function getAdminMenuItems(
+  q: string = '',
   page: number = 1,
   pageSize: number = 10,
 ) {
   const skip = (page - 1) * pageSize
+  const query = q.trim()
+
+  // Го дефинираме филтерот динамички
+  const where: Prisma.MenuItemWhereInput = query
+    ? {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+        ],
+      }
+    : {}
 
   const [items, totalItems, categories] = await Promise.all([
     prisma.menuItem.findMany({
+      where,
       orderBy: { createdAt: 'desc' },
       include: {
         category: true,
@@ -20,9 +34,10 @@ export async function getAdminMenuItems(
       skip,
       take: pageSize,
     }),
-    prisma.menuItem.count(),
+    // Сега и count го користи кастом филтерот
+    prisma.menuItem.count({ where }),
 
-    // Ги влечеме сите категории заедно со нивните поткатегории
+    // Сите категории и поткатегории
     prisma.category.findMany({
       orderBy: { displayOrder: 'asc' },
       select: {

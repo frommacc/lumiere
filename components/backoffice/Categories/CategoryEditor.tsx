@@ -19,6 +19,7 @@ import { useSavedAction } from '@/hooks/use-saved-action'
 import { Category } from '@/lib/generated/prisma'
 import { ImageUploadField } from '@/components/shared/ImageUploadField'
 import { saveCategoryAction } from '@/actions/backoffice/categories'
+import { Switch } from '@/components/ui/switch'
 
 export default function CategoryEditor({
   category,
@@ -40,6 +41,9 @@ export default function CategoryEditor({
   const [imageFile, setImageFile] = useState<File | undefined>()
   const [name, setName] = useState(category?.name ?? '')
   const [slug, setSlug] = useState(category?.slug ?? '')
+  const [isPublished, setIsPublished] = useState<boolean>(
+    category?.isPublished ?? true,
+  )
 
   // Помошна функција за автоматско генерирање на slug
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +76,7 @@ export default function CategoryEditor({
           slug: form.get('slug') as string,
           description: form.get('description') as string,
           displayOrder: Number(form.get('displayOrder')),
+          isPublished: isPublished,
           image: category?.image ?? null,
           imageFile: imageFile,
         }),
@@ -162,6 +167,27 @@ export default function CategoryEditor({
               name='description'
               defaultValue={category?.description ?? ''}
               className='min-h-20 resize-y'
+            />
+          </div>
+
+          {/* Статус (isPublished Switch) */}
+          <div className='flex items-center justify-between rounded-lg border border-outline-variant/20 bg-surface-container-low p-3 shadow-sm'>
+            <div className='space-y-0.5'>
+              <Label
+                htmlFor='category-published'
+                className='text-sm font-medium'
+              >
+                Објавена категорија
+              </Label>
+              <p className='text-xs text-muted-foreground'>
+                Ако е оневозможено, категоријата нема да биде видлива на менито.
+              </p>
+            </div>
+            <Switch
+              id='category-published'
+              checked={isPublished}
+              onCheckedChange={setIsPublished}
+              disabled={pending}
             />
           </div>
 

@@ -64,6 +64,7 @@ export const categorySchema = z.object({
   slug: z.string().min(1, 'Slug е задолжителен'),
   description: z.string().nullable().optional(),
   displayOrder: z.number(),
+  isPublished: z.boolean().default(true),
   image: z.string().nullable().optional(),
   imageId: z.string().nullable().optional(),
   imageFile: z
@@ -79,6 +80,7 @@ export const subcategorySchema = z.object({
   slug: z.string().min(1, 'Слагот е задолжителен'),
   description: z.string().optional().nullable(),
   displayOrder: z.coerce.number().default(0),
+  isPublished: z.boolean().default(true),
 })
 
 export type SubcategoryFormValues = z.infer<typeof subcategorySchema>

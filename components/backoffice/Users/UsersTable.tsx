@@ -112,13 +112,13 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                 >
                   <TableCell className='px-5 py-4'>
                     <div className='flex items-center gap-3'>
-                      <div className='relative size-10 shrink-0 overflow-hidden rounded-full border border-outline-variant/20 bg-surface-container-high'>
+                      <div className='relative size-20 shrink-0 overflow-hidden rounded-full border border-outline-variant/20 bg-surface-container-high'>
                         {user.image ? (
                           <Image
                             src={user.image}
                             alt={user.name || 'Корисник'}
                             fill
-                            sizes='40px'
+                            sizes='160px'
                             className='object-cover'
                           />
                         ) : (

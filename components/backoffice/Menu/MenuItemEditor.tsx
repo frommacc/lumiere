@@ -181,7 +181,7 @@ export default function MenuItemEditor({
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-2xl'>
+      <DialogContent className='max-h-[90vh] overflow-y-auto custom-scrollbar border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-2xl'>
         <DialogHeader>
           <DialogTitle>{item ? 'Уреди артикл' : 'Нов артикл'}</DialogTitle>
         </DialogHeader>

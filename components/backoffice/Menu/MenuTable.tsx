@@ -78,6 +78,9 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
             <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
               Статус
             </TableHead>
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
+              Онлајн достапност
+            </TableHead>
             <TableHead className='px-5 py-4 text-right text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
               Акции
             </TableHead>
@@ -98,13 +101,13 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
               >
                 {/* 1. Слика */}
                 <TableCell className='px-5 py-3'>
-                  <div className='relative h-16 w-16 overflow-hidden rounded-lg bg-surface-container border border-outline-variant/20'>
+                  <div className='relative h-20 w-20 overflow-hidden bg-surface-container border border-outline-variant/20'>
                     {item.image ? (
                       <Image
                         src={item.image}
                         alt={item.name}
                         fill
-                        sizes='128px'
+                        sizes='160px'
                         quality={80}
                         className='object-cover'
                       />
@@ -190,6 +193,26 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                       }`}
                     />
                     {item.isAvailable ? 'Достапно' : 'Повлечено'}
+                  </span>
+                </TableCell>
+
+                {/* 6. Online availability */}
+                <TableCell className='px-5 py-4 whitespace-nowrap'>
+                  <span
+                    className={`inline-flex items-center gap-1.5 text-xs font-medium ${
+                      item.isOrderable
+                        ? 'text-emerald-400'
+                        : 'text-on-surface-variant/60'
+                    }`}
+                  >
+                    <span
+                      className={`size-1.5 rounded-full ${
+                        item.isOrderable
+                          ? 'bg-emerald-400'
+                          : 'bg-on-surface-variant/40'
+                      }`}
+                    />
+                    {item.isOrderable ? 'Достапно' : 'само во ресторан'}
                   </span>
                 </TableCell>
 

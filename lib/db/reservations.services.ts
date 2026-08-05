@@ -248,24 +248,6 @@ export async function getUserReservations({
 }
 
 // ADMIN RESERVATIONS
-// export async function getAdminReservations({
-//   date,
-//   status,
-// }: { date?: string; status?: ReservationStatus } = {}) {
-//   const { start, end } = getDayRange(date)
-//   return prisma.reservation.findMany({
-//     where: {
-//       startTime: { gte: start, lt: end },
-//       ...(status ? { status } : {}),
-//     },
-//     take: 100,
-//     orderBy: { startTime: 'asc' },
-//     include: {
-//       table: { include: { tableType: true } },
-//       user: { select: { name: true, email: true } },
-//     },
-//   })
-// }
 
 export async function getAdminReservations({ date }: { date?: string } = {}) {
   const { start, end } = getDayRange(date)

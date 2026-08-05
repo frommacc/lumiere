@@ -43,6 +43,78 @@ export const menuItemSelect = {
   },
 } as const
 
+// export async function getMenuItems(categoryId?: string) {
+//   'use cache'
+
+//   cacheLife('weeks')
+//   cacheTag('menu-items')
+
+//   const filterCategory = categoryId && categoryId !== 'all'
+
+//   if (filterCategory) {
+//     cacheTag(`menu-items-${categoryId}`)
+//   }
+
+//   return await prisma.menuItem.findMany({
+//     where: {
+//       isPublished: true,
+
+//       // Проверка на објавеност врз основа на структурите:
+//       AND: [
+//         {
+//           OR: [
+//             // Случај 1: Артиклот е директно во Категорија (нема поткатегорија)
+//             {
+//               subcategory: null,
+//               category: {
+//                 isPublished: true,
+//               },
+//             },
+//             // Случај 2: Артиклот е во Поткатегорија (category е null)
+//             {
+//               category: null,
+//               subcategory: {
+//                 isPublished: true,
+//                 category: {
+//                   isPublished: true, // Родителската категорија исто така мора да е објавена
+//                 },
+//               },
+//             },
+//           ],
+//         },
+
+//         // Филтрирање по специфичен categoryId/slug ако е проследен
+//         ...(filterCategory
+//           ? [
+//               {
+//                 OR: [
+//                   {
+//                     category: {
+//                       OR: [{ id: categoryId }, { slug: categoryId }],
+//                     },
+//                   },
+//                   {
+//                     subcategory: {
+//                       category: {
+//                         OR: [{ id: categoryId }, { slug: categoryId }],
+//                       },
+//                     },
+//                   },
+//                 ],
+//               },
+//             ]
+//           : []),
+//       ],
+//     },
+//     select: menuItemSelect,
+//     orderBy: [
+//       { subcategory: { displayOrder: 'asc' } },
+//       { displayOrder: 'asc' },
+//       { createdAt: 'desc' },
+//     ],
+//   })
+// }
+
 export async function getMenuItems(categoryId?: string) {
   'use cache'
 
@@ -58,28 +130,29 @@ export async function getMenuItems(categoryId?: string) {
   return await prisma.menuItem.findMany({
     where: {
       isPublished: true,
+
+      // Секогаш мора да биде објавена и нејзината главна категорија
+      category: {
+        isPublished: true,
+      },
+
+      // Ако има поткатегорија, и таа мора да е објавена
+      OR: [{ subcategory: null }, { subcategory: { isPublished: true } }],
+
+      // Филтрирањето е директно и екстремно брзо
       ...(filterCategory
         ? {
             OR: [
-              {
-                category: {
-                  OR: [{ id: categoryId }, { slug: categoryId }],
-                },
-              },
-              {
-                subcategory: {
-                  category: {
-                    OR: [{ id: categoryId }, { slug: categoryId }],
-                  },
-                },
-              },
+              { categoryId: categoryId },
+              { category: { slug: categoryId } },
+              { subcategoryId: categoryId },
+              { subcategory: { slug: categoryId } },
             ],
           }
         : {}),
     },
     select: menuItemSelect,
     orderBy: [
-      // Прво сортираме според редоследот на поткатегоријата, па според артикалот
       { subcategory: { displayOrder: 'asc' } },
       { displayOrder: 'asc' },
       { createdAt: 'desc' },
