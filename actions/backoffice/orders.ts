@@ -41,6 +41,9 @@ export async function updateOrderStatusAction(
   const updatedOrder = await prisma.order.update({
     where: { id: parsed.data.orderId },
     data: { status: parsed.data.status },
+    include: {
+      items: true,
+    },
   })
 
   // PUSHER TRIGGER
@@ -48,6 +51,7 @@ export async function updateOrderStatusAction(
     orderId: updatedOrder.id,
     status: updatedOrder.status,
     updatedAt: updatedOrder.updatedAt,
+    updatedOrder,
   })
 
   refreshOperations()

@@ -26,6 +26,8 @@ export interface KdsOrder {
   customerName?: string | null
   notes?: string | null
   items: KdsItem[]
+  phone?: string | null
+  deliveryAddress?: string | null
 }
 
 interface KdsOrderCardProps {

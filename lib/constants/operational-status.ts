@@ -40,16 +40,22 @@ export function getAllowedOrderStatuses(
     return Object.values(OrderStatus).filter((status) => status !== current)
   }
 
+  // MANAGER ROLES
   if (role === Role.MANAGER) {
     return managerOrderTransitions[current]
   }
+
+  // KITCHEN ROLES
   if (role === Role.KITCHEN) {
-    if (current === OrderStatus.PENDING) return [OrderStatus.CONFIRMED]
     if (current === OrderStatus.CONFIRMED) return [OrderStatus.PREPARING]
     if (current === OrderStatus.PREPARING) return [OrderStatus.READY]
     return []
   }
+
   if (role === Role.STAFF) {
+    if (current === OrderStatus.PENDING)
+      return [OrderStatus.CONFIRMED, OrderStatus.CANCELLED]
+
     if (current === OrderStatus.READY) {
       return deliveryMethod === DeliveryMethod.PICKUP
         ? [OrderStatus.DELIVERED]

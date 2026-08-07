@@ -83,8 +83,11 @@ export async function getKitchenOrders() {
 
 export async function getStaffOrders() {
   return prisma.order.findMany({
-    where: { status: { in: [OrderStatus.READY, OrderStatus.IN_TRANSIT] } },
-
+    where: {
+      status: {
+        in: [OrderStatus.PENDING, OrderStatus.READY, OrderStatus.IN_TRANSIT],
+      },
+    },
     orderBy: { updatedAt: 'asc' },
     include: { items: true },
   })
