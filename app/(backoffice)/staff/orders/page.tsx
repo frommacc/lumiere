@@ -1,7 +1,7 @@
 import { ShoppingBag } from 'lucide-react'
 
 import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
-import { OrderStatusActions } from '@/components/backoffice/StatusActionButtons'
+import { OrderStatusActions } from '@/components/backoffice/Orders/OrderStatusActions'
 import { OrderStatusBadge } from '@/components/Orders/OrderStatusBadge'
 import { requireRouteAccess } from '@/lib/authorization'
 import { formatDeliveryMethod } from '@/lib/utils/order'

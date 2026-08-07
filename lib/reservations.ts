@@ -206,3 +206,42 @@ export function getDayRange(dateKey = getReservationDateKey(new Date())) {
     ),
   }
 }
+
+export function getOptionalDayRange(dateKey?: string) {
+  if (!dateKey) {
+    return { dateKey: undefined, start: undefined, end: undefined }
+  }
+
+  const start = zonedDateTimeToUtc(dateKey, '00:00')
+  const nextDayKey = getReservationDateKey(
+    new Date(start.getTime() + 86_400_000),
+  )
+  const end = zonedDateTimeToUtc(nextDayKey, '00:00')
+
+  return {
+    dateKey,
+    start,
+    end,
+  }
+}
+
+export function getOptionalDateRange(fromKey?: string, toKey?: string) {
+  if (!fromKey && !toKey) {
+    return { start: undefined, end: undefined }
+  }
+
+  const effectiveToKey = toKey || fromKey
+
+  const start = fromKey ? zonedDateTimeToUtc(fromKey, '00:00') : undefined
+
+  let end: Date | undefined = undefined
+  if (effectiveToKey) {
+    const nextDay = new Date(
+      zonedDateTimeToUtc(effectiveToKey, '00:00').getTime() + 86_400_000,
+    )
+    const nextDayKey = getReservationDateKey(nextDay)
+    end = zonedDateTimeToUtc(nextDayKey, '00:00')
+  }
+
+  return { start, end }
+}

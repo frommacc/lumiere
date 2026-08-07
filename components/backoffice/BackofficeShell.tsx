@@ -55,6 +55,9 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
+  // Проверка дали улогата е KITCHEN
+  const isKitchen = role === Role.KITCHEN
+
   const signOutUser = async () => {
     await signOut({
       fetchOptions: {
@@ -78,7 +81,6 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
       aria-label='Оперативна навигација'
     >
       {links.map(({ href, label, Icon }) => {
-        // const active = pathname === href || (href !== '/admin/dashboard' && pathname.startsWith(`${href}/`))
         const active = isLinkActive(href, pathname, allHrefs)
         return (
           <Link
@@ -130,20 +132,33 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
   )
 
   return (
-    <div className='min-h-screen bg-surface text-on-surface lg:grid lg:grid-cols-[17rem_1fr]'>
-      <aside className='fixed inset-y-0 left-0 z-40 hidden w-68 flex-col border-r border-outline-variant/20 bg-surface-container-low/85 p-5 backdrop-blur-xl lg:flex'>
-        <Link
-          href={links[0]?.href ?? '/'}
-          className='mb-10 px-3 font-display text-2xl tracking-[0.22em] text-primary'
-        >
-          LUMIÈRE
-        </Link>
-        {navigation}
-        {account}
-      </aside>
+    <div
+      className={`min-h-screen bg-surface text-on-surface ${
+        isKitchen ? 'flex flex-col' : 'lg:grid lg:grid-cols-[17rem_1fr]'
+      }`}
+    >
+      {/* Траен Aside за Admin/Manager на десктоп */}
+      {!isKitchen && (
+        <aside className='fixed inset-y-0 left-0 z-40 hidden w-68 flex-col border-r border-outline-variant/20 bg-surface-container-low/85 p-5 backdrop-blur-xl lg:flex'>
+          <Link
+            href={links[0]?.href ?? '/'}
+            className='mb-10 px-3 font-display text-2xl tracking-[0.22em] text-primary'
+          >
+            LUMIÈRE
+          </Link>
+          {navigation}
+          {account}
+        </aside>
+      )}
 
-      <header className='sticky top-0 z-30 flex h-16 items-center justify-between border-b border-outline-variant/20 bg-surface/90 px-5 backdrop-blur-xl lg:hidden'>
+      {/* Хедер кој ќе биде видлив на мобилен за сите, а на десктоп само за KITCHEN */}
+      <header
+        className={`sticky top-0 z-30 flex h-16 items-center justify-between border-b border-outline-variant/20 bg-surface/90 px-5 backdrop-blur-xl ${
+          isKitchen ? 'flex' : 'lg:hidden'
+        }`}
+      >
         <p className='font-display tracking-[0.18em] text-primary'>LUMIÈRE</p>
+
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button
@@ -154,6 +169,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
               <Menu className='size-5' />
             </Button>
           </SheetTrigger>
+
           <SheetContent
             side='left'
             className='flex w-72 flex-col border-outline-variant/20 bg-surface-container p-5 text-on-surface'
@@ -177,7 +193,10 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
         </Sheet>
       </header>
 
-      <main className='min-w-0 lg:col-start-2'>{children}</main>
+      {/* Главна содржина */}
+      <main className={`min-w-0 ${isKitchen ? 'w-full' : 'lg:col-start-2'}`}>
+        {children}
+      </main>
     </div>
   )
 }

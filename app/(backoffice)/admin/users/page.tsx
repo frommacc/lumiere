@@ -42,7 +42,9 @@ export default async function AdminUsersPage({
       <div className='space-y-6 px-6 py-8 md:px-10'>
         {/* Форма за пребарување и филтрирање */}
         <div className='flex flex-col md:flex-row items-center gap-6'>
-          <SearchInput placeholder='Пребарај име, е-пошта или телефон' />
+          <div className='max-w-md w-full'>
+            <SearchInput placeholder='Пребарај име, е-пошта или телефон' />
+          </div>
 
           <RoleSelect />
         </div>

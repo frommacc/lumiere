@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth'
 import { calculateDeliveryFee } from '@/lib/constants/delivery'
 import { DeliveryMethod } from '@/lib/generated/prisma'
 import { generateUniqueOrderNumber } from '@/lib/utils/generate-order-number'
+import { pusherServer } from '@/lib/pusher'
 
 // 1. Дефинирање на типови за влезните податоци
 export interface CartItemInput {
@@ -196,7 +197,13 @@ export async function createOrder(
           }),
         },
       },
+      include: {
+        items: true,
+      },
     })
+
+    // PUSHER TRIGGER
+    await pusherServer.trigger('kds-channel', 'new-order-created', newOrder)
 
     return {
       success: true,

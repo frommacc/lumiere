@@ -1,38 +1,81 @@
 import { OrderStatus } from '@/lib/generated/prisma'
 import { prisma } from '@/lib/prisma'
+import { getOptionalDateRange } from '@/lib/reservations'
 
 export async function getAdminOrders({
   query,
   status,
-}: { query?: string; status?: OrderStatus } = {}) {
+  page = 1,
+  pageSize = 20,
+  from,
+  to,
+}: {
+  query?: string
+  status?: OrderStatus
+  page?: number
+  pageSize?: number
+  from?: string
+  to?: string
+} = {}) {
   const term = query?.trim()
-  return prisma.order.findMany({
-    where: {
-      ...(status ? { status } : {}),
-      ...(term
-        ? {
-            OR: [
-              { orderNumber: { contains: term, mode: 'insensitive' } },
-              { customerName: { contains: term, mode: 'insensitive' } },
-              { phone: { contains: term, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
-    },
-    take: 100,
-    orderBy: { createdAt: 'desc' },
-    include: { items: true, user: { select: { name: true, email: true } } },
-  })
+  const { start, end } = getOptionalDateRange(from, to)
+
+  // Флексибилен филтер за датум во Prisma
+  const createdAtFilter = {
+    ...(start ? { gte: start } : {}),
+    ...(end ? { lt: end } : {}), // 'lt' се користи бидејќи 'end' е почетокот на следниот ден
+  }
+
+  const where = {
+    ...(status ? { status } : {}),
+    ...(start || end ? { createdAt: createdAtFilter } : {}),
+    ...(term
+      ? {
+          OR: [
+            { orderNumber: { contains: term, mode: 'insensitive' as const } },
+            { customerName: { contains: term, mode: 'insensitive' as const } },
+            { phone: { contains: term, mode: 'insensitive' as const } },
+          ],
+        }
+      : {}),
+  }
+
+  const skip = (page - 1) * pageSize
+
+  const [totalItems, orders] = await prisma.$transaction([
+    prisma.order.count({ where }),
+    prisma.order.findMany({
+      where,
+      skip,
+      take: pageSize,
+      orderBy: { createdAt: 'desc' },
+      include: { items: true, user: { select: { name: true, email: true } } },
+    }),
+  ])
+
+  const totalPages = Math.ceil(totalItems / pageSize)
+
+  return {
+    orders,
+    totalItems,
+    totalPages,
+    currentPage: page,
+    pageSize,
+  }
 }
 
 export async function getKitchenOrders() {
   return prisma.order.findMany({
     where: {
       status: {
-        in: [OrderStatus.CONFIRMED, OrderStatus.PREPARING, OrderStatus.READY],
+        in: [
+          OrderStatus.PENDING,
+          OrderStatus.CONFIRMED,
+          OrderStatus.PREPARING,
+          OrderStatus.READY,
+        ],
       },
     },
-    take: 100,
     orderBy: { createdAt: 'asc' },
     include: { items: true },
   })
@@ -41,7 +84,7 @@ export async function getKitchenOrders() {
 export async function getStaffOrders() {
   return prisma.order.findMany({
     where: { status: { in: [OrderStatus.READY, OrderStatus.IN_TRANSIT] } },
-    take: 100,
+
     orderBy: { updatedAt: 'asc' },
     include: { items: true },
   })

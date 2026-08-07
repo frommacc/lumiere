@@ -15,9 +15,16 @@ const managerOrderTransitions: Record<OrderStatus, OrderStatus[]> = {
   CANCELLED: [],
 }
 
-const managerReservationTransitions: Record<ReservationStatus, ReservationStatus[]> = {
+const managerReservationTransitions: Record<
+  ReservationStatus,
+  ReservationStatus[]
+> = {
   PENDING: [ReservationStatus.CONFIRMED, ReservationStatus.CANCELLED],
-  CONFIRMED: [ReservationStatus.SEATED, ReservationStatus.CANCELLED, ReservationStatus.NO_SHOW],
+  CONFIRMED: [
+    ReservationStatus.SEATED,
+    ReservationStatus.CANCELLED,
+    ReservationStatus.NO_SHOW,
+  ],
   SEATED: [ReservationStatus.COMPLETED, ReservationStatus.CANCELLED],
   COMPLETED: [],
   CANCELLED: [],
@@ -29,10 +36,15 @@ export function getAllowedOrderStatuses(
   current: OrderStatus,
   deliveryMethod: DeliveryMethod,
 ) {
-  if (role === Role.ADMIN || role === Role.MANAGER) {
+  if (role === Role.ADMIN) {
+    return Object.values(OrderStatus).filter((status) => status !== current)
+  }
+
+  if (role === Role.MANAGER) {
     return managerOrderTransitions[current]
   }
   if (role === Role.KITCHEN) {
+    if (current === OrderStatus.PENDING) return [OrderStatus.CONFIRMED]
     if (current === OrderStatus.CONFIRMED) return [OrderStatus.PREPARING]
     if (current === OrderStatus.PREPARING) return [OrderStatus.READY]
     return []
@@ -48,7 +60,10 @@ export function getAllowedOrderStatuses(
   return []
 }
 
-export function getAllowedReservationStatuses(role: Role, current: ReservationStatus) {
+export function getAllowedReservationStatuses(
+  role: Role,
+  current: ReservationStatus,
+) {
   if (role === Role.ADMIN || role === Role.MANAGER) {
     return managerReservationTransitions[current]
   }
@@ -56,7 +71,9 @@ export function getAllowedReservationStatuses(role: Role, current: ReservationSt
     if (current === ReservationStatus.CONFIRMED) {
       return [ReservationStatus.SEATED, ReservationStatus.NO_SHOW]
     }
-    return current === ReservationStatus.SEATED ? [ReservationStatus.COMPLETED] : []
+    return current === ReservationStatus.SEATED
+      ? [ReservationStatus.COMPLETED]
+      : []
   }
   return []
 }

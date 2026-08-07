@@ -16,26 +16,31 @@ export function SearchInput({ placeholder = 'Пребарај...' }: SearchInput
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  // Дебаунс функција која ќе се изврши 300ms откако корисникот ќе престане да пишува
+  // Дебаунс функција која ќе се изврши 500ms откако корисникот ќе престане да пишува
   const handleSearch = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    // При секое ново пребарување, секогаш врати на првата страница
-    params.set('page', '1')
+    let params: URLSearchParams
 
     if (term) {
+      // Кога корисникот пребарува, бришеме сè и почнуваме од нула со чисти параметри
+      params = new URLSearchParams()
       params.set('q', term)
     } else {
+      // Кога ќе го избрише пребарувањето, ги земаме постоечките параметри и само го отстрануваме 'q'
+      params = new URLSearchParams(searchParams.toString())
       params.delete('q')
+      params.delete('page') // исто така ресетираме на прва страница
     }
 
     startTransition(() => {
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      const queryString = params.toString()
+      router.push(queryString ? `${pathname}?${queryString}` : pathname, {
+        scroll: false,
+      })
     })
   }, 500)
 
   return (
-    <div className='relative max-w-md flex-1'>
+    <div className='relative flex-1'>
       <Search className='absolute left-3 top-1/2 size-4 -translate-y-1/2 text-on-surface-variant/60' />
 
       <Input

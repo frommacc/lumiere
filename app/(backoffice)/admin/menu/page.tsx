@@ -35,7 +35,7 @@ export default async function AdminMenuPage({ searchParams }: PageProps) {
       />
 
       <div className='space-y-6 px-6 py-8 md:px-10'>
-        <div className='flex items-center gap-3'>
+        <div className='max-w-md'>
           <SearchInput placeholder='Пребарај артикли, по име, опис...' />
         </div>
 

@@ -10,6 +10,24 @@ export const orderStatusLabels: Record<OrderStatus, string> = {
   [OrderStatus.CANCELLED]: 'Откажано',
 }
 
+export const statusActionLabels: Record<OrderStatus, string> = {
+  [OrderStatus.PENDING]: 'Означи како примена',
+  [OrderStatus.CONFIRMED]: 'Потврди нарачка',
+  [OrderStatus.PREPARING]: 'Започни подготовка',
+  [OrderStatus.READY]: 'Означи како подготвена',
+  [OrderStatus.IN_TRANSIT]: 'Испрати во испорака',
+  [OrderStatus.DELIVERED]: 'Означи како доставена',
+  [OrderStatus.CANCELLED]: 'Откажи нарачка',
+}
+
+export const orderActionLabels = {
+  actionsMenuTitle: 'Акции',
+  changeStatusGroup: 'Промени статус',
+  viewDetails: 'Види детали',
+  deleteOrder: 'Избриши нарачка',
+  openMenuSr: 'Отвори мени',
+} as const
+
 const statusConfig: Record<OrderStatus, { label: string; className: string }> =
   {
     [OrderStatus.PENDING]: {

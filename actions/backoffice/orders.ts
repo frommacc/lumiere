@@ -6,6 +6,7 @@ import { getAuthorizedUser } from '@/lib/authorization'
 import { OrderStatus, Role } from '@/lib/generated/prisma'
 import { prisma } from '@/lib/prisma'
 import { getAllowedOrderStatuses } from '@/lib/constants/operational-status'
+import { pusherServer } from '@/lib/pusher'
 
 export async function updateOrderStatusAction(
   input: unknown,
@@ -37,10 +38,39 @@ export async function updateOrderStatusAction(
     return { success: false, message: 'Овој статусен премин не е дозволен.' }
   }
 
-  await prisma.order.update({
+  const updatedOrder = await prisma.order.update({
     where: { id: parsed.data.orderId },
     data: { status: parsed.data.status },
   })
+
+  // PUSHER TRIGGER
+  await pusherServer.trigger('kds-channel', 'order-status-updated', {
+    orderId: updatedOrder.id,
+    status: updatedOrder.status,
+    updatedAt: updatedOrder.updatedAt,
+  })
+
   refreshOperations()
   return { success: true, message: 'Статусот на нарачката е ажуриран.' }
+}
+
+export async function deleteOrderAction(
+  orderId: string,
+): Promise<ActionResult> {
+  const user = await getAuthorizedUser([Role.ADMIN])
+  if (!user) return forbidden()
+
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    select: { id: true },
+  })
+
+  if (!order) return { success: false, message: 'Нарачката не постои.' }
+
+  await prisma.order.delete({
+    where: { id: orderId },
+  })
+
+  refreshOperations()
+  return { success: true, message: 'Нарачката е успешно избришана.' }
 }
