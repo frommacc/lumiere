@@ -45,7 +45,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
       if (resetError) {
         setError('root', {
           message:
-            'Се случи грешка при ресетирање на лозинката. Линкот е истечен или невалиден.',
+            'An error occurred while resetting the password. The link has expired or is invalid.',
         })
       } else {
         setSuccess(true)
@@ -55,27 +55,24 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
       }
     } catch (err) {
       setError('root', {
-        message: 'Мрежна грешка. Ве молиме обидете се повторно.',
+        message: 'Network error. Please try again.',
       })
       console.error(err)
     }
   }
 
   return (
-    <>
-      {/* СЛУЧАЈ 1: УСПЕШНА ПРОМЕНА */}
-      {success ? (
+    <>      {/* CASE 1: SUCCESSFUL CHANGE */}
+      {success? (
         <div className='space-y-8 animate-[fadeIn_0.5s_ease-out_forwards]'>
           <div className='border border-primary/30 bg-primary/5 p-6 rounded-none space-y-3 relative overflow-hidden'>
             <div className='flex items-center gap-3 text-primary'>
               <CheckCircle2 className='h-5 w-5 shrink-0' />
-              <h3 className='text-xs font-semibold uppercase tracking-widest'>
-                Успешна промена!
+              <h3 className='text-xs font-semibold uppercase tracking-widest'>                Successful change!
               </h3>
             </div>
-            <p className='text-xs text-outline leading-relaxed'>
-              Вашата лозинка е успешно ажурирана. Веднаш ве пренасочуваме кон
-              страницата за најава...
+            <p className='text-xs text-outline leading-relaxed'>              Your password has been successfully updated. We immediately redirect you to
+              login page...
             </p>
           </div>
 
@@ -83,20 +80,16 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
             <Link
               href='/login'
               className='block w-full bg-primary text-primary-foreground py-4 text-center text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container shadow-lg'
-            >
-              ОДИ КОН НАЈАВА
+            >              GO TO ANNOUNCEMENT
             </Link>
           </div>
-        </div>
-      ) : (
-        /* СЛУЧАЈ 2: ФОРМА ЗА НОВА ЛОЗИНКА */
+        </div>      ) : (
+        /* CASE 2: NEW PASSWORD FORM */
         <div>
           <header className='mb-10'>
-            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>
-              Нова лозинка
+            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>              New password
             </h1>
-            <p className='text-outline text-sm'>
-              Внесете ја вашата нова безбедна лозинка за пристап.
+            <p className='text-outline text-sm'>              Enter your new secure access password.
             </p>
           </header>
 
@@ -111,8 +104,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
             onSubmit={handleSubmit(onSubmit)}
             className='flex flex-col space-y-7'
             noValidate
-          >
-            {/* Нова Лозинка */}
+          >            {/* New Password */}
             <Controller
               control={control}
               name='password'
@@ -121,8 +113,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                   <Label
                     htmlFor='password'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Нова лозинка
+                  >                    New password
                   </Label>
                   <div className='relative flex items-center'>
                     <Input
@@ -137,7 +128,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                       onClick={() => setShowPassword(!showPassword)}
                       className='absolute right-2 text-outline hover:text-primary transition-colors focus:outline-none p-1'
                       aria-label={
-                        showPassword ? 'Сокриј лозинка' : 'Прикажи лозинка'
+                        showPassword ? 'Hide password' : 'Show password'
                       }
                     >
                       {showPassword ? (
@@ -155,9 +146,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                   )}
                 </div>
               )}
-            />
-
-            {/* Потврди лозинка */}
+            />            {/* Confirm password */}
             <Controller
               control={control}
               name='confirmPassword'
@@ -166,8 +155,7 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                   <Label
                     htmlFor='confirmPassword'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Потврди лозинка
+                  >                    Confirm password
                   </Label>
                   <div className='relative flex items-center'>
                     <Input
@@ -185,8 +173,8 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                       className='absolute right-2 text-outline hover:text-primary transition-colors focus:outline-none p-1'
                       aria-label={
                         showConfirmPassword
-                          ? 'Сокриј лозинка'
-                          : 'Прикажи лозинка'
+                          ? 'Hide password'
+                          : 'Show password'
                       }
                     >
                       {showConfirmPassword ? (
@@ -212,17 +200,15 @@ const ResetPasswordForm = ({ token }: { token: string }) => {
                 type='submit'
                 disabled={isSubmitting}
                 className='w-full bg-primary text-primary-foreground py-4 text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container disabled:opacity-50 shadow-lg cursor-pointer'
-              >
-                {isSubmitting ? 'СЕ ЗАЧУВУВА...' : 'ПРОМЕНИ ЛОЗИНКА'}
+              >                {isSubmitting ? 'SAVING...' : 'CHANGE PASSWORD'}
               </button>
 
               <div className='flex flex-col items-center space-y-2'>
-                <p className='text-outline text-xs'>Се сетивте на лозинката?</p>
+                <p className='text-outline text-xs'>Remember your password?</p>
                 <Link
                   href='/login'
                   className='text-[11px] font-semibold tracking-widest text-primary border-b border-primary/30 hover:border-primary transition-all pb-0.5 uppercase'
-                >
-                  НАЗАД КОН НАЈАВА
+                >                  BACK TO ANNOUNCEMENT
                 </Link>
               </div>
             </div>

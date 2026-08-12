@@ -28,7 +28,7 @@ export async function updateProfileAction(
   if (!session?.user?.id) {
     return {
       success: false,
-      message: 'Мора да бидете најавени за да го уредите профилот.',
+      message: 'You must be logged in to edit your profile.',
     }
   }
 
@@ -46,7 +46,7 @@ export async function updateProfileAction(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Проверете ги внесените податоци и обидете се повторно.',
+      message: 'Check the entered data and try again.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     }
   }
@@ -76,7 +76,7 @@ export async function updateProfileAction(
       try {
         await deleteImageFromCloudinary(currentImage.imageId)
       } catch {
-        console.error('Неуспешно бришење на претходната профилна слика.')
+        console.error('Failed to delete previous profile picture.')
       }
     }
 
@@ -84,14 +84,14 @@ export async function updateProfileAction(
 
     return {
       success: true,
-      message: 'Профилот е успешно ажуриран.',
+      message: 'Profile updated successfully.',
     }
   } catch (error) {
     if (uploadedImage) {
       try {
         await deleteImageFromCloudinary(uploadedImage.imageId)
       } catch {
-        console.error('Неуспешно чистење на ново-поставената профилна слика.')
+        console.error('Failed to clear newly uploaded profile picture.')
       }
     }
 
@@ -99,7 +99,7 @@ export async function updateProfileAction(
 
     return {
       success: false,
-      message: 'Не успеавме да го ажурираме профилот. Обидете се повторно.',
+      message: 'We were unable to update the profile. Try again.',
     }
   }
 }

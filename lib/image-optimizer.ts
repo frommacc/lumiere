@@ -1,10 +1,10 @@
 import sharp from 'sharp'
 
 /**
- * Хелпер функција за оптимизација, промена на големина и компресија на слика.
- * @param buffer Оригиналниот бафер на сликата
- * @param maxWidth Максимална ширина (стандардно 1200px)
- * @returns Оптимизиран Buffer во WebP формат
+ * Helper function for image optimization, resizing and compression.
+ * @param buffer The original image buffer
+ * @param maxWidth Maximum width (default 1200px)
+ * @returns Optimized Buffer in WebP format
  */
 export async function optimizeImage(
   buffer: Buffer,
@@ -21,7 +21,7 @@ export async function optimizeImage(
       .webp({ quality: 80 })
       .toBuffer()
   } catch (error) {
-    console.error('Грешка при оптимизација на сликата со sharp:', error)
+    console.error('Sharp image optimization error:', error)
 
     return buffer
   }

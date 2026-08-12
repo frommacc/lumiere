@@ -16,7 +16,7 @@ export function useKdsOrders(
 ) {
   const [orders, setOrders] = useState<KdsOrder[]>(initialOrders)
 
-  // 1. Ref за зачувување на callback-от (спречува повторно претплаќање на Pusher)
+  // 1. Ref to save the callback (prevents pusher subscription again)
   const alertRef = useRef(onNewConfirmedOrder)
   useEffect(() => {
     alertRef.current = onNewConfirmedOrder
@@ -35,12 +35,12 @@ export function useKdsOrders(
       setOrders((prev) => {
         const exists = prev.some((o) => o.id === data.orderId)
 
-        // 1. Ако новиот статус НЕ е за кујна (на пр. станала READY) -> отстрани ја од кујнската табла
+        // 1. If the new status is NOT for a kitchen (eg it became READY) -> remove it from the kitchen board
         if (!KITCHEN_STATUSES.includes(data.status)) {
           return prev.filter((o) => o.id !== data.orderId)
         }
 
-        // 2. Ако веќе постои во кујната (на пр. преминува од CONFIRMED во PREPARING)
+        // 2. If it already exists in the kitchen (eg goes from CONFIRMED to PREPARING)
         if (exists) {
           return prev.map((order) =>
             order.id === data.orderId
@@ -49,7 +49,7 @@ export function useKdsOrders(
           )
         }
 
-        // 3. Нова нарачка што штотуку ВЛЕГУВА во кујната (Станала CONFIRMED)
+        // 3. A new order that just ENTERS the kitchen (Becomes CONFIRMED)
         if (data.status === OrderStatus.CONFIRMED) {
           isNewConfirmedForKitchen = true
         }
@@ -67,7 +67,7 @@ export function useKdsOrders(
         return prev
       })
 
-      // Свири аларм ТОЧНО кога нарачката станува CONFIRMED
+      // An alarm sounds EXACTLY when an order becomes CONFIRMED
       if (isNewConfirmedForKitchen) {
         alertRef.current?.()
       }
@@ -79,7 +79,7 @@ export function useKdsOrders(
       channel.unbind('order-status-updated', handleStatusUpdate)
       pusherClient.unsubscribe('kds-channel')
     }
-  }, []) // Се претплаќа само еднаш при mount
+  }, []) // It is subscribed only once at mount
 
   const confirmedOrders = orders.filter(
     (o) => o.status === OrderStatus.CONFIRMED,

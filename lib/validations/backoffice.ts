@@ -60,8 +60,8 @@ export const tableSchema = z.object({
 
 export const categorySchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, 'Името е задолжително'),
-  slug: z.string().min(1, 'Slug е задолжителен'),
+  name: z.string().min(1, 'Name is mandatory'),
+  slug: z.string().min(1, 'Slug is a must'),
   description: z.string().nullable().optional(),
   displayOrder: z.number(),
   isPublished: z.boolean().default(true),
@@ -75,9 +75,9 @@ export const categorySchema = z.object({
 
 export const subcategorySchema = z.object({
   id: z.string().optional(),
-  categoryId: z.string().min(1, 'Изберете категорија'),
-  name: z.string().min(1, 'Името е задолжително'),
-  slug: z.string().min(1, 'Слагот е задолжителен'),
+  categoryId: z.string().min(1, 'Select Category'),
+  name: z.string().min(1, 'Name is required'),
+  slug: z.string().min(1, 'Slug is required'),
   description: z.string().optional().nullable(),
   displayOrder: z.coerce.number().default(0),
   isPublished: z.boolean().default(true),
@@ -87,25 +87,25 @@ export type SubcategoryFormValues = z.infer<typeof subcategorySchema>
 
 export const menuItemSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1, 'Името е задолжително'),
-  description: z.string().min(1, 'Описот е задолжителен'),
-  price: z.number().min(0, 'Цената мора да биде позитивен број'),
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  price: z.number().min(0, 'Price must be a positive number'),
   image: z.string().nullable().optional(),
   imageId: z.string().nullable().optional(),
   imageFile: z.instanceof(File).optional(),
 
-  // Селекција
+  // Selection
   categoryId: z.string().nullable().optional(),
   subcategoryId: z.string().nullable().optional(),
 
-  // Знаменца
+  // Flags
   isAvailable: z.boolean().default(true),
   isOrderable: z.boolean().default(false),
   isPopular: z.boolean().default(false),
   isExclusive: z.boolean().default(false),
   isSpecial: z.boolean().default(false),
 
-  // Дополнителни детали
+  // Additional details
   ingredients: z.array(z.string()).default([]),
   allergens: z.array(z.string()).default([]),
   dietary: z.array(z.string()).default([]),

@@ -1,7 +1,7 @@
 import PusherServer from 'pusher'
 import PusherClient from 'pusher-js'
 
-// 1. Серверска инстанца (за праќање настани од Server Actions)
+// 1. Server instance (for sending events from Server Actions)
 export const pusherServer = new PusherServer({
   appId: process.env.PUSHER_APP_ID!,
   key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
@@ -10,7 +10,7 @@ export const pusherServer = new PusherServer({
   useTLS: true,
 })
 
-// 2. Клиентска инстанца (за претплата на кујнскиот екран)
+// 2. Client instance (for kitchen screen subscription)
 export const pusherClient = new PusherClient(
   process.env.NEXT_PUBLIC_PUSHER_KEY!,
   {

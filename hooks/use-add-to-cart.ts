@@ -12,16 +12,16 @@ export function useAddToCart(feedbackDuration = 3000) {
   const handleAddToCart = (item: MenuItemWithRelations) => {
     addItem(item)
 
-    // Додаваме визуелен фидбек за конкретниот артикал
+    // We add visual feedback for the specific item
     setAddedItemIds((prev) => ({ ...prev, [item.id]: true }))
 
-    // По минување на дефинираното време го враќаме копчето во првобитна состојба
+    // After the defined time has passed, we return the button to its original state
     setTimeout(() => {
       setAddedItemIds((prev) => ({ ...prev, [item.id]: false }))
     }, feedbackDuration)
   }
 
-  // Помошна функција да провериш дали специфичен артикал е додаден
+  // A helper function to check if a specific item has been added
   const isItemAdded = (itemId: string) => Boolean(addedItemIds[itemId])
 
   return {

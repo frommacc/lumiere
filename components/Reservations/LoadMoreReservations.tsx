@@ -38,7 +38,7 @@ export function LoadMoreReservations({
         disabled={isPending}
         className='group flex items-center gap-4 font-label-caps text-label-caps uppercase tracking-[0.4em] text-outline transition-colors hover:text-primary disabled:opacity-50'
       >
-        {isPending ? <><span>Се вчитува...</span><Loader2 className='size-5 animate-spin text-primary' /></> : <><span>Вчитај повеќе</span><ChevronDown className='size-5 transition-transform group-hover:translate-y-1' /></>}
+        {isPending ? <><span>Loading...</span><Loader2 className='size-5 animate-spin text-primary' /></> : <><span>Load more</span><ChevronDown className='size-5 transition-transform group-hover:translate-y-1' /></>}
       </button>
     </div>
   )

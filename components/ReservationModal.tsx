@@ -5,7 +5,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { format } from 'date-fns'
-import { mk } from 'date-fns/locale'
+import { enUS } from 'date-fns/locale'
 import { CalendarIcon, CheckCircle, LoaderCircle, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -71,13 +71,13 @@ function getMaxReservationDate() {
 function formatDurationLabel(durationMinutes: number) {
   const hours = Math.floor(durationMinutes / 60)
   const minutes = durationMinutes % 60
-  const hourLabel = hours === 1 ? 'час' : 'часа'
+  const hourLabel = hours === 1 ? 'hour' : 'hours'
 
-  return `${hours} ${hourLabel}${minutes ? ` и ${minutes} мин.` : ''}`
+  return `${hours} ${hourLabel}${minutes ? ` and ${minutes} min.` : ''}`
 }
 
 function FormFieldError({ message }: { message?: string }) {
-  return message ? <p className='mt-1 text-xs text-destructive'>{message}</p> : null
+  return message? <p className='mt-1 text-xs text-destructive'>{message}</p> : null
 }
 
 export default function ReservationModal() {
@@ -182,7 +182,7 @@ export default function ReservationModal() {
         })
       }
       if (!result.slots.length) {
-        setSlotMessage('Нема слободни термини за избраниот датум и амбиент.')
+        setSlotMessage('There are no available appointments for the selected date and setting.')
       }
     })
 
@@ -217,7 +217,7 @@ export default function ReservationModal() {
 
   const onSubmit = (values: ReservationFormValues) => {
     if (!availableSlots.includes(values.time)) {
-      form.setError('time', { message: 'Изберете слободен термин.' })
+      form.setError('time', { message: 'Choose a free term.' })
       return
     }
 
@@ -244,15 +244,13 @@ export default function ReservationModal() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className='w-full max-w-4xl overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container p-0 text-on-surface shadow-2xl gap-0 max-h-[90vh] flex flex-col md:min-w-2xl'>
         <DialogHeader className='sr-only'>
-          <DialogTitle>Резервација на маса</DialogTitle>
-          <DialogDescription>
-            Изберете датум, термин и амбиент за вашата резервација.
+          <DialogTitle>Table reservation</DialogTitle>
+          <DialogDescription>            Choose a date, time and setting for your reservation.
           </DialogDescription>
         </DialogHeader>
 
         <div className='shrink-0 border-b border-outline-variant/20 px-6 py-4'>
-          <h3 className='font-display text-lg font-bold uppercase tracking-wide text-primary md:text-xl'>
-            Резервација на маса
+          <h3 className='font-display text-lg font-bold uppercase tracking-wide text-primary md:text-xl'>            Table reservation
           </h3>
         </div>
 
@@ -266,12 +264,11 @@ export default function ReservationModal() {
           ) : !session?.user ? (
             <div className='mx-auto max-w-md py-12 text-center'>
               <LogIn className='mx-auto mb-4 h-12 w-12 text-primary' />
-              <h4 className='font-display text-2xl font-bold'>Најавете се за резервација</h4>
-              <p className='mt-2 text-sm text-on-surface-variant'>
-                Резервациите се врзани за вашиот профил за да можете лесно да ги следите.
+              <h4 className='font-display text-2xl font-bold'>Log in to make a reservation</h4>
+              <p className='mt-2 text-sm text-on-surface-variant'>                Bookings are linked to your profile so you can easily track them.
               </p>
               <Button asChild className='mt-6'>
-                <Link href='/login?redirect_url=/'>Најави се</Link>
+                <Link href='/login?redirect_url=/'>Log in</Link>
               </Button>
             </div>
           ) : reservation ? (
@@ -280,7 +277,7 @@ export default function ReservationModal() {
             <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6' noValidate>
               <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
                 <div>
-                  <Label className='mb-2 block'>Датум</Label>
+                  <Label className='mb-2 block'>Date</Label>
                   <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button
@@ -288,8 +285,7 @@ export default function ReservationModal() {
                         variant='outline'
                         className='h-auto w-full justify-start rounded border border-outline-variant/30 bg-surface-container-high px-4 py-3 text-left font-normal text-on-surface hover:bg-surface-container-high/80'
                       >
-                        <CalendarIcon className='mr-2 h-4 w-4 text-primary' />
-                        {selectedDate ? format(selectedDate, 'dd MMMM yyyy', { locale: mk }) : 'Изберете датум'}
+                        <CalendarIcon className='mr-2 h-4 w-4 text-primary' />                        {selectedDate ? format(selectedDate, 'dd MMMM yyyy', { locale: enUS }) : 'Select a date'}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className='w-auto border border-outline-variant/30 bg-surface-container-high p-0 text-on-surface' align='start'>
@@ -315,7 +311,7 @@ export default function ReservationModal() {
                 </div>
 
                 <div>
-                  <Label htmlFor='reservation-guests' className='mb-2'>Број на гости</Label>
+                  <Label htmlFor='reservation-guests' className='mb-2'>Number of guests</Label>
                   <Select
                     value={String(guests)}
                     onValueChange={(value) =>
@@ -323,12 +319,11 @@ export default function ReservationModal() {
                     }
                   >
                     <SelectTrigger id='reservation-guests' className='h-auto w-full rounded border border-outline-variant/30 bg-surface-container-high px-4 py-3 text-sm text-on-surface'>
-                      <SelectValue placeholder='Изберете број на гости' />
+                      <SelectValue placeholder='Choose number of guests' />
                     </SelectTrigger>
                     <SelectContent className='border border-outline-variant/30 bg-surface-container-high text-on-surface'>
                       {Array.from({ length: 14 }, (_, index) => index + 1).map((number) => (
-                        <SelectItem key={number} value={String(number)}>
-                          {number} {number === 1 ? 'лице' : 'лица'}
+                        <SelectItem key={number} value={String(number)}>                          {number} {number === 1 ? 'face' : 'faces'}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -336,7 +331,7 @@ export default function ReservationModal() {
                 </div>
 
                 <div>
-                  <Label htmlFor='reservation-duration' className='mb-2'>Планирано седење</Label>
+                  <Label htmlFor='reservation-duration' className='mb-2'>Planned seating</Label>
                   <Select
                     value={String(durationMinutes)}
                     onValueChange={(value) =>
@@ -346,7 +341,7 @@ export default function ReservationModal() {
                     }
                   >
                     <SelectTrigger id='reservation-duration' className='h-auto w-full rounded border border-outline-variant/30 bg-surface-container-high px-4 py-3 text-sm text-on-surface'>
-                      <SelectValue placeholder='Изберете време' />
+                      <SelectValue placeholder='Choose a time' />
                     </SelectTrigger>
                     <SelectContent className='border border-outline-variant/30 bg-surface-container-high text-on-surface'>
                       {RESERVATION_DURATIONS.map((duration) => (
@@ -361,7 +356,7 @@ export default function ReservationModal() {
               </div>
 
               <div>
-                <Label className='mb-2 block'>Време</Label>
+                <Label className='mb-2 block'>Time</Label>
                 {isLoadingSlots ? (
                   <div className='grid grid-cols-3 gap-2 sm:grid-cols-5'>
                     {Array.from({ length: 5 }, (_, index) => <Skeleton key={index} className='h-9' />)}
@@ -384,15 +379,14 @@ export default function ReservationModal() {
                     ))}
                   </div>
                 ) : (
-                  <p className='rounded-md border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface-variant'>
-                    {slotMessage ?? 'Изберете датум и амбиент за да ги видите слободните термини.'}
+                  <p className='rounded-md border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface-variant'>                    { slotMessage ?? 'Select a date and location to see available appointments.'}
                   </p>
                 )}
                 <FormFieldError message={form.formState.errors.time?.message} />
               </div>
 
               <div>
-                <Label className='mb-2 block'>Амбиент и сместување</Label>
+                <Label className='mb-2 block'>Ambience and accommodation</Label>
                 {isLoadingTypes ? (
                   <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
                     <Skeleton className='h-20' />
@@ -419,37 +413,36 @@ export default function ReservationModal() {
                     ))}
                   </div>
                 ) : (
-                  <p className='rounded-md border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface-variant'>
-                    Нема конфигурирани типови на маси.
+                  <p className='rounded-md border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface-variant'>                    There are no table types configured.
                   </p>
                 )}
                 <FormFieldError message={form.formState.errors.tableTypeId?.message} />
               </div>
 
               <div className='space-y-4 border-t border-outline-variant/20 pt-4'>
-                <p className='text-[10px] font-bold uppercase tracking-widest text-primary'>Контакт информации</p>
+                <p className='text-[10px] font-bold uppercase tracking-widest text-primary'>Contact information</p>
                 <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
                   <div>
-                    <Input id='reservation-name' autoComplete='name' placeholder='Име и презиме' aria-invalid={!!form.formState.errors.name} {...form.register('name')} />
+                    <Input id='reservation-name' autoComplete='name' placeholder='Name and surname' aria-invalid={!!form.formState.errors.name} {...form.register('name')} />
                     <FormFieldError message={form.formState.errors.name?.message} />
                   </div>
                   <div>
-                    <Input id='reservation-phone' type='tel' autoComplete='tel' placeholder='Телефонски број' aria-invalid={!!form.formState.errors.phone} {...form.register('phone')} />
+                    <Input id='reservation-phone' type='tel' autoComplete='tel' placeholder='Telephone number' aria-invalid={!!form.formState.errors.phone} {...form.register('phone')} />
                     <FormFieldError message={form.formState.errors.phone?.message} />
                   </div>
                 </div>
                 <div>
-                  <Input id='reservation-email' type='email' autoComplete='email' placeholder='Е-пошта за потврда' aria-invalid={!!form.formState.errors.email} {...form.register('email')} />
+                  <Input id='reservation-email' type='email' autoComplete='email' placeholder='Confirmation email' aria-invalid={!!form.formState.errors.email} {...form.register('email')} />
                   <FormFieldError message={form.formState.errors.email?.message} />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor='reservation-requests' className='mb-2'>Посебни барања (опционално)</Label>
+                <Label htmlFor='reservation-requests' className='mb-2'>Special requirements (optional)</Label>
                 <textarea
                   id='reservation-requests'
                   rows={3}
-                  placeholder='Алергии, роденден или други важни детали.'
+                  placeholder='Allergies, birthday or other important details.'
                   className='w-full rounded border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface placeholder:text-muted-foreground focus:border-primary focus:outline-none'
                   {...form.register('specialRequests')}
                 />
@@ -458,7 +451,7 @@ export default function ReservationModal() {
 
               <Button type='submit' disabled={isSubmitting || isLoadingSlots || !availableSlots.length || !tableTypeId} className='h-auto w-full py-4 text-xs uppercase tracking-widest'>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
-                {isSubmitting ? 'Потврдување...' : 'Потврди резервација'}
+                {isSubmitting ? 'Confirming...' : 'Confirm booking'}
               </Button>
             </form>
           )}
@@ -481,31 +474,30 @@ function ReservationTicket({
     <div className='space-y-6 px-4 py-8 text-center'>
       <CheckCircle size={60} className='mx-auto text-primary' />
       <div>
-        <h4 className='font-display text-2xl font-bold'>Барањето е испратено!</h4>
-        <p className='mx-auto mt-2 max-w-md text-xs text-on-surface-variant'>
-          Ви благодариме {reservation.name}. Ќе добиете е-пошта на{' '}
-          <span className='text-primary'>{reservation.email}</span> штом ресторанот
-          ја потврди резервацијата. Статусот можете да го следите и во вашите
-          резервации.
+        <h4 className='font-display text-2xl font-bold'>The request has been sent!</h4>
+        <p className='mx-auto mt-2 max-w-md text-xs text-on-surface-variant'>          Thank you {reservation.name}. You will receive an email at {' '}
+          <span className='text-primary'>{reservation.email}</span> as soon as the restaurant
+          confirm the reservation. You can also follow the status in yours
+          reservations.
         </p>
       </div>
 
       <div className='relative mx-auto max-w-md overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-high p-6 text-left'>
-        <p className='mb-4 text-center text-[9px] font-bold uppercase tracking-[0.2em] text-primary'>Официјален гастрономски билет</p>
+        <p className='mb-4 text-center text-[9px] font-bold uppercase tracking-[0.2em] text-primary'>Official gastronomic ticket</p>
         <div className='grid grid-cols-2 gap-x-2 gap-y-4 border-b border-outline-variant/20 pb-4 text-xs'>
-          <TicketDetail label='Датум' value={format(date, 'dd MMMM yyyy', { locale: mk })} />
-          <TicketDetail label='Време' value={`${reservation.time} часот`} />
-          <TicketDetail label='Планирано седење' value={`${reservation.durationMinutes} минути`} />
-          <TicketDetail label='Маса за' value={`${reservation.guests} ${reservation.guests === 1 ? 'лице' : 'лица'}`} />
-          <TicketDetail label='Локација' value={reservation.tableTypeName} />
+          <TicketDetail label='Date' value={format(date, 'dd MMMM yyyy', { locale: enUS })} />
+          <TicketDetail label='Time' value={`${reservation.time} hour`} />
+          <TicketDetail label='Planned seating' value={`${reservation.durationMinutes} minutes`} />
+          <TicketDetail label='Table for' value={`${reservation.guests} ${reservation.guests === 1 ? 'guest' : 'guests'}`} />
+          <TicketDetail label='Location' value={reservation.tableTypeName} />
         </div>
         <div className='flex items-center justify-between pt-4 text-xs'>
-          <TicketDetail label='Референтен код' value={reservation.reference} mono />
-          <TicketDetail label='Ресторан' value='LUMIÈRE' align='right' />
+          <TicketDetail label='Reference code' value={reservation.reference} mono />
+          <TicketDetail label='Restaurant' value='LUMIÈRE' align='right' />
         </div>
       </div>
 
-      <Button variant='outline' onClick={onClose}>Затвори</Button>
+      <Button variant='outline' onClick={onClose}>Close</Button>
     </div>
   )
 }

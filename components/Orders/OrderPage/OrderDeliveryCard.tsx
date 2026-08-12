@@ -20,15 +20,13 @@ export function OrderDeliveryCard({
   return (
     <div className='bg-card p-6 md:p-8 rounded-lg border border-border/30 relative overflow-hidden'>
       <div className='absolute top-0 left-0 w-1 h-full bg-primary' />
-      <h4 className='text-xs font-semibold text-muted-foreground tracking-[0.2em] uppercase mb-6'>
-        Информации за испорака
+      <h4 className='text-xs font-semibold text-muted-foreground tracking-[0.2em] uppercase mb-6'>        Shipping information
       </h4>
       <div className='space-y-6 text-sm'>
         <div className='flex gap-3'>
           <MapPin className='w-5 h-5 text-primary shrink-0 mt-0.5' />
           <div>
-            <p className='text-[10px] text-muted-foreground uppercase'>
-              Начин / Адреса
+            <p className='text-[10px] text-muted-foreground uppercase'>              Method / Address
             </p>
             <p className='text-foreground font-medium'>
               {formatDeliveryMethod(deliveryMethod)}
@@ -45,8 +43,7 @@ export function OrderDeliveryCard({
         <div className='flex gap-3'>
           <Phone className='w-5 h-5 text-primary shrink-0 mt-0.5' />
           <div>
-            <p className='text-[10px] text-muted-foreground uppercase'>
-              Телефон
+            <p className='text-[10px] text-muted-foreground uppercase'>              Telephone
             </p>
             <p className='text-foreground font-medium'>{phone}</p>
           </div>
@@ -55,8 +52,7 @@ export function OrderDeliveryCard({
         <div className='flex gap-3'>
           <CreditCard className='w-5 h-5 text-primary shrink-0 mt-0.5' />
           <div>
-            <p className='text-[10px] text-muted-foreground uppercase'>
-              Начин на плаќање
+            <p className='text-[10px] text-muted-foreground uppercase'>              Method of payment
             </p>
             <p className='text-foreground font-medium'>
               {formatPaymentMethod(paymentMethod)}
@@ -68,8 +64,7 @@ export function OrderDeliveryCard({
           <div className='flex gap-3 pt-2 border-t border-border/20'>
             <FileText className='w-5 h-5 text-primary shrink-0 mt-0.5' />
             <div>
-              <p className='text-[10px] text-muted-foreground uppercase'>
-                Забелешка
+              <p className='text-[10px] text-muted-foreground uppercase'>                Note
               </p>
               <p className='text-foreground italic'>{notes}</p>
             </div>

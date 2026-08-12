@@ -41,7 +41,7 @@ export function UserActions({
   const [pending, startTransition] = useTransition()
   const router = useRouter()
 
-  // Брза акција: Блокирај / Активирај
+  // Quick action: Block / Activate
   const handleToggleStatus = () => {
     const nextStatus =
       user.status === UserStatus.BLOCKED
@@ -76,7 +76,7 @@ export function UserActions({
           ) : (
             <MoreHorizontal className='size-4' />
           )}
-          <span className='sr-only'>Отвори мени</span>
+          <span className='sr-only'>Open menu</span>
         </Button>
       </DropdownMenuTrigger>
 
@@ -84,21 +84,15 @@ export function UserActions({
         align='end'
         className='w-48 border-outline-variant/20 bg-surface-container text-on-surface'
       >
-        <DropdownMenuLabel className='text-xs font-normal text-on-surface-variant'>
-          Акции за корисник
+        <DropdownMenuLabel className='text-xs font-normal text-on-surface-variant'>          User Actions
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className='bg-outline-variant/15' />
-
-        {/* Известува табелата кој корисник се уредува */}
+        <DropdownMenuSeparator className='bg-outline-variant/15' />        {/* Notifies the table which user is editing */}
         <DropdownMenuItem
           onClick={() => onEdit(user)}
           className='cursor-pointer text-xs'
         >
-          <Pencil className='mr-2 size-3.5' />
-          Уреди корисник
-        </DropdownMenuItem>
-
-        {/* Блокирај / Активирај */}
+          <Pencil className='mr-2 size-3.5' />          Edit user
+        </DropdownMenuItem>        {/* Block / Activate */}
         <DropdownMenuItem
           disabled={isSelf}
           onClick={handleToggleStatus}
@@ -106,27 +100,22 @@ export function UserActions({
         >
           {user.status === UserStatus.BLOCKED ? (
             <>
-              <CheckCircle2 className='mr-2 size-3.5 text-emerald-500' />
-              Активирај корисник
+              <CheckCircle2 className='mr-2 size-3.5 text-emerald-500' />              Activate user
             </>
           ) : (
             <>
-              <Ban className='mr-2 size-3.5 text-amber-500' />
-              Блокирај корисник
+              <Ban className='mr-2 size-3.5 text-amber-500' />              Block user
             </>
           )}
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator className='bg-outline-variant/15' />
-
-        {/* Известува за бришење */}
+        <DropdownMenuSeparator className='bg-outline-variant/15' />        {/* Notify about deletion */}
         <DropdownMenuItem
           disabled={isSelf}
           onClick={() => onDelete(user)}
           className='cursor-pointer text-xs text-destructive focus:bg-destructive/10 focus:text-destructive'
         >
-          <Trash2 className='mr-2 size-3.5' />
-          Избриши корисник
+          <Trash2 className='mr-2 size-3.5' />          Delete user
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

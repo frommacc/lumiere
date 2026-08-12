@@ -63,17 +63,16 @@ export function OrderDetailsModal({
       <DialogContent className='max-w-md sm:max-w-lg'>
         <DialogHeader>
           <DialogTitle className='flex items-center justify-between pr-4'>
-            <span>Нарачка #{order.orderNumber}</span>
+            <span>Order #{order.orderNumber}</span>
             <OrderStatusBadge status={order.status} />
           </DialogTitle>
         </DialogHeader>
 
-        <div className='space-y-4 text-sm'>
-          {/* Податоци за клиент */}
+        <div className='space-y-4 text-sm'>          {/* Customer data */}
           <div className='rounded-lg border p-3 space-y-1.5 bg-muted/30'>
             <div className='flex items-center gap-2 font-medium'>
               <User className='h-4 w-4 text-muted-foreground' />
-              <span>{order.customerName ?? order.user.name ?? 'Анонимен'}</span>
+              <span>{order.customerName ?? order.user.name ?? 'Anonymous'}</span>
             </div>
             <div className='flex items-center gap-2 text-muted-foreground'>
               <Phone className='h-4 w-4' />
@@ -82,52 +81,45 @@ export function OrderDetailsModal({
             {order.deliveryMethod === DeliveryMethod.ADDRESS && (
               <div className='flex items-start gap-2 text-muted-foreground'>
                 <MapPin className='h-4 w-4 mt-0.5 shrink-0' />
-                <span>{order.deliveryAddress ?? 'Нема внесено адреса'}</span>
+                <span>{order.deliveryAddress ?? 'No address entered'}</span>
               </div>
             )}
-          </div>
-
-          {/* Информации за испорака и плаќање */}
+          </div>          {/* Shipping and Payment Information */}
           <div className='grid grid-cols-2 gap-2'>
             <div className='rounded-lg border p-2.5 space-y-1'>
               <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
                 <Truck className='h-3.5 w-3.5' />
-                <span>Испорака</span>
+                <span>Delivery</span>
               </div>
-              <p className='font-medium'>
-                {order.deliveryMethod === DeliveryMethod.ADDRESS
-                  ? 'Достава до адреса'
-                  : 'Лично подигање'}
+              <p className='font-medium'>                { order.deliveryMethod === DeliveryMethod.ADDRESS
+                  ? 'Delivery to Address'
+                  : 'Personal Upload'}
               </p>
             </div>
             <div className='rounded-lg border p-2.5 space-y-1'>
               <div className='flex items-center gap-1.5 text-xs text-muted-foreground'>
                 <CreditCard className='h-3.5 w-3.5' />
-                <span>Плаќање</span>
+                <span>Payment</span>
               </div>
-              <p className='font-medium'>
-                {order.paymentMethod === PaymentMethod.CASH
-                  ? 'Готовина'
-                  : 'Картичка'}{' '}
+              <p className='font-medium'>                {order.paymentMethod === PaymentMethod.CASH
+                  ? 'Cash'
+                  : 'Card'}{' '}
                 ({order.paymentStatus})
               </p>
             </div>
-          </div>
-
-          {/* Забелешка (доколку постои) */}
+          </div>          {/* Note (if any) */}
           {order.notes && (
             <div className='rounded-lg border border-amber-200 bg-amber-50 p-2.5 text-amber-900 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-200'>
               <div className='flex items-center gap-1.5 font-medium text-xs mb-1'>
                 <FileText className='h-3.5 w-3.5' />
-                <span>Забелешка:</span>
+                <span>Note:</span>
               </div>
               <p className='text-xs'>{order.notes}</p>
-            </div>
-          )}
+            </div>          )}
 
-          {/* Список на ставки од нарачката */}
+          {/* List of order items */}
           <div>
-            <h4 className='font-medium mb-2'>Ставки</h4>
+            <h4 className='font-medium mb-2'>Items</h4>
             <div className='border rounded-lg divide-y max-h-40 overflow-y-auto'>
               {order.items && order.items.length > 0 ? (
                 order.items.map((item) => (
@@ -145,25 +137,22 @@ export function OrderDetailsModal({
                   </div>
                 ))
               ) : (
-                <p className='p-3 text-xs text-muted-foreground text-center'>
-                  Нема детални ставки за прикажување.
+                <p className='p-3 text-xs text-muted-foreground text-center'>                  There are no detailed items to display.
                 </p>
               )}
             </div>
-          </div>
-
-          {/* Рекапитулација на цената */}
+          </div>          {/* Price recap */}
           <div className='space-y-1 pt-2 border-t text-xs'>
             <div className='flex justify-between text-muted-foreground'>
-              <span>Подсметка:</span>
+              <span>Sub account:</span>
               <span>{formatCurrency(order.subtotal)}</span>
             </div>
             <div className='flex justify-between text-muted-foreground'>
-              <span>Достава:</span>
+              <span>Delivery:</span>
               <span>{formatCurrency(order.deliveryFee)}</span>
             </div>
             <div className='flex justify-between font-semibold text-sm pt-1 text-foreground'>
-              <span>Вкупно:</span>
+              <span>Total:</span>
               <span>{formatCurrency(order.total)}</span>
             </div>
           </div>

@@ -30,27 +30,27 @@ export default function CategoryEditor({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
-  const { pending, run } = useSavedAction()
+  const { pending, running } = useSavedAction()
   const [internalOpen, setInternalOpen] = useState(false)
 
   const isControlled = externalOpen !== undefined
   const open = isControlled ? externalOpen : internalOpen
   const setOpen = isControlled ? setExternalOpen : setInternalOpen
 
-  // Состојби за формата
-  const [imageFile, setImageFile] = useState<File | undefined>()
+  // States for the form
+  const [ imageFile , setImageFile ] = useState<File | undefined>()
   const [name, setName] = useState(category?.name ?? '')
   const [slug, setSlug] = useState(category?.slug ?? '')
   const [isPublished, setIsPublished] = useState<boolean>(
     category?.isPublished ?? true,
   )
 
-  // Помошна функција за автоматско генерирање на slug
+  // Helper function for automatic slug generation
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
     setName(val)
     if (!category) {
-      // Само за нови категории креирај slug автоматски
+      // Only for new categories create slug automatically
       setSlug(
         val
           .toLowerCase()
@@ -60,7 +60,7 @@ export default function CategoryEditor({
     }
   }
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = ( event : FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
 
@@ -99,22 +99,19 @@ export default function CategoryEditor({
             {category ? (
               <Pencil className='size-3.5' />
             ) : (
-              <Plus className='size-3.5' />
-            )}
-            {category ? 'Измени' : 'Нова категорија'}
+              <Plus className='size-3.5' />            )}
+            {category ? 'Edit' : 'New Category'}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle>
-            {category ? 'Измени категорија' : 'Нова категорија'}
+          <DialogTitle>            {category ? 'Edit Category' : 'New Category'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={submit} className='grid gap-4'>
-          {/* Име */}
+        <form onSubmit={submit} className='grid gap-4'>          {/* Name */}
           <div className='space-y-2'>
-            <Label htmlFor='category-name'>Име</Label>
+            <Label htmlFor='category-name'>Name</Label>
             <Input
               id='category-name'
               name='name'
@@ -122,12 +119,10 @@ export default function CategoryEditor({
               onChange={handleNameChange}
               required
             />
-          </div>
-
-          {/* Слаг (Slug) & Редослед во два редa */}
+          </div>          {/* Slug & Order in two lines */}
           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             <div className='space-y-2'>
-              <Label htmlFor='category-slug'>Слаг (Slug)</Label>
+              <Label htmlFor='category-slug'>Slug</Label>
               <Input
                 id='category-slug'
                 name='slug'
@@ -138,7 +133,7 @@ export default function CategoryEditor({
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='category-order'>Редослед</Label>
+              <Label htmlFor='category-order'>Order</Label>
               <Input
                 id='category-order'
                 name='displayOrder'
@@ -147,40 +142,32 @@ export default function CategoryEditor({
                 required
               />
             </div>
-          </div>
-
-          {/* Слика за категоријата */}
+          </div>          {/* Image for category */}
           <ImageUploadField
-            label='Слика на категорија'
+            label='Category image'
             currentImage={category?.image}
             value={imageFile}
-            fallback={category?.name?.slice(0, 2).toUpperCase() ?? 'КАТ'}
+            fallback={category?.name?.slice(0, 2).toUpperCase() ?? 'CAT'}
             onChange={setImageFile}
             disabled={pending}
-          />
-
-          {/* Опис */}
+          />          {/* Description */}
           <div className='space-y-2'>
-            <Label htmlFor='category-description'>Опис</Label>
+            <Label htmlFor='category-description'>Description</Label>
             <Textarea
               id='category-description'
               name='description'
               defaultValue={category?.description ?? ''}
               className='min-h-20 resize-y'
             />
-          </div>
-
-          {/* Статус (isPublished Switch) */}
+          </div>          {/* Status (isPublished Switch) */}
           <div className='flex items-center justify-between rounded-lg border border-outline-variant/20 bg-surface-container-low p-3 shadow-sm'>
             <div className='space-y-0.5'>
               <Label
                 htmlFor='category-published'
                 className='text-sm font-medium'
-              >
-                Објавена категорија
+              >                Published category
               </Label>
-              <p className='text-xs text-muted-foreground'>
-                Ако е оневозможено, категоријата нема да биде видлива на менито.
+              <p className='text-xs text-muted-foreground'>                If disabled, the category will not be visible on the menu.
               </p>
             </div>
             <Switch
@@ -189,14 +176,11 @@ export default function CategoryEditor({
               onCheckedChange={setIsPublished}
               disabled={pending}
             />
-          </div>
-
-          {/* Копче за зачувување */}
+          </div>          {/* Save button */}
           <Button disabled={pending} type='submit' className='mt-2'>
             {pending ? (
-              <LoaderCircle className='size-4 animate-spin mr-2' />
-            ) : null}
-            Зачувај
+              <LoaderCircle className='size-4 animate-spin mr-2' />            ) : null}
+            Save
           </Button>
         </form>
       </DialogContent>

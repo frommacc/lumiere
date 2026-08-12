@@ -25,20 +25,16 @@ export function StaffHeader({
   return (
     <div className='relative z-10 flex flex-wrap items-center justify-between gap-4 px-8 py-6'>
       <div className='flex flex-col gap-1'>
-        <span className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground'>
-          СЕРВИС И ИСПРАРАКА
+        <span className='text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground'>          SERVICE AND SHIPPING
         </span>
-        <h1 className='font-heading text-3xl font-black uppercase text-primary'>
-          ТАБЛА ЗА ПРЕДАВАЊЕ
+        <h1 className='font-heading text-3xl font-black uppercase text-primary'>          LECTURE BOARD
         </h1>
-      </div>
-
-      {/* Локално Пребарување Input */}
+      </div>      {/* Local Search Input */}
       <div className='relative w-full max-w-sm'>
         <Search className='absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground' />
         <Input
           type='text'
-          placeholder='Пребарај по име, тел, #ID или адреса...'
+          placeholder='Search by name, phone, #ID or address...'
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           className='pl-9 pr-9 bg-card'
@@ -63,12 +59,12 @@ export function StaffHeader({
           {soundEnabled ? (
             <>
               <Volume2 className='size-4 text-emerald-500' />
-              <span className='text-xs font-semibold'>ЗВУКОТ Е АКТИВЕН</span>
+              <span className='text-xs font-semibold'>SOUND IS ON</span>
             </>
           ) : (
             <>
               <VolumeX className='size-4' />
-              <span className='text-xs font-semibold'>ВКЛУЧИ ЗВУК</span>
+              <span className='text-xs font-semibold'>TURN ON THE SOUND</span>
             </>
           )}
         </Button>

@@ -22,20 +22,18 @@ export default function ProfileReservationsPage({
             className='group flex w-fit items-center gap-2 text-outline transition-colors hover:text-primary'
           >
             <ArrowLeft className='size-5' />
-            <span className='font-label-caps text-label-caps uppercase'>Назад кон профил</span>
+            <span className='font-label-caps text-label-caps uppercase'>Back to profile</span>
           </Link>
 
           <div className='flex items-center gap-4'>
             <CalendarDays className='size-10 text-primary md:size-12' />
             <div>
-              <p className='font-label-caps text-[10px] uppercase tracking-[0.3em] text-primary'>Lumière профил</p>
-              <h1 className='font-mono text-4xl font-bold text-surface-foreground md:text-5xl'>
-                Мои <span className='italic text-primary'>Резервации</span>
+              <p className='font-label-caps text-[10px] uppercase tracking-[0.3em] text-primary'>Lumière profile</p>
+              <h1 className='font-mono text-4xl font-bold text-surface-foreground md:text-5xl'>                Mine <span className='italic text-primary'>Reservations</span>
               </h1>
             </div>
           </div>
-          <p className='max-w-2xl text-sm text-on-surface-variant'>
-            Следете го статусот и деталите за сите ваши барања за резервација.
+          <p className='max-w-2xl text-sm text-on-surface-variant'>            Track the status and details of all your booking requests.
           </p>
         </div>
       </section>

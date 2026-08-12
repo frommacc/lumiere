@@ -7,8 +7,8 @@ export function EmptyReservationsState() {
   return (
     <div className='mt-10 flex flex-col items-center space-y-4 rounded-2xl border border-dashed border-outline-variant/30 py-16 text-center'>
       <CalendarDays className='size-16 text-primary' />
-      <p className='font-headline-sm text-foreground'>Сè уште немате направено резервација.</p>
-      <Button asChild><Link href='/'>Направи резервација</Link></Button>
+      <p className='font-headline-sm text-foreground'>You have not made a reservation yet.</p>
+      <Button asChild><Link href='/'>Make a reservation</Link></Button>
     </div>
   )
 }

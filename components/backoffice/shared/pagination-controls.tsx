@@ -70,18 +70,16 @@ export function PaginationControls({
 
   return (
     <div className='flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-outline-variant/15 px-5 py-3 bg-surface-container-low/60'>
-      <p className='text-xs text-on-surface-variant whitespace-nowrap'>
-        Прикажано{' '}
+      <p className='text-xs text-on-surface-variant whitespace-nowrap'>        Shown{' '}
         <span className='font-medium text-on-surface'>
           {startItem}-{endItem}
         </span>{' '}
-        од <span className='font-medium text-on-surface'>{totalItems}</span>{' '}
-        записи
+        from <span className='font-medium text-on-surface'>{totalItems}</span>{' '}
+        records
       </p>
 
       <Pagination className='justify-center sm:justify-end w-auto mx-0'>
-        <PaginationContent>
-          {/* Претходна */}
+        <PaginationContent>          {/* Previous */}
           <PaginationItem>
             {currentPage <= 1 ? (
               <PaginationPrevious
@@ -93,7 +91,7 @@ export function PaginationControls({
             )}
           </PaginationItem>
 
-          {/* Нумерирани страници */}
+          {/* Numbered pages */}
           {getPageNumbers().map((page, idx) => {
             if (typeof page === 'string') {
               return (
@@ -111,11 +109,10 @@ export function PaginationControls({
                 >
                   {page}
                 </PaginationLink>
-              </PaginationItem>
-            )
+              </PaginationItem>            )
           })}
 
-          {/* Следна */}
+          {/* Next */}
           <PaginationItem>
             {currentPage >= totalPages ? (
               <PaginationNext

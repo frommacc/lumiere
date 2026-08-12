@@ -10,7 +10,7 @@ export default async function MenuCategories({
 }: MenuCategoriesProps) {
   const categories = await getCategories()
 
-  // Проверуваме совпаѓање и со ID и со Slug
+  // We check for a match with both ID and Slug
   const currentCategory =
     categories.find(
       (c) => c.id === activeCategory || c.slug === activeCategory,
@@ -21,7 +21,7 @@ export default async function MenuCategories({
       <nav className='flex space-x-6 sm:space-x-8 min-w-max'>
         {categories.map((cat) => {
           const isActive = currentCategory?.id === cat.id
-          const href = `/menu?category=${cat.slug || cat.id}` // Претпочитаме slug
+          const href = `/menu?category=${cat.slug || cat.id}` // We prefer slug
 
           return (
             <Link

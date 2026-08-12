@@ -20,10 +20,10 @@ export async function getAdminOrders({
   const term = query?.trim()
   const { start, end } = getOptionalDateRange(from, to)
 
-  // Флексибилен филтер за датум во Prisma
+  // Flexible date filter in Prisma
   const createdAtFilter = {
     ...(start ? { gte: start } : {}),
-    ...(end ? { lt: end } : {}), // 'lt' се користи бидејќи 'end' е почетокот на следниот ден
+    ...(end ? { lt: end } : {}), // 'lt' is used because 'end' is the start of the next day
   }
 
   const where = {

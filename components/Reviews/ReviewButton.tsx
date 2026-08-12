@@ -15,8 +15,7 @@ export function ReviewButton({ compact = false }: { compact?: boolean }) {
       onClick={open}
       className={compact ? 'border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground' : ''}
     >
-      <MessageSquarePlus />
-      Остави review
+      <MessageSquarePlus />      Leave a review
     </Button>
   )
 }

@@ -14,7 +14,7 @@ export async function saveMenuItemAction(
 ): Promise<ActionResult> {
   const parsed = menuItemSchema.safeParse(input)
   if (!parsed.success) {
-    return { success: false, message: 'Проверете ги податоците за артиклот.' }
+    return { success: false, message: 'Check item data.' }
   }
 
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
@@ -35,7 +35,7 @@ export async function saveMenuItemAction(
 
   const { id, imageFile, categoryId, subcategoryId, ...itemData } = parsed.data
 
-  // 1. Утврдување на subcategoryId
+  // 1. Determining the subcategoryId
   const finalSubcategoryId =
     subcategoryId && subcategoryId !== 'none' ? subcategoryId : null
 
@@ -63,7 +63,7 @@ export async function saveMenuItemAction(
     if (id) {
       await prisma.menuItem.update({
         where: { id },
-        data,
+        dates,
       })
     } else {
       await prisma.menuItem.create({ data })
@@ -71,12 +71,12 @@ export async function saveMenuItemAction(
 
     await cleanupOldImage()
 
-    // Кеш ревалидација
+    // Cache revalidation
     updateTag('menu-items')
     if (finalCategoryId) {
       updateTag(`menu-items-${finalCategoryId}`)
     }
-    // Зачистување кеш и за претходната категорија доколку е сменета
+    // Clear cache for the previous category as well if it has changed
     if (
       existingItem?.categoryId &&
       existingItem.categoryId !== finalCategoryId
@@ -84,10 +84,10 @@ export async function saveMenuItemAction(
       updateTag(`menu-items-${existingItem.categoryId}`)
     }
 
-    return { success: true, message: 'Артиклот е зачуван.' }
+    return { success: true, message: 'The item has been saved.' }
   } catch (error) {
-    console.error('Грешка при зачувување на артиклот:', error)
-    return { success: false, message: 'Се појави грешка при зачувување.' }
+    console.error('Error saving item:', error)
+    return { success: false, message: 'An error occurred while saving.' }
   }
 }
 
@@ -100,7 +100,7 @@ export async function deleteMenuItemAction(id: string): Promise<ActionResult> {
   })
 
   if (!item) {
-    return { success: false, message: 'Артиклот не е пронајден.' }
+    return { success: false, message: 'Item not found.' }
   }
 
   try {
@@ -108,18 +108,18 @@ export async function deleteMenuItemAction(id: string): Promise<ActionResult> {
 
     if (item.imageId) {
       await deleteImageFromCloudinary(item.imageId).catch((err) => {
-        console.error('Грешка при бришење слика од Cloudinary:', err)
+        console.error('Error deleting image from Cloudinary:', err)
       })
     }
 
     updateTag('menu-items')
-    return { success: true, message: 'Артиклот е избришан.' }
+    return { success: true, message: 'The item has been deleted.' }
   } catch (error) {
-    console.error('Грешка при бришење артикал:', error)
+    console.error('Error deleting item:', error)
     return {
       success: false,
       message:
-        'Артиклот не може да се избрише бидејќи е веќе поврзан со нарачки.',
+        'The item cannot be deleted because it is already associated with orders.',
     }
   }
 }
@@ -137,7 +137,7 @@ export async function toggleMenuItemAvailabilityAction(
   return {
     success: true,
     message: isAvailable
-      ? 'Артиклот е објавен.'
-      : 'Артиклот е повлечен од менито.',
+      ? 'The article has been published.'
+      : 'The item has been removed from the menu.',
   }
 }

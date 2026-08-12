@@ -15,22 +15,22 @@ import {
 import { cn } from '@/lib/utils'
 
 interface DatePickerProps {
-  /** Името на параметрот во URL (default: 'date') */
+  /** The name of the parameter in the URL (default: 'date') */
   paramName?: string
-  /** Формат на датумот за приказ (default: 'yyyy-MM-dd') */
+  /** Display date format (default: 'yyyy-MM-dd') */
   dateFormat?: string
-  /** Текст кога нема избрано датум */
+  /** Text when no date is selected */
   placeholder?: string
-  /** Дополнителни Tailwind класи */
+  /** Additional Tailwind classes */
   className?: string
-  /** Дали да има копче за бришење (X) */
+  /** Should there be a delete button (X) */
   clearable?: boolean
 }
 
 export function DatePicker({
   paramName = 'date',
   dateFormat = 'dd-MM-yyyy',
-  placeholder = 'Избери датум',
+  placeholder = 'Choose a date',
   className,
   clearable = true,
 }: DatePickerProps) {
@@ -39,7 +39,7 @@ export function DatePicker({
   const [isPending, startTransition] = useTransition()
   const [openCalendar, setOpenCalendar] = useState(false)
 
-  // Го читаме датумот директно од URL параметрите
+  // We read the date directly from the URL parameters
   const dateParam = searchParams.get(paramName)
   const currentDate = dateParam ? parseISO(dateParam) : undefined
 
@@ -52,7 +52,7 @@ export function DatePicker({
       params.delete(paramName)
     }
 
-    // Го користиме startTransition за подобри перформанси (UI-то останува одзивно додека презема нови податоци)
+    // We use startTransition for better performance (UI stays responsive while fetching new data)
     startTransition(() => {
       router.push(`?${params.toString()}`)
     })
@@ -64,7 +64,7 @@ export function DatePicker({
   }
 
   const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation() // Да не се отвора календарот при клик на X
+    e.stopPropagation() // Don't open calendar on X click
     updateUrlParam(undefined)
   }
 
@@ -88,9 +88,7 @@ export function DatePicker({
 
           <span className='truncate'>
             {currentDate ? format(currentDate, dateFormat) : placeholder}
-          </span>
-
-          {/* Копче за бришење на филтерот (X) */}
+          </span>          {/* Clear filter button (X) */}
           {clearable && currentDate && !isPending && (
             <span
               role='button'
@@ -99,7 +97,7 @@ export function DatePicker({
               className='absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors'
             >
               <X className='h-3.5 w-3.5' />
-              <span className='sr-only'>Исчисти датум</span>
+              <span className='sr-only'>Clear date</span>
             </span>
           )}
         </Button>

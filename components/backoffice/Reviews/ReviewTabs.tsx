@@ -16,19 +16,15 @@ export function ReviewTabs({ currentStatus, counts }: ReviewTabsProps) {
     <Tabs defaultValue={currentStatus} className='w-full'>
       <TabsList className='grid w-full grid-cols-3 max-w-md'>
         <TabsTrigger value={ReviewStatus.PENDING} asChild>
-          <Link href={`/admin/reviews?status=${ReviewStatus.PENDING}`}>
-            Чекаат ({counts.PENDING})
+          <Link href={`/admin/reviews?status=${ReviewStatus.PENDING}`}>            Pending ({counts.PENDING})
           </Link>
         </TabsTrigger>
         <TabsTrigger value={ReviewStatus.APPROVED} asChild>
-          <Link href={`/admin/reviews?status=${ReviewStatus.APPROVED}`}>
-            Одобрени ({counts.APPROVED})
+          <Link href={`/admin/reviews?status=${ReviewStatus.APPROVED}`}>            Approved ({counts.APPROVED})
           </Link>
         </TabsTrigger>
         <TabsTrigger value={ReviewStatus.REJECTED} asChild>
-          <Link href={`/admin/reviews?status=${ReviewStatus.REJECTED}`}>
-            Одбиени ({counts.REJECTED})
-          </Link>
+          <Link href={`/admin/reviews?status=${ReviewStatus.REJECTED}`}>            Rejected ({counts.REJECTED})</Link>
         </TabsTrigger>
       </TabsList>
     </Tabs>

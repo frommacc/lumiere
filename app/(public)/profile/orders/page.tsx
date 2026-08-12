@@ -33,12 +33,10 @@ export default async function ProfileOrdersPage({ searchParams }: PageProps) {
               className='flex items-center gap-2 group text-outline hover:text-primary transition-colors'
             >
               <ArrowLeft className='w-5 h-5' />
-              <span className='font-label-caps text-label-caps uppercase'>
-                Назад кон Профил
+              <span className='font-label-caps text-label-caps uppercase'>                Back to Profile
               </span>
             </Link>
-            <h1 className='font-mono text-5xl font-bold text-surface-foreground'>
-              Историја на <span className='text-primary italic'>Нарачки</span>
+            <h1 className='font-mono text-5xl font-bold text-surface-foreground'>              History of <span className='text-primary italic'>Orders</span>
             </h1>
           </div>
 

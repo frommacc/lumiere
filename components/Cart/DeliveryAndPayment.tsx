@@ -20,34 +20,30 @@ import { AddressAutocomplete } from './AddressAutocomplete'
 import { DeliveryAddressPicker } from './DeliveryAddressPicker'
 import { GoogleMapsProvider } from '@/components/providers/google-maps-provider'
 
-// Главна компонента која менаџира сесија
+// The main component that manages a session
 export function DeliveryAndPayment() {
   const { data: session, isPending: isSessionLoading } = useSession()
   const user = session?.user
 
-  // 1. Loading состојба
+  // 1. Loading state
   if (isSessionLoading) {
     return (
       <div className='flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground'>
         <Loader2 className='w-6 h-6 animate-spin text-primary' />
-        <span className='text-xs uppercase tracking-widest font-medium'>
-          Проверка на сесија...
+        <span className='text-xs uppercase tracking-widest font-medium'>          Checking session...
         </span>
-      </div>
-    )
+      </div>    )
   }
 
-  // 2. Доколку корисникот НЕ Е најавен
+  // 2. If the user is NOT logged in
   if (!user) {
     return (
       <div className='p-8 text-center border border-outline-variant/30 bg-surface-container-high/20 rounded-xs space-y-6'>
         <div className='space-y-2'>
-          <h3 className='text-base font-semibold text-foreground uppercase tracking-wider'>
-            Потребна е најава
+          <h3 className='text-base font-semibold text-foreground uppercase tracking-wider'>            Login required
           </h3>
-          <p className='text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto'>
-            За да продолжите со процесирање на вашата нарачка во Lumiere, ве
-            молиме најавете се на вашиот профил.
+          <p className='text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto'>            To continue processing your order at Lumiere, you
+            please login to your profile.
           </p>
         </div>
 
@@ -56,7 +52,7 @@ export function DeliveryAndPayment() {
           className='inline-flex items-center justify-center gap-3 w-full bg-primary py-4 px-6 text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase transition-transform active:scale-[0.98] hover:opacity-90'
         >
           <LogIn className='w-4 h-4' />
-          <span>Најави се за да нарачаш</span>
+          <span>Log in to order</span>
         </Link>
       </div>
     )
@@ -65,11 +61,10 @@ export function DeliveryAndPayment() {
   return (
     <GoogleMapsProvider>
       <DeliveryAndPaymentForm key={user.id} user={user} />
-    </GoogleMapsProvider>
-  )
+    </GoogleMapsProvider>  )
 }
 
-// Внатрешна компонента за формата
+// Internal component for the form
 function DeliveryAndPaymentForm({
   user,
 }: {
@@ -87,15 +82,15 @@ function DeliveryAndPaymentForm({
 
   const [isPending, startTransition] = useTransition()
 
-  // Податоците за адреса и координати
+  // The address and coordinate data
   const [address, setAddress] = useState('')
   const [addressDetails, setAddressDetails] = useState('')
-  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+  const [ coords , setCoords ] = useState<{ lat: number; lng: number } | null>(
     null,
   )
   const [phone, setPhone] = useState(user.phone || '')
 
-  // Кога се избира улица/населба од Google Autocomplete
+  // When selecting a street/neighborhood from Google Autocomplete
   const handleStreetSelect = (
     selectedAddress: string,
     lat?: number,
@@ -111,7 +106,7 @@ function DeliveryAndPaymentForm({
     e.preventDefault()
 
     if (cart.length === 0) {
-      toast.error('Кошничката е празна!')
+      toast.error('The basket is empty!')
       return
     }
 
@@ -142,7 +137,7 @@ function DeliveryAndPaymentForm({
           response.issues.forEach((issue) => {
             if (issue.reason === 'PRICE_CHANGED') {
               toast.warning(
-                `Цената за "${issue.name}" е променета од ${issue.oldPrice} во ${issue.newPrice} МКД. Кошничката е ажурирана.`,
+                `The price for "${issue.name}" has changed from ${issue.oldPrice} to ${issue.newPrice} $. The shopping cart has been updated.`,
               )
             } else if (issue.reason === 'ITEM_UNAVAILABLE') {
               toast.error(issue.message)
@@ -150,13 +145,13 @@ function DeliveryAndPaymentForm({
           })
         } else {
           toast.error(
-            response.message || 'Се појави грешка при креирање на нарачката.',
+            response.message || 'An error occurred while creating the order.',
           )
         }
         return
       }
 
-      toast.success(`Нарачката е успешно испратена! (#${response.orderNumber})`)
+      toast.success(`The order has been successfully sent! (#${response.orderNumber})`)
       router.push(`/profile/orders/${response.orderNumber}`)
       setTimeout(() => {
         clearCart()
@@ -166,11 +161,9 @@ function DeliveryAndPaymentForm({
 
   return (
     <form onSubmit={handleOrderSubmit} className='space-y-8 relative'>
-      <div className='space-y-6'>
-        {/* Избор на метод на достава */}
+      <div className='space-y-6'>        {/* Select delivery method */}
         <div className='space-y-4 mb-8'>
-          <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>
-            Метод на испорака
+          <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>            Shipping method
           </label>
           <div className='grid gap-4 grid-cols-2'>
             <label className='relative cursor-pointer group'>
@@ -183,8 +176,7 @@ function DeliveryAndPaymentForm({
               />
               <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
                 <Truck className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-                <span className='text-[10px] text-outline uppercase font-semibold text-center'>
-                  Достава до адреса
+                <span className='text-[10px] text-outline uppercase font-semibold text-center'>                  Delivery to address
                 </span>
               </div>
             </label>
@@ -199,48 +191,38 @@ function DeliveryAndPaymentForm({
               />
               <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
                 <Store className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-                <span className='text-[10px] text-outline uppercase font-semibold text-center'>
-                  Лично подигање
+                <span className='text-[10px] text-outline uppercase font-semibold text-center'>                  Personal training
                 </span>
               </div>
             </label>
           </div>
-        </div>
-
-        {/* Информации за клиентот */}
+        </div>        {/* Customer information */}
         <div className='relative group border-b border-outline-variant/30 pb-2'>
-          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
-            Име на клиент
+          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>            Customer name
           </label>
           <p className='text-foreground font-medium text-sm'>{user.name}</p>
         </div>
 
         {deliveryMethod !== 'PICKUP' && (
-          <div className='space-y-4'>
-            {/* Google Autocomplete за Улица / Населба */}
+          <div className='space-y-4'>            {/* Google Autocomplete for Street / Neighborhood */}
             <AddressAutocomplete
               value={address}
               onChange={handleStreetSelect}
               disabled={isPending}
-            />
-
-            {/* Текстуално поле за Број, Влез, Стан (не влијае врз координатите на мапата) */}
+            />            {/* Text field for Number, Entrance, Apartment (does not affect map coordinates) */}
             <div>
-              <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
-                Број / Влез / Стан / Кат
+              <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>                Number / Entrance / Flat / Floor
               </label>
               <input
                 type='text'
                 required={deliveryMethod === 'ADDRESS'}
                 value={addressDetails}
                 onChange={(e) => setAddressDetails(e.target.value)}
-                placeholder='напр. бр. 24, влез 1, кат 3, стан 12'
+                placeholder='e.g. no. 24, entrance 1, floor 3, apartment 12'
                 disabled={isPending}
                 className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
               />
-            </div>
-
-            {/* Интерактивна мапа со Drag & Drop за прецизирање на пинот */}
+            </div>            {/* Interactive map with Drag & Drop to refine the pin */}
             {coords && (
               <DeliveryAddressPicker
                 coords={coords}
@@ -251,8 +233,7 @@ function DeliveryAndPaymentForm({
         )}
 
         <div className='relative group'>
-          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
-            Телефон за Контакт
+          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>            Contact phone number
           </label>
           <input
             type='tel'
@@ -263,12 +244,9 @@ function DeliveryAndPaymentForm({
             className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
           />
         </div>
-      </div>
-
-      {/* Метод на плаќање */}
+      </div>      {/* Payment method */}
       <div className='space-y-4 pt-4'>
-        <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>
-          Метод на Плаќање
+        <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>          Method of Payment
         </label>
         <div className='grid gap-4 grid-cols-2'>
           <label className='relative cursor-pointer group'>
@@ -281,8 +259,7 @@ function DeliveryAndPaymentForm({
             />
             <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
               <CreditCard className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-              <span className='text-[10px] text-outline uppercase font-semibold'>
-                Картичка
+              <span className='text-[10px] text-outline uppercase font-semibold'>                Card
               </span>
             </div>
           </label>
@@ -297,15 +274,12 @@ function DeliveryAndPaymentForm({
             />
             <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
               <Banknote className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-              <span className='text-[10px] text-outline uppercase font-semibold'>
-                Готовина
+              <span className='text-[10px] text-outline uppercase font-semibold'>                Cash
               </span>
             </div>
           </label>
         </div>
-      </div>
-
-      {/* Копче за потврда */}
+      </div>      {/* Confirm button */}
       <button
         type='submit'
         disabled={isPending || cart.length === 0}
@@ -315,20 +289,16 @@ function DeliveryAndPaymentForm({
         <span className='text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase relative z-10 flex items-center gap-2'>
           {isPending ? (
             <>
-              <Loader2 className='w-4 h-4 animate-spin' />
-              Се процесира...
-            </>
-          ) : (
-            'Потврди Нарачка'
-          )}
-        </span>
+              <Loader2 className='w-4 h-4 animate-spin' />              Processing...
+            </>          ) : (
+            'Confirm Order'
+          )}</span>
         {!isPending && (
           <ArrowRight className='w-5 h-5 text-primary-foreground relative z-10 transition-transform group-hover/btn:translate-x-2' />
         )}
       </button>
 
-      <p className='text-center text-[9px] text-outline uppercase tracking-widest opacity-60 font-semibold'>
-        Со потврдување се согласувате со нашите услови за користење
+      <p className='text-center text-[9px] text-outline uppercase tracking-widest opacity-60 font-semibold'>        By confirming you agree to our terms of use
       </p>
     </form>
   )

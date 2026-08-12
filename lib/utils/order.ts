@@ -14,14 +14,14 @@ export interface StatusStep {
 }
 
 export const STATUS_STEPS: StatusStep[] = [
-  { key: OrderStatus.PENDING, label: 'Нарачката е\nпримена', icon: Check },
+  { key: OrderStatus.PENDING, label: 'Order is\napplied', icon: Check },
   {
     key: OrderStatus.PREPARING,
-    label: 'Се подготвува\nво кујната',
+    label: 'Preparing\nin the kitchen',
     icon: UtensilsCrossed,
   },
-  { key: OrderStatus.IN_TRANSIT, label: 'Во\nиспорака', icon: Truck },
-  { key: OrderStatus.DELIVERED, label: 'Доставено', icon: CheckCircle2 },
+  { key: OrderStatus.IN_TRANSIT, label: 'In\ndelivery', icon: Truck },
+  { key: OrderStatus.DELIVERED, label: 'Delivered', icon: CheckCircle2 },
 ]
 
 export function getStatusStepIndex(status: OrderStatus): number {
@@ -42,15 +42,15 @@ export function getStatusStepIndex(status: OrderStatus): number {
 }
 
 export function formatCurrency(amount: number): string {
-  return `${amount.toLocaleString('mk-MK')} МКД`
+  return `${amount.toLocaleString('en-US')} $`
 }
 
 export function formatPaymentMethod(method: PaymentMethod): string {
   switch (method) {
     case PaymentMethod.CARD:
-      return 'Картичка (Онлајн)'
+      return 'Card (Online)'
     case PaymentMethod.CASH:
-      return 'Готовина при преземање'
+      return 'Cash on collection'
     default:
       return method
   }
@@ -58,6 +58,6 @@ export function formatPaymentMethod(method: PaymentMethod): string {
 
 export function formatDeliveryMethod(method: DeliveryMethod): string {
   return method === DeliveryMethod.PICKUP
-    ? 'Лично подигање'
-    : 'Достава до адреса'
+    ? 'Personal training'
+    : 'Delivery to address'
 }

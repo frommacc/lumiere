@@ -9,7 +9,7 @@ export async function getAdminUsers(
 ) {
   const term = query?.trim()
 
-  // Типизиран where објект
+  // Typed where object
   const where: Prisma.UserWhereInput = {}
 
   if (term) {

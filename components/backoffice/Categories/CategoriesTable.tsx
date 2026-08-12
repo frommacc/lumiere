@@ -19,28 +19,21 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
     <div className='overflow-hidden rounded-xl border border-outline-variant/20 bg-surface-container-low/40'>
       <Table className='min-w-125 text-sm'>
         <TableHeader className='border-b border-outline-variant/15 bg-surface-container-low/80'>
-          <TableRow className='hover:bg-transparent'>
-            {/* 0. Редослед */}
+          <TableRow className='hover:bg-transparent'>            {/* 0. Order */}
             <TableHead className='w-12 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium text-center'>
               #
             </TableHead>
-            <TableHead className='w-16 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Слика
+            <TableHead className='w-16 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Picture
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Категорија
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Category
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Статус
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Status
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Поткатегории
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Subcategories
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Вкупно артикли
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Total items
             </TableHead>
-            <TableHead className='px-5 py-4 text-right text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Акции
+            <TableHead className='px-5 py-4 text-right text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Actions
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -50,13 +43,10 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
               <TableRow
                 key={category.id}
                 className='hover:bg-surface-container/30 transition-colors border-outline-variant/10'
-              >
-                {/* 0. Редослед (displayOrder) */}
+              >                {/* 0. Order (displayOrder) */}
                 <TableCell className='px-5 py-4 text-center font-mono text-xs text-on-surface-variant font-medium'>
                   {category.displayOrder}
-                </TableCell>
-
-                {/* 1. Слика */}
+                </TableCell>                {/* 1st Image */}
                 <TableCell className='px-5 py-3'>
                   <div className='relative h-20 w-20 overflow-hidden bg-surface-container border border-outline-variant/20'>
                     {category.image ? (
@@ -74,9 +64,7 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       </div>
                     )}
                   </div>
-                </TableCell>
-
-                {/* 2. Име и Опис */}
+                </TableCell>                {/* 2. Name and Description */}
                 <TableCell className='px-5 py-4 font-medium text-surface-foreground max-w-50'>
                   <div>
                     <h2 className='font-semibold'>{category.name}</h2>
@@ -86,42 +74,32 @@ export function CategoriesTable({ categories }: CategoriesTableProps) {
                       </p>
                     )}
                   </div>
-                </TableCell>
-
-                {/* 3. Статус (isPublished) */}
+                </TableCell>                {/* 3. Status (isPublished) */}
                 <TableCell className='px-5 py-4 text-xs'>
                   {category.isPublished ? (
                     <span className='inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-600 border border-emerald-500/20'>
-                      <span className='h-1.5 w-1.5 rounded-full bg-emerald-500' />
-                      Објавено
+                      <span className='h-1.5 w-1.5 rounded-full bg-emerald-500' />                      Published
                     </span>
                   ) : (
                     <span className='inline-flex items-center gap-1.5 rounded-full bg-zinc-500/10 px-2.5 py-1 text-xs font-medium text-zinc-500 border border-zinc-500/20'>
-                      <span className='h-1.5 w-1.5 rounded-full bg-zinc-400' />
-                      Скриено
+                      <span className='h-1.5 w-1.5 rounded-full bg-zinc-400' />                      Hidden
                     </span>
                   )}
-                </TableCell>
-
-                {/* 4. Поткатегории */}
+                </TableCell>                {/* 4. Subcategories */}
                 <TableCell className='px-5 py-4 text-on-surface-variant text-xs'>
                   <span className='font-medium text-surface-foreground'>
                     {category._count.subcategories}
                   </span>{' '}
-                  {category._count.subcategories === 1
-                    ? 'поткатегорија'
-                    : 'поткатегории'}
-                </TableCell>
-
-                {/* 5. Вкупно артикли */}
+                  { category._count.subcategories === 1
+                    ? 'subcategory'
+                    : 'subcategories'}
+                </TableCell>                {/* 5. Total items */}
                 <TableCell className='px-5 py-4 text-on-surface-variant text-xs'>
                   <span className='font-medium text-surface-foreground'>
                     {category._count.menuItems}
                   </span>{' '}
-                  {category._count.menuItems === 1 ? 'артикл' : 'артикли'}
-                </TableCell>
-
-                {/* 6. Акции */}
+                  {category._count.menuItems === 1 ? 'article' : 'articles'}
+                </TableCell>                {/* 6. Actions */}
                 <TableCell className='px-5 py-4 text-right'>
                   <div className='flex justify-end'>
                     <CategoryActions category={category} />

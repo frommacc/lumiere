@@ -13,12 +13,11 @@ export function OrderMap(props: OrderMapProps) {
   return (
     <GoogleMapsProvider>
       <OrderMapContent {...props} />
-    </GoogleMapsProvider>
-  )
+    </GoogleMapsProvider>  )
 }
 
 function OrderMapContent({ latitude, longitude }: OrderMapProps) {
-  // Подразбирливи координати за Скопје (ако нема внесено конкретни)
+  // Implicit coordinates for Skopje (if no specific ones have been entered)
   const defaultPosition = { lat: 41.9981, lng: 21.4254 }
 
   const position =
@@ -31,14 +30,13 @@ function OrderMapContent({ latitude, longitude }: OrderMapProps) {
         defaultZoom={16}
         gestureHandling={'cooperative'}
         disableDefaultUI={false}
-        mapId={'restaurant_order_map'} // Потребно за AdvancedMarker
+        mapId={'restaurant_order_map'} // Required for AdvancedMarker
         className='w-full h-full'
-      >
-        {/* Црвен Маркер на точната локација */}
-        {latitude && longitude && (
+      >        {/* Red Marker at exact location */}
+        { latitude && longitude && (
           <AdvancedMarker position={position}>
             <Pin
-              background={'#e11d48'} // Примарна црвена боја за маркерот
+              background={'#e11d48'} // Primary red color for the marker
               borderColor={'#9f1239'}
               glyphColor={'#ffffff'}
             />

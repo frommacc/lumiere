@@ -22,7 +22,7 @@ export function OrderStatusFilter({
   const handleStatusChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString())
 
-    // Секогаш го бришеме или ресетираме 'page' кога се менува филтерот
+    // We always clear or reset 'page' when the filter changes
     params.delete('page')
 
     if (value && value !== 'ALL') {
@@ -40,10 +40,10 @@ export function OrderStatusFilter({
       onValueChange={handleStatusChange}
     >
       <SelectTrigger className='w-full md:w-auto'>
-        <SelectValue placeholder='Сите статуси' />
+        <SelectValue placeholder='All statuses' />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value='ALL'>Сите статуси</SelectItem>
+        <SelectItem value='ALL'>All statuses</SelectItem>
         {Object.values(OrderStatus).map((val) => (
           <SelectItem key={val} value={val}>
             {orderStatusLabels[val]}

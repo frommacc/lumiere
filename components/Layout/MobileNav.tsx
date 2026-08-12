@@ -56,19 +56,19 @@ export function MobileNav({
       await signOut({
         fetchOptions: {
           onSuccess: () => {
-            toast.success('Успешно се одјавивте.', {
-              description: 'Се гледаме наскоро во Lumière!',
+            toast.success('You have successfully logged out.', {
+              description: 'See you soon at Lumière!',
             })
             closeDrawer()
             router.refresh()
           },
           onError: () => {
-            toast.error('Не успеавме да ве одјавиме.')
+            toast.error('We were unable to log you out.')
           },
         },
       })
     } catch (err) {
-      toast.error('Се случи грешка при одјавување.')
+      toast.error('An error occurred while logging out.')
       console.error('Sign out error:', err)
     }
   }
@@ -91,7 +91,7 @@ export function MobileNav({
       <SheetTrigger asChild>
         <button
           className='text-surface-variant hover:text-primary transition-colors xl:hidden'
-          aria-label='Отвори мени'
+          aria-label='Open menu'
         >
           <Menu size={26} />
         </button>
@@ -160,8 +160,7 @@ export function MobileNav({
                           onClick={closeDrawer}
                           className='flex items-center gap-2.5 px-2 py-1.5 text-xs uppercase tracking-wider hover:text-primary transition-colors'
                         >
-                          <Users className='h-4 w-4 text-gold-accent' />
-                          Корисници
+                          <Users className='h-4 w-4 text-gold-accent' />                          Users
                         </Link>
                       )}
                     </>
@@ -175,8 +174,7 @@ export function MobileNav({
                     onClick={handleSignOut}
                     className='flex items-center gap-2.5 px-2 py-1.5 text-xs uppercase tracking-wider text-destructive hover:bg-destructive/10 transition-colors w-full text-left mt-2'
                   >
-                    <LogOut className='h-4 w-4' />
-                    Одјави се
+                    <LogOut className='h-4 w-4' />                    Sign out
                   </button>
                 </div>
               </div>
@@ -187,15 +185,14 @@ export function MobileNav({
                 className='flex items-center gap-2.5 text-sm font-sans uppercase tracking-wider hover:text-primary transition-colors py-1'
               >
                 <UserIcon size={20} />
-                <span>Најави се</span>
+                <span>Log in</span>
               </Link>
             )}
           </div>
 
           {/* Navigation */}
           <div className='flex flex-col space-y-4 grow'>
-            <span className='text-[10px] uppercase tracking-widest text-on-surface-variant/50 font-bold'>
-              Навигација
+            <span className='text-[10px] uppercase tracking-widest text-on-surface-variant/50 font-bold'>              Navigation
             </span>
             {NAV_LINKS.map((link) => (
               <Link
@@ -218,8 +215,7 @@ export function MobileNav({
               }}
               className='w-full bg-primary text-primary-foreground font-sans text-xs uppercase tracking-widest font-semibold py-3 flex items-center justify-center gap-2 active:scale-95 transition-all'
             >
-              <Calendar size={16} />
-              Резервација
+              <Calendar size={16} />              Reservation
             </button>
           </div>
         </div>

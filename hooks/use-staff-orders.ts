@@ -18,7 +18,7 @@ export function useStaffOrders(
   const [orders, setOrders] = useState<KdsOrder[]>(initialOrders)
   const [searchQuery, setSearchQuery] = useState('')
 
-  // 1. Го чуваме callback-от во ref за да не го ре-претплаќаме Pusher при секој render
+  // 1. We store the callback in a ref so that we don't re-subscribe the Pusher on every render
   const alertRef = useRef(onNewOrderAlert)
   useEffect(() => {
     alertRef.current = onNewOrderAlert
@@ -27,7 +27,7 @@ export function useStaffOrders(
   useEffect(() => {
     const channel = pusherClient.subscribe('kds-channel')
 
-    // 1. Слушач за сосема нови онлајн нарачки
+    // 1. Brand new online order listener
     const handleNewOrder = (newOrder: KdsOrder) => {
       if (STAFF_STATUSES.includes(newOrder.status)) {
         const formattedOrder: KdsOrder = {
@@ -43,14 +43,14 @@ export function useStaffOrders(
           return [...prev, formattedOrder]
         })
 
-        // Го повикуваме алармот ОДНАВОР, а не внатре во setOrders
+        // We call the alarm ONCE, not inside setOrders
         if (isNew) {
           alertRef.current?.()
         }
       }
     }
 
-    // 2. Слушач за ажурирање на статус
+    // 2. Status update listener
     const handleStatusUpdate = (data: {
       orderId: string
       status: OrderStatus
@@ -61,19 +61,19 @@ export function useStaffOrders(
       setOrders((prev) => {
         const exists = prev.some((o) => o.id === data.orderId)
 
-        // Отстрани од таблата ако новиот статус е надвор од опсегот
+        // Remove from board if new status is out of range
         if (!STAFF_STATUSES.includes(data.status)) {
           return prev.filter((o) => o.id !== data.orderId)
         }
 
-        // Ажурирај го статусот ако веќе постои
+        // Update the status if it already exists
         if (exists) {
           return prev.map((o) =>
             o.id === data.orderId ? { ...o, status: data.status } : o,
           )
         }
 
-        // Нова нарачка за оваа табла (на пр. Кујната ја ставила READY)
+        // New order for this board (e.g. READY has been set by the kitchen)
         if (data.updatedOrder) {
           shouldAlert = true
           const formattedNewOrder: KdsOrder = {
@@ -101,9 +101,9 @@ export function useStaffOrders(
       channel.unbind('order-status-updated', handleStatusUpdate)
       pusherClient.unsubscribe('kds-channel')
     }
-  }, []) // Празен dependency array - Pusher каналот се претплаќа само еднаш!
+  }, []) // Empty dependency array - Pusher channel is subscribed only once!
 
-  // Пребарување и филтрирање
+  // Search and filter
   const filteredOrders = useMemo(() => {
     const query = searchQuery.trim().toLowerCase()
     if (!query) return orders
@@ -125,7 +125,7 @@ export function useStaffOrders(
     })
   }, [orders, searchQuery])
 
-  // Поделба по колони
+  // Split by columns
   const pendingOrders = filteredOrders.filter(
     (o) => o.status === OrderStatus.PENDING,
   )

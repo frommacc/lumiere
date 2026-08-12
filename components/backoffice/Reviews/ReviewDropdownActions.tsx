@@ -34,7 +34,7 @@ export function ReviewDropdownActions({
 
   const moderate = (status: ReviewStatus) =>
     startTransition(async () => {
-      // Испраќаме објект кој го совпаѓа updateReviewModerationSchema
+      // We send an object that matches the updateReviewModerationSchema
       const result = await moderateReviewAction({ reviewId, status })
 
       if (result.success) {
@@ -49,13 +49,13 @@ export function ReviewDropdownActions({
     startTransition(async () => {
       if (
         !confirm(
-          'Дали сте сигурни дека сакате целосно да ја избришете оваа рецензија?',
+          'Are you sure you want to delete this review completely?',
         )
       ) {
         return
       }
 
-      // Испраќаме објект кој го совпаѓа deleteReviewSchema
+      // We send an object that matches deleteReviewSchema
       const result = await deleteReviewAction({ reviewId })
 
       if (result.success) {
@@ -80,7 +80,7 @@ export function ReviewDropdownActions({
           ) : (
             <MoreVertical className='h-4 w-4' />
           )}
-          <span className='sr-only'>Отвори мени</span>
+          <span className='sr-only'>Open menu</span>
         </Button>
       </DropdownMenuTrigger>
 
@@ -92,7 +92,7 @@ export function ReviewDropdownActions({
               className='cursor-pointer'
             >
               <Check className='mr-2 h-4 w-4 text-emerald-500' />
-              <span>Одобри</span>
+              <span>Approve</span>
             </DropdownMenuItem>
           )}
 
@@ -103,7 +103,7 @@ export function ReviewDropdownActions({
               className='cursor-pointer'
             >
               <X className='mr-2 h-4 w-4 text-amber-500' />
-              <span>Одбиј</span>
+              <span>Decline</span>
             </DropdownMenuItem>
           )}
 
@@ -114,7 +114,7 @@ export function ReviewDropdownActions({
           className='cursor-pointer text-destructive focus:text-destructive'
         >
           <Trash2 className='mr-2 h-4 w-4' />
-          <span>Избриши</span>
+          <span>Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

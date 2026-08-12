@@ -45,23 +45,18 @@ export default async function AdminOrdersPage({
   return (
     <>
       <BackofficeHeader
-        eyebrow='Оператива'
-        title='Нарачки'
-        description='Пребарувајте, следете и безбедно движете ги нарачките низ процесот.'
+        eyebrow='Operative'
+        title='Orders'
+        description='Search, track and securely move orders through the process.'
       />
       <div className='space-y-6 px-6 py-8 md:px-10'>
-        <div className='flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap items-center gap-4'>
-          {/* Пребарување: Мобилен (w-full), sm (цел нов ред w-full), md (автоматска ширина во истиот ред) */}
+        <div className='flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap items-center gap-4'>          {/* Search: Mobile (w-full), sm (full newline w-full), md (autowidth in same line) */}
           <div className='w-full md:w-80 lg:w-100 md:shrink-0'>
-            <SearchInput placeholder='Пребарај по број, име или телефон' />
-          </div>
-
-          {/* Статус филтер: Мобилен (w-full), sm (во ист ред со DatePicker, w-auto), md (во ист ред) */}
+            <SearchInput placeholder='Search by number, name or phone' />
+          </div>          {/* Status filter: Mobile (w-full), sm (in the same row as DatePicker, w-auto), md (in the same row) */}
           <div className='w-full sm:w-auto'>
             <OrderStatusFilter currentStatus={params.status} />
-          </div>
-
-          {/* DateRangePicker: Мобилен (w-full), sm (во ист ред со StatusFilter, го зема преостанатиот простор со flex-1), md (ml-auto) */}
+          </div>          {/* DateRangePicker: Mobile (w-full), sm (same row as StatusFilter, takes remaining space with flex-1), md (ml-auto) */}
           <div className='w-full sm:w-auto sm:flex-1 md:flex-none md:ml-auto'>
             <DateRangePicker />
           </div>

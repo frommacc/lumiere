@@ -11,8 +11,7 @@ export default async function Menu({ categoryId }: MenuListProps) {
   if (menuItems.length === 0) {
     return (
       <div className='my-16 flex flex-col items-center justify-center text-center'>
-        <p className='font-display text-lg text-on-surface'>
-          Нема пронајдено артикли во оваа категорија.
+        <p className='font-display text-lg text-on-surface'>          No items found in this category.
         </p>
       </div>
     )

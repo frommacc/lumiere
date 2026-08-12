@@ -32,17 +32,17 @@ import {
 } from '@/actions/backoffice/reservations'
 
 const reservationLabels: Partial<Record<ReservationStatus, string>> = {
-  CONFIRMED: 'Прифати',
-  SEATED: 'Седнати',
-  COMPLETED: 'Заврши',
-  CANCELLED: 'Откажи',
-  NO_SHOW: 'Не се појави',
+  CONFIRMED: 'Accept',
+  SEATED: 'Sat',
+  COMPLETED: 'Finish',
+  CANCELED: 'Cancel',
+  NO_SHOW: 'Not shown',
 }
 
 export function ReservationActions({
   reservationId,
   status,
-  role,
+  roles
 }: {
   reservationId: string
   status: ReservationStatus
@@ -52,8 +52,8 @@ export function ReservationActions({
   const router = useRouter()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
-  // Следење која акција моментално се извршува
-  const [activeAction, setActiveAction] = useState<string | null>(null)
+  // Keeping track of which action is currently running
+  const [ activeAction , setActiveAction ] = useState<string | null>(null)
 
   const nextStatuses = getAllowedReservationStatuses(role, status)
   const canDelete = role === Role.ADMIN || role === Role.MANAGER
@@ -88,7 +88,7 @@ export function ReservationActions({
     })
   }
 
-  // 1. СЛУЧАЈ: Резервацијата е PENDING - Директни копчиња
+  // CASE 1: Reservation is PENDING - Direct keys
   if (status === ReservationStatus.PENDING) {
     const isConfirming = pending && activeAction === ReservationStatus.CONFIRMED
     const isCancelling = pending && activeAction === ReservationStatus.CANCELLED
@@ -104,9 +104,8 @@ export function ReservationActions({
           {isConfirming ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />
-          )}
-          Прифати
+            <Check className='size-3.5' />          )}
+          Accept
         </Button>
 
         <Button
@@ -119,23 +118,21 @@ export function ReservationActions({
           {isCancelling ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <X className='size-3.5' />
-          )}
-          Откажи
+            <X className='size-3.5' />          )}
+          Give up
         </Button>
-      </div>
-    )
+      </div>    )
   }
 
-  // Нема акции ниту за промена на статус ниту за бришење
+  // No actions for either status change or delete
   if (!nextStatuses.length && !canDelete) return null
 
-  // Проверка за конкретни акции
+  // Check for specific actions
   const isDeleting = pending && activeAction === 'DELETE'
   const isSeating = pending && activeAction === ReservationStatus.SEATED
   const isFinishing = pending && activeAction === ReservationStatus.COMPLETED
 
-  // Loader во менито со 3 точки се прикажува САМО ако акцијата доаѓа од менито или при бришење
+  // Loader in the 3-dot menu is shown ONLY if the action comes from the menu or on delete
   const isDropdownLoading =
     pending &&
     activeAction !== null &&
@@ -155,9 +152,8 @@ export function ReservationActions({
           {isSeating ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />
-          )}
-          Седнати
+            <Check className='size-3.5' />          )}
+          Sitting down
         </Button>
       )}
 
@@ -172,9 +168,8 @@ export function ReservationActions({
           {isFinishing ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />
-          )}
-          Заврши
+            <Check className='size-3.5' />          )}
+          It's over
         </Button>
       )}
 
@@ -191,12 +186,12 @@ export function ReservationActions({
             ) : (
               <MoreHorizontal className='size-4' />
             )}
-            <span className='sr-only'>Мени за акции</span>
+            <span className='sr-only'>Actions menu</span>
           </Button>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align='end' className='w-40'>
-          {/* Статусни промени */}
+          {/* Status changes */}
           {nextStatuses.map((nextStatus) => {
             const isItemLoading = pending && activeAction === nextStatus
 
@@ -215,35 +210,31 @@ export function ReservationActions({
             )
           })}
 
-          {/* Разделник пред бришење */}
+          {/* Delimiter before deletion */}
           {nextStatuses.length > 0 && canDelete && <DropdownMenuSeparator />}
 
-          {/* Бришење */}
-          {canDelete && (
+          {/* Delete */}
+          { canDelete && (
             <DropdownMenuItem
               disabled={pending}
               onClick={() => setDeleteDialogOpen(true)}
               className='cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10'
             >
-              <Trash2 className='mr-2 size-4' />
-              Избриши
+              <Trash2 className='mr-2 size-4' />              Delete
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* Потврда за бришење преку AlertDialog */}
+      </DropdownMenu>      {/* Confirm deletion via AlertDialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Дали сте сигурни?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Оваа акција е трајна и резервацијата ќе биде целосно избришана од
-              системот.
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>              This action is permanent and the reservation will be completely deleted from
+              the system.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Откажи</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Give up</AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) => {
                 e.preventDefault()
@@ -255,10 +246,9 @@ export function ReservationActions({
               {isDeleting ? (
                 <div className='flex items-center gap-2'>
                   <LoaderCircle className='size-3.5 animate-spin' />
-                  <span>Се брише...</span>
-                </div>
-              ) : (
-                'Избриши'
+                  <span>Deleting...</span>
+                </div>              ) : (
+                'delete'
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

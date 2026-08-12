@@ -60,7 +60,7 @@ async function getAuthenticatedUser() {
 export async function getReservationTableTypesAction(): Promise<ReservationTableTypesResult> {
   const user = await getAuthenticatedUser()
   if (!user) {
-    return { success: false, message: 'Најавете се за да направите резервација.' }
+    return { success: false, message: 'Log in to make a reservation.' }
   }
 
   const tableTypes = await getReservationTableTypes()
@@ -69,13 +69,13 @@ export async function getReservationTableTypesAction(): Promise<ReservationTable
 
 export async function getReservationAvailabilityAction(input: {
   date: string
-  tableTypeId: string
+  tableTypeId : string
   guests: number
   durationMinutes: number
 }): Promise<ReservationAvailabilityResult> {
   const user = await getAuthenticatedUser()
   if (!user) {
-    return { success: false, message: 'Најавете се за да продолжите.' }
+    return { success: false, message: 'Sign in to continue.' }
   }
 
   const parsed = reservationFormSchema.pick({
@@ -85,16 +85,16 @@ export async function getReservationAvailabilityAction(input: {
     durationMinutes: true,
   }).safeParse(input)
   if (!parsed.success) {
-    return { success: false, message: 'Изберете валиден датум, број на гости и тип на маса.' }
+    return { success: false, message: 'Select a valid date, number of guests and table type.' }
   }
   if (!isReservationDateBookable(parsed.data.date)) {
-    return { success: false, message: 'Резервации се достапни до 90 дена однапред.' }
+    return { success: false, message: 'Reservations are available up to 90 days in advance.' }
   }
 
   const tableTypes = await getReservationTableTypes()
   const tableType = tableTypes.find((type) => type.id === parsed.data.tableTypeId)
   if (!tableType) {
-    return { success: false, message: 'Избраниот тип на маса не постои.' }
+    return { success: false, message: 'The selected table type does not exist.' }
   }
   const slots = await getAvailableReservationSlots(
     parsed.data.date,
@@ -110,24 +110,24 @@ export async function createReservationAction(
 ): Promise<CreateReservationResult> {
   const user = await getAuthenticatedUser()
   if (!user) {
-    return { success: false, message: 'Најавете се за да направите резервација.' }
+    return { success: false, message: 'Log in to make a reservation.' }
   }
 
   const parsed = reservationFormSchema.safeParse(input)
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Проверете ги внесените податоци.',
+      message: 'Check the entered data.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     }
   }
 
   const reservationData = parsed.data
   if (!isReservationDateBookable(reservationData.date)) {
-    return { success: false, message: 'Избраниот датум не е достапен за резервација.' }
+    return { success: false, message: 'The selected date is not available for booking.' }
   }
   if (isReservationSlotInPast(reservationData.date, reservationData.time)) {
-    return { success: false, message: 'Избраниот термин веќе помина.' }
+    return { success: false, message: 'The selected term has already passed.' }
   }
 
   const tableTypes = await getReservationTableTypes()
@@ -135,7 +135,7 @@ export async function createReservationAction(
     (type) => type.id === reservationData.tableTypeId,
   )
   if (!tableType) {
-    return { success: false, message: 'Избраниот тип на маса не постои.' }
+    return { success: false, message: 'The selected table type does not exist.' }
   }
   try {
     const reservation = await createReservation({
@@ -146,7 +146,7 @@ export async function createReservationAction(
     if (!reservation) {
       return {
         success: false,
-        message: 'Овој термин штотуку е резервиран. Изберете друг термин.',
+        message: 'This appointment has just been booked. Choose another term.',
       }
     }
 
@@ -154,7 +154,7 @@ export async function createReservationAction(
 
     return {
       success: true,
-      message: 'Барањето за резервација е успешно испратено.',
+      message: 'The booking request has been successfully sent.',
       reservation: {
         reference: getReservationReference(reservation.id),
         date: reservationData.date,
@@ -170,7 +170,7 @@ export async function createReservationAction(
     console.error('Create reservation failed:', error)
     return {
       success: false,
-      message: 'Не успеавме да ја зачуваме резервацијата. Обидете се повторно.',
+      message: 'We were unable to save the reservation. Try again.',
     }
   }
 }

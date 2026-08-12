@@ -18,20 +18,20 @@ export async function updateAdminUserAction(input: UpdateUserFormValues) {
   if (!parsed.success) {
     return {
       success: false,
-      message: parsed.error.issues[0]?.message || 'Невалидни податоци.',
+      message: parsed.error.issues[0]?.message || 'Invalid data.',
     }
   }
 
   const { userId, name, phone, role, status } = parsed.data
 
-  // Заштита: Admin не може да си го менува сопствениот статус или улога
+  // Protection: Admin cannot change their own status or role
   if (
     currentUser.id === userId &&
     (role !== currentUser.role || status !== currentUser.status)
   ) {
     return {
       success: false,
-      message: 'Не можете да си ги промените сопствената улога или статус.',
+      message: 'You cannot change your own role or status.',
     }
   }
 
@@ -44,10 +44,10 @@ export async function updateAdminUserAction(input: UpdateUserFormValues) {
     revalidatePath('/admin/users')
     return {
       success: true,
-      message: 'Податоците за корисникот се успешно ажурирани.',
+      message: 'User data has been successfully updated.',
     }
   } catch {
-    return { success: false, message: 'Грешка при ажурирање на корисникот.' }
+    return { success: false, message: 'Error updating user.' }
   }
 }
 
@@ -55,27 +55,27 @@ export async function updateUserRoleAction(
   input: unknown,
 ): Promise<ActionResult> {
   const parsed = updateUserRoleSchema.safeParse(input)
-  if (!parsed.success) return { success: false, message: 'Невалидна улога.' }
+  if (!parsed.success) return { success: false, message: 'Invalid role.' }
 
   const user = await getAuthorizedUser([Role.ADMIN])
   if (!user) return forbidden()
   if (user.id === parsed.data.userId)
     return {
       success: false,
-      message: 'Не можете да ја промените сопствената улога.',
+      message: 'You cannot change your own role.',
     }
 
   const target = await prisma.user.findUnique({
     where: { id: parsed.data.userId },
     select: { role: true },
   })
-  if (!target) return { success: false, message: 'Корисникот не постои.' }
+  if (!target) return { success: false, message: 'The user does not exist.' }
   if (target.role === Role.ADMIN && parsed.data.role !== Role.ADMIN) {
     const admins = await prisma.user.count({ where: { role: Role.ADMIN } })
     if (admins <= 1)
       return {
         success: false,
-        message: 'Мора да остане барем еден администратор.',
+        message: 'At least one administrator must remain.',
       }
   }
 
@@ -83,7 +83,7 @@ export async function updateUserRoleAction(
     where: { id: parsed.data.userId },
     data: { role: parsed.data.role },
   })
-  return { success: true, message: 'Улогата е успешно ажурирана.' }
+  return { success: true, message: 'The role has been successfully updated.' }
 }
 
 export async function updateUserStatusAction({
@@ -98,7 +98,7 @@ export async function updateUserStatusAction({
   if (currentUser.id === userId) {
     return {
       success: false,
-      message: 'Не можете да го промените сопствениот статус.',
+      message: 'You cannot change your own status.',
     }
   }
 
@@ -113,11 +113,11 @@ export async function updateUserStatusAction({
       success: true,
       message:
         status === UserStatus.BLOCKED
-          ? 'Корисникот е успешно блокиран.'
-          : 'Корисникот е успешно активиран.',
+          ? 'The user has been successfully blocked.'
+          : 'The user has been successfully activated.',
     }
   } catch {
-    return { success: false, message: 'Грешка при менување на статусот.' }
+    return { success: false, message: 'Error changing status.' }
   }
 }
 
@@ -125,7 +125,7 @@ export async function deleteUserAction(userId: string) {
   const currentUser = await requireRouteAccess('/admin/users')
 
   if (currentUser.id === userId) {
-    return { success: false, message: 'Не можете да се избришете самите себе.' }
+    return { success: false, message: 'You cannot delete yourself.' }
   }
 
   try {
@@ -134,8 +134,8 @@ export async function deleteUserAction(userId: string) {
     })
 
     revalidatePath('/admin/users')
-    return { success: true, message: 'Корисникот е успешно избришан.' }
+    return { success: true, message: 'User deleted successfully.' }
   } catch {
-    return { success: false, message: 'Грешка при бришење на корисникот.' }
+    return { success: false, message: 'Error deleting user.' }
   }
 }

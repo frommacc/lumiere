@@ -37,29 +37,28 @@ export function ReservationDetailsDialog({
               #{reservation.id.slice(-8).toUpperCase()}
             </span>
           </div>
-          <DialogTitle className='font-display text-3xl'>Детали за резервација</DialogTitle>
-          <DialogDescription className='text-on-surface-variant'>
-            {isPending
-              ? 'Барањето е испратено. Ќе добиете е-пошта кога ресторанот ќе ја потврди резервацијата.'
-              : 'Податоци за вашата резервација.'}
+          <DialogTitle className='font-display text-3xl'>Booking details</DialogTitle>
+          <DialogDescription className='text-on-surface-variant'>            {isPending
+              ? 'The request has been sent. You will receive an email when the restaurant confirms the reservation.'
+              : 'Your booking details.'}
           </DialogDescription>
         </DialogHeader>
 
         <div className='grid gap-3 sm:grid-cols-2'>
-          <Detail icon={CalendarDays} label='Датум' value={formatReservationDate(reservation.startTime)} />
+          <Detail icon={CalendarDays} label='Date' value={formatReservationDate(reservation.startTime)} />
           <Detail
             icon={Clock3}
-            label='Време'
+            label='Time'
             value={`${formatReservationTime(reservation.startTime)} – ${formatReservationTime(reservation.endTime)}`}
           />
-          <Detail icon={UsersRound} label='Гости' value={`${reservation.guests} ${reservation.guests === 1 ? 'лице' : 'лица'}`} />
-          <Detail icon={Clock3} label='Планирано седење' value={formatReservationDuration(reservation.durationMinutes)} />
-          <Detail icon={MapPin} label='Амбиент' value={reservation.table.tableType.name} />
-          <Detail icon={MapPin} label='Доделена маса' value={reservation.table.number} />
+          <Detail icon={UsersRound} label='Guests' value={`${reservation.guests} ${reservation.guests === 1 ? 'guest' : 'guests'}`} />
+          <Detail icon={Clock3} label='Planned seating' value={formatReservationDuration(reservation.durationMinutes)} />
+          <Detail icon={MapPin} label='Ambient' value={reservation.table.tableType.name} />
+          <Detail icon={MapPin} label='Table assigned' value={reservation.table.number} />
         </div>
 
         <section className='space-y-3 border-t border-outline-variant/20 pt-5'>
-          <h3 className='font-label-caps text-[10px] uppercase tracking-widest text-primary'>Контакт</h3>
+          <h3 className='font-label-caps text-[10px] uppercase tracking-widest text-primary'>Contact</h3>
           <div className='grid gap-3 text-sm sm:grid-cols-2'>
             <p className='flex items-center gap-2'><Mail className='size-4 text-primary' />{reservation.email}</p>
             <p className='flex items-center gap-2'><Phone className='size-4 text-primary' />{reservation.phone}</p>
@@ -68,7 +67,7 @@ export function ReservationDetailsDialog({
 
         {reservation.specialRequests && (
           <section className='border-t border-outline-variant/20 pt-5'>
-            <h3 className='font-label-caps text-[10px] uppercase tracking-widest text-primary'>Посебни барања</h3>
+            <h3 className='font-label-caps text-[10px] uppercase tracking-widest text-primary'>Special requirements</h3>
             <p className='mt-2 rounded-md bg-surface-container-high p-3 text-sm text-on-surface-variant'>
               {reservation.specialRequests}
             </p>
@@ -76,7 +75,7 @@ export function ReservationDetailsDialog({
         )}
 
         <div className='flex justify-end border-t border-outline-variant/20 pt-5'>
-          <Button variant='outline' onClick={() => onOpenChange(false)}>Затвори</Button>
+          <Button variant='outline' onClick={() => onOpenChange(false)}>Close</Button>
         </div>
       </DialogContent>
     </Dialog>

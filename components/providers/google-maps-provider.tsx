@@ -3,7 +3,7 @@
 import React from 'react'
 import { APIProvider } from '@vis.gl/react-google-maps'
 
-// Важно: Поставено надвор од компонентата за да го спречи непотребниот re-render
+// Important: Placed outside the component to prevent unnecessary re-rendering
 const LIBRARIES: ('places' | 'geometry' | 'drawing' | 'visualization')[] = [
   'places',
 ]
@@ -20,7 +20,7 @@ export function GoogleMapsProvider({
       apiKey={apiKey}
       language='mk'
       region='MK'
-      libraries={LIBRARIES} // 👈 Мора да се додаде ова!
+      libraries={LIBRARIES} // 👈 Must add this!
     >
       {children}
     </APIProvider>

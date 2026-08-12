@@ -103,25 +103,22 @@ export default function SubcategoryEditor({
             {subcategory ? (
               <Pencil className='size-3.5' />
             ) : (
-              <Plus className='size-3.5' />
-            )}
-            {subcategory ? 'Измени' : 'Нова подкатегорија'}
+              <Plus className='size-3.5' />            )}
+            {subcategory ? 'Edit' : 'New SubCategory'}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle>
-            {subcategory ? 'Измени подкатегорија' : 'Нова подкатегорија'}
+          <DialogTitle>            {subcategory ? 'Edit subcategory' : 'New subcategory'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={submit} className='grid gap-4'>
-          {/* Родител Категорија */}
+        <form onSubmit={submit} className='grid gap-4'>          {/* Parent Category */}
           <div className='space-y-2'>
-            <Label htmlFor='parent-category'>Главна Категорија</Label>
+            <Label htmlFor='parent-category'>Main Category</Label>
             <Select value={categoryId} onValueChange={setCategoryId}>
               <SelectTrigger id='parent-category' className='w-full'>
-                <SelectValue placeholder='Изберете категорија' />
+                <SelectValue placeholder='Select a category' />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
@@ -131,11 +128,9 @@ export default function SubcategoryEditor({
                 ))}
               </SelectContent>
             </Select>
-          </div>
-
-          {/* Име */}
+          </div>          {/* Name */}
           <div className='space-y-2'>
-            <Label htmlFor='subcategory-name'>Име</Label>
+            <Label htmlFor='subcategory-name'>Name</Label>
             <Input
               id='subcategory-name'
               name='name'
@@ -143,12 +138,10 @@ export default function SubcategoryEditor({
               onChange={handleNameChange}
               required
             />
-          </div>
-
-          {/* Слаг & Редослед */}
+          </div>          {/* Stack & Order */}
           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             <div className='space-y-2'>
-              <Label htmlFor='subcategory-slug'>Слаг (Slug)</Label>
+              <Label htmlFor='subcategory-slug'>Slug</Label>
               <Input
                 id='subcategory-slug'
                 name='slug'
@@ -159,7 +152,7 @@ export default function SubcategoryEditor({
             </div>
 
             <div className='space-y-2'>
-              <Label htmlFor='subcategory-order'>Редослед</Label>
+              <Label htmlFor='subcategory-order'>Order</Label>
               <Input
                 id='subcategory-order'
                 name='displayOrder'
@@ -168,31 +161,25 @@ export default function SubcategoryEditor({
                 required
               />
             </div>
-          </div>
-
-          {/* Опис */}
+          </div>          {/* Description */}
           <div className='space-y-2'>
-            <Label htmlFor='subcategory-description'>Опис</Label>
+            <Label htmlFor='subcategory-description'>Description</Label>
             <Textarea
               id='subcategory-description'
               name='description'
               defaultValue={subcategory?.description ?? ''}
               className='min-h-20 resize-y'
             />
-          </div>
-
-          {/* Статус (isPublished Switch) */}
+          </div>          {/* Status (isPublished Switch) */}
           <div className='flex items-center justify-between rounded-lg border border-outline-variant/20 bg-surface-container-low p-3 shadow-sm'>
             <div className='space-y-0.5'>
               <Label
                 htmlFor='subcategory-published'
                 className='text-sm font-medium'
-              >
-                Објавена подкатегорија
+              >                Published subcategory
               </Label>
-              <p className='text-xs text-muted-foreground'>
-                Ако е оневозможено, подкатегоријата нема да биде видлива на
-                менито.
+              <p className='text-xs text-muted-foreground'>                If disabled, the subcategory will not be visible on
+                the menu.
               </p>
             </div>
             <Switch
@@ -205,9 +192,8 @@ export default function SubcategoryEditor({
 
           <Button disabled={pending} type='submit' className='mt-2'>
             {pending ? (
-              <LoaderCircle className='size-4 animate-spin mr-2' />
-            ) : null}
-            Зачувај
+              <LoaderCircle className='size-4 animate-spin mr-2' />            ) : null}
+            Save
           </Button>
         </form>
       </DialogContent>

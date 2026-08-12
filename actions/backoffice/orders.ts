@@ -13,7 +13,7 @@ export async function updateOrderStatusAction(
 ): Promise<ActionResult> {
   const parsed = updateOrderStatusSchema.safeParse(input)
   if (!parsed.success)
-    return { success: false, message: 'Невалиден статус на нарачка.' }
+    return { success: false, message: 'Invalid order status.' }
 
   const user = await getAuthorizedUser([
     Role.ADMIN,
@@ -27,7 +27,7 @@ export async function updateOrderStatusAction(
     where: { id: parsed.data.orderId },
     select: { status: true, deliveryMethod: true },
   })
-  if (!order) return { success: false, message: 'Нарачката не постои.' }
+  if (!order) return { success: false, message: 'The order does not exist.' }
 
   const allowed = getAllowedOrderStatuses(
     user.role as Role,
@@ -35,7 +35,7 @@ export async function updateOrderStatusAction(
     order.deliveryMethod,
   )
   if (!allowed.includes(parsed.data.status as OrderStatus)) {
-    return { success: false, message: 'Овој статусен премин не е дозволен.' }
+    return { success: false, message: 'This status transition is not allowed.' }
   }
 
   const updatedOrder = await prisma.order.update({
@@ -55,7 +55,7 @@ export async function updateOrderStatusAction(
   })
 
   refreshOperations()
-  return { success: true, message: 'Статусот на нарачката е ажуриран.' }
+  return { success: true, message: 'Order status updated.' }
 }
 
 export async function deleteOrderAction(
@@ -69,12 +69,12 @@ export async function deleteOrderAction(
     select: { id: true },
   })
 
-  if (!order) return { success: false, message: 'Нарачката не постои.' }
+  if (!order) return { success: false, message: 'The order does not exist.' }
 
   await prisma.order.delete({
     where: { id: orderId },
   })
 
   refreshOperations()
-  return { success: true, message: 'Нарачката е успешно избришана.' }
+  return { success: true, message: 'The order has been successfully deleted.' }
 }

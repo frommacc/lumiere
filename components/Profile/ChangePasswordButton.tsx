@@ -17,8 +17,6 @@ export function ChangePasswordButton({ compact = false }: { compact?: boolean })
         ? 'h-auto px-0 text-primary hover:bg-transparent hover:text-primary/75'
         : 'border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground'}
     >
-      <KeyRound />
-      Промени лозинка
-    </Button>
+      <KeyRound />      Change password</Button>
   )
 }

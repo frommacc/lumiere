@@ -28,15 +28,15 @@ export default async function AdminMenuPage({ searchParams }: PageProps) {
   return (
     <>
       <BackofficeHeader
-        eyebrow='Мени контрола'
-        title='Мени и јадења'
-        description='Креирајте, уредете, повлечете или избришете јадења.'
+        eyebrow='Menu control'
+        title='Menu and dishes'
+        description='Create, edit, drag or delete dishes.'
         actions={<MenuItemEditor categories={categories} />}
       />
 
       <div className='space-y-6 px-6 py-8 md:px-10'>
         <div className='max-w-md'>
-          <SearchInput placeholder='Пребарај артикли, по име, опис...' />
+          <SearchInput placeholder='Search for items by name, description...' />
         </div>
 
         <MenuTable

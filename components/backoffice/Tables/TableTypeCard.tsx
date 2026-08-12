@@ -34,14 +34,14 @@ export function TableTypeCard({ type }: TableTypeCardProps) {
   const handleDelete = () => {
     if (type._count.tables > 0) {
       toast.error(
-        'Не можете да го избришете типот бидејќи содржи активни маси.',
+        'You cannot delete the type because it contains active tables.',
       )
       return
     }
 
     if (
       !confirm(
-        `Дали сте сигурни дека сакате да го избришете типот "${type.name}"?`,
+        `Are you sure you want to delete the type "${type.name}"?`,
       )
     ) {
       return
@@ -67,9 +67,7 @@ export function TableTypeCard({ type }: TableTypeCardProps) {
           <p className='mt-1 text-xs font-mono text-on-surface-variant'>
             slug: {type.slug}
           </p>
-        </div>
-
-        {/* Брзи акции за менаџирање */}
+        </div>        {/* Quick actions to manage */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -95,7 +93,7 @@ export function TableTypeCard({ type }: TableTypeCardProps) {
               }}
               trigger={
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <Pencil className='mr-2 size-4' /> Измени
+                  <Pencil className='mr-2 size-4' /> Edit
                 </DropdownMenuItem>
               }
             />
@@ -105,18 +103,16 @@ export function TableTypeCard({ type }: TableTypeCardProps) {
               onClick={handleDelete}
               disabled={isPending}
             >
-              <Trash2 className='mr-2 size-4' /> Избриши
+              <Trash2 className='mr-2 size-4' /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      <p className='mt-3 text-sm text-on-surface-variant'>
-        {type.description || 'Нема опис.'}
+      <p className='mt-3 text-sm text-on-surface-variant'>        {type.description || 'No description.'}
       </p>
 
-      <div className='mt-4 border-t border-outline-variant/15 pt-3 text-xs font-medium text-primary'>
-        {type._count.tables} {type._count.tables === 1 ? 'маса' : 'маси'}
+      <div className='mt-4 border-t border-outline-variant/15 pt-3 text-xs font-medium text-primary'>        {type._count.tables} {type._count.tables === 1 ? 'table' : 'tables'}
       </div>
     </article>
   )

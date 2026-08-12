@@ -48,13 +48,10 @@ export default async function OrderDetailsPage({ params }: PageProps) {
       <OrderStatusTracker status={order.status} />
 
       <section className='w-full max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-16'>
-        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-          {/* Лева Колона: Артикли */}
+        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>          {/* Left Column: Items */}
           <div className='lg:col-span-7'>
             <OrderItemsList items={order.items} />
-          </div>
-
-          {/* Десна Колона: Информации и Сметка */}
+          </div>          {/* Right Column: Info and Account */}
           <div className='lg:col-span-5 flex flex-col gap-6'>
             <OrderDeliveryCard
               address={order.deliveryAddress}

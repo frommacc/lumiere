@@ -15,7 +15,7 @@ export async function getAllPendingReservations() {
   })
 }
 
-// 2. Сите останати (non-PENDING) резервации за конкретен датум
+// 2. All other (non-PENDING) reservations for a specific date
 export async function getAgendaReservationsForDate(dateKey: string) {
   const { start, end } = getDayRange(dateKey)
   return prisma.reservation.findMany({

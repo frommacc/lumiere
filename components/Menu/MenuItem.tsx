@@ -26,13 +26,11 @@ const MenuItemCard = ({
       >
         {/* Badges */}
         {item.isPopular && (
-          <div className='absolute top-3 left-3 z-10 bg-primary text-primary-foreground font-sans text-[9px] font-bold tracking-widest px-2.5 py-1 uppercase rounded-md shadow-md'>
-            ПОПУЛАРНО
+          <div className='absolute top-3 left-3 z-10 bg-primary text-primary-foreground font-sans text-[9px] font-bold tracking-widest px-2.5 py-1 uppercase rounded-md shadow-md'>            POPULAR
           </div>
         )}
         {item.isExclusive && (
-          <div className='absolute top-3 right-3 z-10 bg-[#7a2222] text-[#fbebeb] font-sans text-[9px] font-bold tracking-widest px-2.5 py-1 uppercase rounded-md shadow-md'>
-            ЕКСКЛУЗИВНО
+          <div className='absolute top-3 right-3 z-10 bg-[#7a2222] text-[#fbebeb] font-sans text-[9px] font-bold tracking-widest px-2.5 py-1 uppercase rounded-md shadow-md'>            EXCLUSIVE
           </div>
         )}
 
@@ -44,9 +42,7 @@ const MenuItemCard = ({
           fetchPriority={isLcpCandidate ? 'high' : 'auto'}
           fill
           sizes='(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw'
-        />
-
-        {/* Hover Action Overlay за Desktop */}
+        />        {/* Hover Action Overlay for Desktop */}
         <div className='hidden md:flex absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3'>
           <button
             onClick={(e) => {
@@ -55,8 +51,7 @@ const MenuItemCard = ({
             }}
             className='flex items-center gap-2 font-sans text-xs font-semibold uppercase tracking-wider bg-surface/90 border border-outline px-5 py-2 hover:bg-primary hover:text-primary-foreground transition-all duration-300 rounded-md'
           >
-            <Eye size={14} />
-            Детали
+            <Eye size={14} />            Details
           </button>
         </div>
       </div>
@@ -74,26 +69,21 @@ const MenuItemCard = ({
           <p className='font-sans text-xs text-muted-foreground leading-relaxed line-clamp-2 mt-2'>
             {item.description}
           </p>
-        </div>
-
-        {/* Цена и Копчиња за Мобилен + Desktop */}
+        </div>        {/* Price and Buttons for Mobile + Desktop */}
         <div className='flex items-center justify-between gap-2 pt-3 mt-3 border-t border-outline-variant/15'>
           <span className='font-sans text-sm md:text-base font-bold text-primary shrink-0'>
             {item.price.toLocaleString()}{' '}
-            <span className='text-xs font-normal'>МКД</span>
+            <span className='text-xs font-normal'>$</span>
           </span>
 
-          <div className='flex items-center gap-2'>
-            {/* Око за детали (мобилен) */}
+          <div className='flex items-center gap-2'>            {/* Eye for detail (mobile) */}
             <button
               onClick={() => onOpenDetails(item)}
-              aria-label='Детали'
+              aria-label='Details'
               className='md:hidden p-2 text-on-surface-variant hover:text-primary bg-surface-container-high rounded-none transition-colors'
             >
               <Eye size={16} />
-            </button>
-
-            {/* Копче за нарачка (Се прикажува само доколку предметот може да се нарача: isOrderable === true) */}
+            </button>            {/* Order button (Shown only if the item is orderable: isOrderable === true) */}
             {item.isOrderable ? (
               <button
                 onClick={() => handleAddToCart(item)}
@@ -107,18 +97,17 @@ const MenuItemCard = ({
                 {isItemAdded ? (
                   <>
                     <Check size={14} />
-                    <span>Додадено</span>
+                    <span>Added</span>
                   </>
                 ) : (
                   <>
                     <ShoppingBag size={14} />
-                    <span>Нарачај</span>
+                    <span>Order</span>
                   </>
                 )}
               </button>
             ) : (
-              <p className='font-sans text-[10px] text-muted-foreground'>
-                само во ресторан*
+              <p className='font-sans text-[10px] text-muted-foreground'>                only in restaurant*
               </p>
             )}
           </div>

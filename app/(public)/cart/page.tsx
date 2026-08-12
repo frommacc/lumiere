@@ -14,12 +14,11 @@ export default function CartPage() {
   const cart = useCartStore((state) => state.cart)
   const isMounted = useHasMounted()
 
-  // Додека се рендира на сервер/хидрира, прикажи loading
+  // While rendering on server/hydration, show loading
   if (!isMounted) {
     return (
       <main className='min-h-screen w-full bg-background text-foreground pt-20 flex items-center justify-center'>
-        <div className='animate-pulse text-muted-foreground uppercase text-xs tracking-widest'>
-          Вчитување...
+        <div className='animate-pulse text-muted-foreground uppercase text-xs tracking-widest'>          Loading...
         </div>
       </main>
     )
@@ -33,19 +32,16 @@ export default function CartPage() {
         {cart.length === 0 ? (
           <div className='flex flex-col items-center justify-center py-20 text-center gap-6'>
             <ShoppingBag size={100} />
-            <p className='font-mono text-2xl text-foreground'>
-              Вашата кошничка е празна
+            <p className='font-mono text-2xl text-foreground'>              Your basket is empty
             </p>
             <Link
               href='/menu'
               className='bg-primary text-primary-foreground font-semibold px-8 py-4 text-xs uppercase tracking-widest hover:opacity-90 transition-opacity'
-            >
-              Разгледај Мени
+            >              View Menu
             </Link>
           </div>
         ) : (
-          <div className='grid grid-cols-1 lg:grid-cols-12 gap-16 items-start'>
-            {/* Лева колона: Производи */}
+          <div className='grid grid-cols-1 lg:grid-cols-12 gap-16 items-start'>            {/* Left Column: Products */}
             <div className='lg:col-span-7 flex flex-col gap-12'>
               <div className='flex flex-col'>
                 {cart.map((item) => (
@@ -53,9 +49,7 @@ export default function CartPage() {
                 ))}
               </div>
               <ChefNotes />
-            </div>
-
-            {/* Десна колона: Преглед и плаќање */}
+            </div>            {/* Right Column: View and Pay */}
             <OrderSummary />
           </div>
         )}

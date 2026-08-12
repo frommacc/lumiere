@@ -56,22 +56,22 @@ export function TableModal({
   const isOpen = externalOpen ?? internalOpen
   const setIsOpen = externalOnOpenChange ?? setInternalOpen
 
-  // Пресметка на подразбраната вредност директно без useEffect
+  // Calculation of the implied value directly without useEffect
   const defaultTypeId = initialData?.tableTypeId ?? tableTypes[0]?.id ?? ''
 
-  // Состојби за следење на избраниот тип и пропот што го добивме
+  // States to keep track of the selected type and the prop we got
   const [prevInitialTypeId, setPrevInitialTypeId] = useState(
     initialData?.tableTypeId,
   )
   const [tableTypeId, setTableTypeId] = useState(defaultTypeId)
 
-  // Сихронизација за време на рендерирање: Доколку initialData се промени на друг објект, го ажурираме state-от
+  // Synchronization during rendering: If initialData changes to another object, we update the state
   if (initialData?.tableTypeId !== prevInitialTypeId) {
     setPrevInitialTypeId(initialData?.tableTypeId)
     setTableTypeId(initialData?.tableTypeId ?? tableTypes[0]?.id ?? '')
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = ( event : FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
 
@@ -102,11 +102,11 @@ export function TableModal({
           <Button variant={isEditing ? 'outline' : 'default'}>
             {isEditing ? (
               <>
-                <Pencil className='mr-2 size-4' /> Измени маса
+                <Pencil className='mr-2 size-4' /> Change table
               </>
             ) : (
               <>
-                <Plus className='mr-2 size-4' /> Додај маса
+                <Plus className='mr-2 size-4' /> Add a table
               </>
             )}
           </Button>
@@ -117,14 +117,14 @@ export function TableModal({
         <DialogHeader>
           <DialogTitle>
             {isEditing
-              ? `Измени маса: ${initialData?.number}`
-              : 'Додај нова маса'}
+              ? `Modify table: ${initialData?.number}`
+              : 'Add new table'}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className='space-y-4 pt-4'>
           <div className='space-y-1.5'>
-            <Label htmlFor='table-number'>Број на маса</Label>
+            <Label htmlFor='table-number'>Table number</Label>
             <Input
               id='table-number'
               name='number'
@@ -135,7 +135,7 @@ export function TableModal({
           </div>
 
           <div className='space-y-1.5'>
-            <Label htmlFor='table-capacity'>Капацитет (седишта)</Label>
+            <Label htmlFor='table-capacity'>Capacity (seats)</Label>
             <Input
               id='table-capacity'
               name='capacity'
@@ -149,10 +149,10 @@ export function TableModal({
           </div>
 
           <div className='space-y-1.5'>
-            <Label>Тип на маса</Label>
+            <Label>Table type</Label>
             <Select value={tableTypeId} onValueChange={setTableTypeId}>
               <SelectTrigger>
-                <SelectValue placeholder='Избери тип' />
+                <SelectValue placeholder='Choose a type' />
               </SelectTrigger>
               <SelectContent>
                 {tableTypes.map((type) => (
@@ -167,7 +167,7 @@ export function TableModal({
           <div className='flex justify-end pt-2'>
             <Button disabled={pending || !tableTypeId} type='submit'>
               {pending && <LoaderCircle className='mr-2 size-4 animate-spin' />}
-              {isEditing ? 'Зачувај измени' : 'Креирај маса'}
+              {isEditing ? 'Save Changes' : 'Create Table'}
             </Button>
           </div>
         </form>

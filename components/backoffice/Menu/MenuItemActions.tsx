@@ -42,7 +42,7 @@ export default function MenuItemActions({
             variant='ghost'
             className='h-8 w-8 p-0 hover:bg-surface-container'
           >
-            <span className='sr-only'>Отвори мени</span>
+            <span className='sr-only'>Open menu</span>
             <MoreHorizontal className='h-4 w-4 text-on-surface-variant' />
           </Button>
         </DropdownMenuTrigger>
@@ -50,7 +50,7 @@ export default function MenuItemActions({
           align='end'
           className='w-48 bg-surface-container text-on-surface'
         >
-          <DropdownMenuLabel>Акции</DropdownMenuLabel>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
@@ -65,12 +65,12 @@ export default function MenuItemActions({
             {item.isAvailable ? (
               <>
                 <EyeOff className='mr-2 size-4 text-on-surface-variant' />
-                <span>Повлечи</span>
+                <span>Drag</span>
               </>
             ) : (
               <>
                 <Eye className='mr-2 size-4 text-emerald-400' />
-                <span>Објави</span>
+                <span>Post</span>
               </>
             )}
           </DropdownMenuItem>
@@ -80,7 +80,7 @@ export default function MenuItemActions({
             className='cursor-pointer'
           >
             <Pencil className='mr-2 size-4 text-on-surface-variant' />
-            <span>Измени</span>
+            <span>Edit</span>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
@@ -88,14 +88,14 @@ export default function MenuItemActions({
           <DropdownMenuItem
             disabled={isDeleting}
             onClick={() => {
-              if (window.confirm('Да го избришам артиклот?')) {
+              if (window.confirm('Should I delete the article?')) {
                 runDelete(() => deleteMenuItemAction(item.id!))
               }
             }}
             className='cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive'
           >
             <Trash2 className='mr-2 size-4' />
-            <span>Избриши</span>
+            <span>Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

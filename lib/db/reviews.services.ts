@@ -86,7 +86,7 @@ export async function createReview({
       data: {
         userId,
         name,
-        role: 'Потврден гостин',
+        role: 'Verified guest',
         rating,
         text,
         status: ReviewStatus.PENDING,

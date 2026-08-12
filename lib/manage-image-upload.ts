@@ -13,7 +13,7 @@ interface ManageImageOptions {
 interface ImageUploadResult {
   image: string | null
   imageId: string | null
-  /** Повикај ја оваа функција САМО по успешно зачувување во базата */
+  /** Call this function ONLY after a successful database save */
   cleanupOldImage: () => Promise<void>
 }
 
@@ -23,10 +23,10 @@ export async function handleImageUpload({
   currentImageId = null,
   folder = 'general',
 }: ManageImageOptions): Promise<ImageUploadResult> {
-  // Празен cleanup по подразбирање
+  // Empty cleanup by default
   const noopCleanup = async () => {}
 
-  // Ако нема Нов фајл, врати ги постарите податоци и празен cleanup
+  // If there is no New file, restore older data and empty cleanup
   if (!newFile || !(newFile instanceof File) || newFile.size === 0) {
     return {
       image: currentImage,
@@ -35,7 +35,7 @@ export async function handleImageUpload({
     }
   }
 
-  // 1. Upload на новата слика
+  // 1. Upload the new image
   const uploadResults = await uploadImagesToCloudinary([newFile], folder)
 
   if (uploadResults.length === 0) {
@@ -48,16 +48,16 @@ export async function handleImageUpload({
 
   const newImageData = uploadResults[0]
 
-  // 2. Дефинирање на cleanup функцијата за старата слика
+  // 2. Defining the cleanup function for the old image
   const cleanupOldImage = async () => {
     if (currentImageId) {
       await deleteImageFromCloudinary(currentImageId).catch((err) => {
-        console.error('Грешка при бришење на стара слика од Cloudinary:', err)
+        console.error('Error deleting old image from Cloudinary:', err)
       })
     }
   }
 
-  // Забележи: ТЕК ТУКА НЕ ја бришеме старата слика веднаш!
+  // Note: ONLY HERE we do NOT delete the old image immediately!
   return {
     image: newImageData.url,
     imageId: newImageData.imageId,

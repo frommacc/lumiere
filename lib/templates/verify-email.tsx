@@ -2,13 +2,12 @@ export function getVerifyEmailHtml(
   email: string,
   verificationUrl: string,
 ): string {
-  return `
-    <!DOCTYPE html>
+  return `    <!DOCTYPE html>
     <html>
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Потврдете ја вашата е-маил адреса</title>
+      <title>Verify your email address</title>
     </head>
     <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5;">
       <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f5; padding: 40px 0;">
@@ -18,7 +17,7 @@ export function getVerifyEmailHtml(
               <!-- Header -->
               <tr>
                 <td style="padding: 40px 40px 20px 40px; text-align: center;">
-                  <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #18181b;">Потврдете ја вашата е-маил адреса</h1>
+                  <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #18181b;">Verify your email address</h1>
                 </td>
               </tr>
               
@@ -26,27 +25,27 @@ export function getVerifyEmailHtml(
               <tr>
                 <td style="padding: 0 40px 30px 40px;">
                   <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 24px; color: #52525b;">
-                    Добредојдовте!
+                    Welcome!
                   </p>
                   <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 24px; color: #52525b;">
-                    Ви благодариме за регистрацијата. Ве молиме потврдете ја вашата е-маил адреса (<strong>${email}</strong>) за целосно да ја активирате вашата корисничка сметка.
+                    Thank you for your registration. Please verify your email address (<strong>${email}</strong>) to fully activate your user account.
                   </p>
                   <p style="margin: 0 0 30px 0; font-size: 16px; line-height: 24px; color: #52525b;">
-                    Кликнете на копчето подолу за да ја потврдете вашата е-маил адреса:
+                    Click the button below to verify your email address:
                   </p>
                   
                   <!-- Button -->
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td align="center" style="padding: 0 0 30px 0;">
-                        <a href="${verificationUrl}" style="display: inline-block; padding: 14px 32px; background-color: #18181b; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 500;">Потврди е-маил</a>
+                        <a href="${verificationUrl}" style="display: inline-block; padding: 14px 32px; background-color: #18181b; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 500;">Verify Email</a>
                       </td>
                     </tr>
                   </table>
                   
                                    
                   <p style="margin: 0; font-size: 14px; line-height: 20px; color: #71717a;">
-                    Ако вие не креиравте корисничка сметка со овој е-маил, можете слободно да ја игнорирате оваа порака.
+                    If you did not create a user account with this email, you are free to ignore this message.
                   </p>
                 </td>
               </tr>
@@ -55,7 +54,7 @@ export function getVerifyEmailHtml(
               <tr>
                 <td style="padding: 30px 40px 40px 40px; border-top: 1px solid #e4e4e7;">
                   <p style="margin: 0; font-size: 12px; line-height: 18px; color: #a1a1aa; text-align: center;">
-                    Ова е автоматска порака, ве молиме не одговарајте на овој е-маил.
+                    This is an automated message, please do not reply to this email.
                   </p>
                 </td>
               </tr>

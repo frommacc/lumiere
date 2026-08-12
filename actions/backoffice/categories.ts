@@ -18,12 +18,12 @@ export async function saveCategoryAction(
   if (!parsed.success)
     return {
       success: false,
-      message: 'Проверете ги податоците за категоријата.',
+      message: 'Check category data.',
     }
 
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
 
-  // 1. Земање на постоечките податоци ако е Edit
+  // 1. Fetching existing data if Edit
   let existingCategory = null
   if (parsed.data.id) {
     existingCategory = await prisma.category.findUnique({
@@ -31,7 +31,7 @@ export async function saveCategoryAction(
     })
   }
 
-  // 2. Upload на новата слика (ако има)
+  // 2. Upload the new image (if any)
   const { image, imageId, cleanupOldImage } = await handleImageUpload({
     newFile: parsed.data.imageFile,
     currentImage: existingCategory?.image,
@@ -50,7 +50,7 @@ export async function saveCategoryAction(
   }
 
   try {
-    // 3. ПРВО СНИМАЊЕ ВО БАЗА
+    // 3. FIRST RECORDING IN THE BASE
     if (parsed.data.id) {
       await prisma.category.update({ where: { id: parsed.data.id }, data })
     } else {
@@ -66,13 +66,13 @@ export async function saveCategoryAction(
       updateTag(`menu-items-${parsed.data.id}`)
     }
 
-    return { success: true, message: 'Категоријата е зачувана.' }
+    return { success: true, message: 'The category has been saved.' }
   } catch (error) {
-    console.error('Грешка при зачувување во база:', error)
+    console.error('Error saving to database:', error)
 
     return {
       success: false,
-      message: 'Се појави грешка при зачувување на категоријата.',
+      message: 'An error occurred while saving the category.',
     }
   }
 }
@@ -87,19 +87,17 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
   if (subcategoriesCount > 0) {
     return {
       success: false,
-      message:
-        'Прво избришете ги или преместете ги сите подкатегории од оваа категорија.',
+      message: 'First delete or move all subcategories of this category.',
     }
   }
 
-  // 1. Проверка дали категоријата се користи во мени артикли
+  // 1. Checking if the category is used in menu items
   const used = await prisma.menuItem.count({ where: { categoryId: id } })
 
   if (used)
     return {
       success: false,
-      message:
-        'Прво преместете ги или избришете ги артиклите од оваа категорија.',
+      message: 'Move or delete items from this category first.',
     }
 
   const category = await prisma.category.findUnique({
@@ -110,7 +108,7 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
   if (!category) {
     return {
       success: false,
-      message: 'Категоријата не е пронајдена.',
+      message: 'Category not found.',
     }
   }
 
@@ -118,7 +116,7 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
 
   if (category.imageId) {
     await deleteImageFromCloudinary(category.imageId).catch((err) => {
-      console.error('Грешка при бришење слика од Cloudinary:', err)
+      console.error('Error deleting image from Cloudinary:', err)
     })
   }
 
@@ -129,5 +127,5 @@ export async function deleteCategoryAction(id: string): Promise<ActionResult> {
     updateTag(`menu-items-${category.id}`)
   }
 
-  return { success: true, message: 'Категоријата е избришана.' }
+  return { success: true, message: 'The category has been deleted.' }
 }

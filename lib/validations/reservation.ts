@@ -11,39 +11,39 @@ const phonePattern = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/
 export const reservationFormSchema = z.object({
   date: z
     .string()
-    .refine(isValidReservationDateKey, 'Изберете валиден датум.'),
+    .refine(isValidReservationDateKey, 'Please select a valid date.'),
   time: z
     .string()
-    .refine(isValidReservationTime, 'Изберете достапен термин.'),
+    .refine(isValidReservationTime, 'Select an available appointment.'),
   guests: z
     .number()
-    .int('Бројот на гости мора да е цел број.')
-    .min(1, 'Изберете најмалку едно лице.')
-    .max(14, 'За групи над 14 лица, контактирајте нè директно.'),
+    .int('The number of guests must be an integer.')
+    .min(1, 'Select at least one person.')
+    .max(14, 'For groups over 14 people, contact us directly.'),
   durationMinutes: z
     .number()
     .int()
     .refine(
       isValidReservationDuration,
-      'Изберете валидно планирано време на седење.',
+      'Select a valid scheduled seating time.',
     ),
-  tableTypeId: z.string().cuid('Изберете тип на маса.'),
+  tableTypeId: z.string().cuid('Select a table type.'),
   name: z
     .string()
     .trim()
-    .min(2, 'Името мора да има најмалку 2 карактери.')
-    .max(100, 'Името може да има најмногу 100 карактери.'),
+    .min(2, 'The name must have at least 2 characters.')
+    .max(100, 'The name can have a maximum of 100 characters.'),
   phone: z
     .string()
     .trim()
-    .min(8, 'Внесете валиден телефонски број.')
-    .max(30, 'Телефонскиот број е предолг.')
-    .regex(phonePattern, 'Невалиден формат за телефонски број.'),
-  email: z.email('Внесете валидна е-пошта.'),
+    .min(8, 'Enter a valid phone number.')
+    .max(30, 'The phone number is too long.')
+    .regex(phonePattern, 'Invalid phone number format.'),
+  email: z.email('Please enter a valid email address.'),
   specialRequests: z
     .string()
     .trim()
-    .max(500, 'Посебните барања може да имаат најмногу 500 карактери.')
+    .max(500, 'Special requests can have a maximum of 500 characters.')
     .optional(),
 })
 

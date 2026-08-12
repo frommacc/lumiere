@@ -6,8 +6,8 @@ export const createReviewSchema = z.object({
   text: z
     .string()
     .trim()
-    .min(20, 'Споделете барем 20 карактери од вашето искуство.')
-    .max(1000, 'Review-от може да има најмногу 1000 карактери.'),
+    .min(20, 'Share at least 20 characters from your experience.')
+    .max(1000, 'The review can have a maximum of 1000 characters.'),
 })
 
 export type CreateReviewValues = z.infer<typeof createReviewSchema>
@@ -16,15 +16,15 @@ export type CreateReviewValues = z.infer<typeof createReviewSchema>
 
 export const updateReviewModerationSchema = z.object({
   reviewId: z
-    .string({ message: 'Идентификаторот е задолжителен.' })
-    .min(1, 'Идентификаторот е задолжителен.'),
+    .string({ message: 'Identifier is required.' })
+    .min(1, 'Identifier is required.'),
   status: z.enum(ReviewStatus, {
-    message: 'Невалиден статус за рецензија.',
+    message: 'Invalid review status.',
   }),
 })
 
 export const deleteReviewSchema = z.object({
   reviewId: z
-    .string({ message: 'Идентификаторот е задолжителен.' })
-    .min(1, 'Идентификаторот е задолжителен.'),
+    .string({ message: 'Identifier is required.' })
+    .min(1, 'Identifier is required.'),
 })

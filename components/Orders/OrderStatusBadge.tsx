@@ -1,31 +1,31 @@
 import { OrderStatus } from '@/lib/generated/prisma'
 
 export const orderStatusLabels: Record<OrderStatus, string> = {
-  [OrderStatus.PENDING]: 'Примена',
-  [OrderStatus.CONFIRMED]: 'Потврдена',
-  [OrderStatus.PREPARING]: 'Во подготовка',
-  [OrderStatus.READY]: 'Подготвена',
-  [OrderStatus.IN_TRANSIT]: 'Во испорака',
-  [OrderStatus.DELIVERED]: 'Доставено',
-  [OrderStatus.CANCELLED]: 'Откажано',
+  [OrderStatus.PENDING]: 'Apply',
+  [OrderStatus.CONFIRMED]: 'Confirmed',
+  [OrderStatus.PREPARING]: 'Preparing',
+  [OrderStatus.READY]: 'Ready',
+  [OrderStatus.IN_TRANSIT]: 'In Delivery',
+  [OrderStatus.DELIVERED]: 'Delivered',
+  [OrderStatus.CANCELLED]: 'Cancelled',
 }
 
 export const statusActionLabels: Record<OrderStatus, string> = {
-  [OrderStatus.PENDING]: 'Означи како примена',
-  [OrderStatus.CONFIRMED]: 'Потврди нарачка',
-  [OrderStatus.PREPARING]: 'Започни подготовка',
-  [OrderStatus.READY]: 'Означи како подготвена',
-  [OrderStatus.IN_TRANSIT]: 'Испрати во испорака',
-  [OrderStatus.DELIVERED]: 'Означи како доставена',
-  [OrderStatus.CANCELLED]: 'Откажи нарачка',
+  [OrderStatus.PENDING]: 'Mark as received',
+  [OrderStatus.CONFIRMED]: 'Confirm Order',
+  [OrderStatus.PREPARING]: 'Start Preparation',
+  [OrderStatus.READY]: 'Mark as ready',
+  [OrderStatus.IN_TRANSIT]: 'Send in Delivery',
+  [OrderStatus.DELIVERED]: 'Mark as delivered',
+  [OrderStatus.CANCELLED]: 'Cancel Order',
 }
 
 export const orderActionLabels = {
-  actionsMenuTitle: 'Акции',
-  changeStatusGroup: 'Промени статус',
-  viewDetails: 'Види детали',
-  deleteOrder: 'Избриши нарачка',
-  openMenuSr: 'Отвори мени',
+  actionsMenuTitle: 'Actions',
+  changeStatusGroup: 'Change Status',
+  viewDetails: 'View Details',
+  deleteOrder: 'Delete Order',
+  openMenuSr: 'Open Menu',
 } as const
 
 const statusConfig: Record<OrderStatus, { label: string; className: string }> =

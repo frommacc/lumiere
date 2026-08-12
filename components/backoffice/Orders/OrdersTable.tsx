@@ -29,7 +29,7 @@ interface OrdersTableProps {
 export function OrdersTable({
   orders,
   role,
-  emptyMessage = 'Нема пронајдено нарачки.',
+  emptyMessage = 'No orders found.',
 }: OrdersTableProps) {
   const [selectedOrder, setSelectedOrder] = useState<OrderDetailData | null>(
     null,
@@ -49,19 +49,18 @@ export function OrdersTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className='w-32'>Нарачка</TableHead>
-              <TableHead>Клиент</TableHead>
-              <TableHead>Достава</TableHead>
-              <TableHead>Плаќање</TableHead>
-              <TableHead>Износ</TableHead>
-              <TableHead>Статус</TableHead>
-              <TableHead className='text-right'>Акции</TableHead>
+              <TableHead className='w-32'>Order</TableHead>
+              <TableHead>Client</TableHead>
+              <TableHead>Delivery</TableHead>
+              <TableHead>Payment</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className='text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
-                {/* ID и Дата */}
+              <TableRow key={order.id}>                {/* ID and Date */}
                 <TableCell className='font-medium'>
                   <div>#{order.orderNumber}</div>
                   <div
@@ -70,64 +69,46 @@ export function OrdersTable({
                   >
                     {formatBackofficeDateTime(order.createdAt)}
                   </div>
-                </TableCell>
-
-                {/* Клиент */}
+                </TableCell>                {/* Client */}
                 <TableCell>
-                  <div className='font-medium'>
-                    {order.customerName ?? order.user?.name ?? 'Анонимен'}
+                  <div className='font-medium'>                    {order.customerName ?? order.user?.name ?? 'Anonymous'}
                   </div>
                   <div className='text-xs text-muted-foreground'>
                     {order.phone}
                   </div>
-                </TableCell>
-
-                {/* Достава */}
+                </TableCell>                {/* Delivery */}
                 <TableCell>
-                  <Badge variant='outline' className='text-xs'>
-                    {order.deliveryMethod === DeliveryMethod.ADDRESS
-                      ? 'Адресна достава'
-                      : 'Подигање'}
+                  <Badge variant='outline' className='text-xs'>                    { order.deliveryMethod === DeliveryMethod.ADDRESS
+                      ? 'Delivery Address'
+                      : 'Upload'}
                   </Badge>
-                </TableCell>
-
-                {/* Плаќање */}
+                </TableCell>                {/* Payment */}
                 <TableCell>
-                  <Badge variant='secondary' className='text-xs'>
-                    {order.paymentMethod === PaymentMethod.CASH
-                      ? 'Готовина'
-                      : 'Картичка'}
+                  <Badge variant='secondary' className='text-xs'>                    {order.paymentMethod === PaymentMethod.CASH
+                      ? 'Cash'
+                      : 'Card'}
                   </Badge>
-                </TableCell>
-
-                {/* Износ */}
+                </TableCell>                {/* Amount */}
                 <TableCell className='font-semibold'>
                   <span suppressHydrationWarning>
                     {formatCurrency(order.total)}
                   </span>
-                </TableCell>
-
-                {/* Статус */}
+                </TableCell>                {/* Status */}
                 <TableCell>
                   <OrderStatusBadge status={order.status} />
-                </TableCell>
-
-                {/* Копче за Детали + Менување Статус / Бришење */}
+                </TableCell>                {/* Details Button + Change Status / Delete */}
                 <TableCell className='text-right'>
-                  <div className='flex items-center justify-end gap-1'>
-                    {/* Преглед на детали */}
+                  <div className='flex items-center justify-end gap-1'>                    {/* View details */}
                     <Button
                       variant='ghost'
                       size='icon'
                       className='h-8 w-8'
                       onClick={() => setSelectedOrder(order)}
-                      title='Види детали'
+                      title='See details'
                     >
                       <Eye className='h-4 w-4 text-muted-foreground hover:text-foreground' />
-                      <span className='sr-only'>Детали</span>
-                    </Button>
-
-                    {/* Мени со акции */}
+                      <span className='sr-only'>Details</span>
+                    </Button>                    {/* Action menu */}
                     <OrderActionsMenu
                       orderId={order.id}
                       currentStatus={order.status}
@@ -139,9 +120,7 @@ export function OrdersTable({
             ))}
           </TableBody>
         </Table>
-      </div>
-
-      {/* Модал за детали */}
+      </div>      {/* Details modal */}
       <OrderDetailsModal
         order={selectedOrder}
         isOpen={!!selectedOrder}

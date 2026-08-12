@@ -33,7 +33,7 @@ export async function getAdminDashboard() {
     topSellingItems,
     unavailableMenuItemsCount,
   ] = await Promise.all([
-    // Нови нарачки (Pending)
+    // New orders (Pending)
     prisma.order.count({
       where: {
         createdAt: { gte: start, lt: end },
@@ -41,7 +41,7 @@ export async function getAdminDashboard() {
       },
     }),
 
-    // Активни резервации за денес
+    // Active bookings for today
     prisma.reservation.count({
       where: {
         startTime: { gte: start, lt: end },
@@ -49,10 +49,10 @@ export async function getAdminDashboard() {
       },
     }),
 
-    // Вкупно маси
+    // Total tables
     prisma.table.count(),
 
-    // Зафатени маси
+    // Busy tables
     prisma.reservation.findMany({
       where: {
         startTime: { lt: end },
@@ -63,7 +63,7 @@ export async function getAdminDashboard() {
       select: { tableId: true },
     }),
 
-    // Последни 5 нарачки
+    // Last 5 orders
     prisma.order.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
@@ -73,7 +73,7 @@ export async function getAdminDashboard() {
       },
     }),
 
-    // Резервации кои чекаат потврда
+    // Reservations awaiting confirmation
     prisma.reservation.findMany({
       where: { status: ReservationStatus.PENDING },
       take: 5,
@@ -81,7 +81,7 @@ export async function getAdminDashboard() {
       include: { table: { include: { tableType: true } } },
     }),
 
-    // Дневен промет
+    // Daily turnover
     prisma.order.aggregate({
       where: {
         createdAt: { gte: start, lt: end },
@@ -91,17 +91,17 @@ export async function getAdminDashboard() {
       _sum: { total: true },
     }),
 
-    // Во кујна (Preparing)
+    // In the kitchen (Preparing)
     prisma.order.count({
       where: { status: OrderStatus.PREPARING },
     }),
 
-    // Рецензии кои чекаат одобрување
+    // Reviews pending approval
     prisma.review.count({
       where: { status: ReviewStatus.PENDING },
     }),
 
-    // Топ 5 најпродавани артикли
+    // Top 5 best selling items
     prisma.orderItem.groupBy({
       by: ['name'],
       _sum: { quantity: true },
@@ -109,7 +109,7 @@ export async function getAdminDashboard() {
       take: 5,
     }),
 
-    // Недостапни артикли во менито
+    // Unavailable menu items
     prisma.menuItem.count({
       where: { isAvailable: false },
     }),

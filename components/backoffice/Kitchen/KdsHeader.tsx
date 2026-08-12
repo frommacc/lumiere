@@ -42,12 +42,12 @@ export function KdsHeader({
           {soundEnabled ? (
             <>
               <Volume2 className='size-4 text-emerald-500' />
-              <span className='text-xs font-semibold'>ЗВУКОТ Е АКТИВЕН</span>
+              <span className='text-xs font-semibold'>SOUND IS ON</span>
             </>
           ) : (
             <>
               <VolumeX className='size-4' />
-              <span className='text-xs font-semibold'>ВКЛУЧИ ЗВУК</span>
+              <span className='text-xs font-semibold'>TURN ON THE SOUND</span>
             </>
           )}
         </Button>

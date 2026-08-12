@@ -30,7 +30,7 @@ export async function getUserOrders({
     }),
   }
 
-  // Извршуваме две заявки во една трансакција за подобри перформанси
+  // We execute two requests in one transaction for better performance
   const [orders, totalCount] = await prisma.$transaction([
     prisma.order.findMany({
       where: whereClause,

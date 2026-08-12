@@ -20,7 +20,7 @@ export function ImageUploadField({
   value,
   currentImage,
   fallback,
-  label = 'Профилна слика',
+  label = 'Profile Picture',
   error,
   disabled = false,
   onChange,
@@ -56,8 +56,7 @@ export function ImageUploadField({
           <p className='font-label-caps text-[10px] tracking-widest uppercase text-on-surface-variant'>
             {label}
           </p>
-          <p className='mt-1 text-xs text-outline'>
-            JPG, PNG или WebP · до 5 MB
+          <p className='mt-1 text-xs text-outline'>            JPG, PNG or WebP · up to 5 MB
           </p>
         </div>
         {value && (
@@ -69,8 +68,7 @@ export function ImageUploadField({
             onClick={() => setFile(undefined)}
             className='text-on-surface-variant hover:text-destructive'
           >
-            <X />
-            Откажи
+            <X />            Give up
           </Button>
         )}
       </div>
@@ -85,25 +83,21 @@ export function ImageUploadField({
                 fill
                 sizes='96px'
                 className='object-cover'
-                unoptimized={Boolean(previewUrl)} // Го заобиколува Next.js оптимизаторот за локални blob preview URL-и
+                unoptimized={Boolean(previewUrl)} // Bypasses the Next.js optimizer for local blob preview URLs
               />
             ) : (
               <span>{fallback}</span>
             )}
-          </div>
-
-          {/* Икончето за камера */}
+          </div>          {/* Camera icon */}
           <span className='absolute -right-1 -bottom-1 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground ring-4 ring-surface-container-low'>
             <Camera className='size-3.5' />
           </span>
         </div>
 
         <div className='min-w-0 flex-1'>
-          <p className='text-sm text-on-surface'>
-            {value ? value.name : 'Поставете нова слика.'}
+          <p className='text-sm text-on-surface'>            { value ? value.name : 'Upload a new image.'}
           </p>
-          <p className='mt-1 text-xs leading-relaxed text-on-surface-variant'>
-            Новата слика ќе ја замени претходната по успешно зачувување.
+          <p className='mt-1 text-xs leading-relaxed text-on-surface-variant'>            The new image will replace the previous one after a successful save.
           </p>
           <Button
             type='button'
@@ -114,7 +108,7 @@ export function ImageUploadField({
             className='mt-4 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground'
           >
             {currentImage || value ? <ImageIcon /> : <Upload />}
-            Избери слика
+            Choose a picture
           </Button>
         </div>
       </div>

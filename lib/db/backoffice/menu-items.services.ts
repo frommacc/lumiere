@@ -9,7 +9,7 @@ export async function getAdminMenuItems(
   const skip = (page - 1) * pageSize
   const query = q.trim()
 
-  // Го дефинираме филтерот динамички
+  // We define the filter dynamically
   const where: Prisma.MenuItemWhereInput = query
     ? {
         OR: [
@@ -34,10 +34,10 @@ export async function getAdminMenuItems(
       skip,
       take: pageSize,
     }),
-    // Сега и count го користи кастом филтерот
+    // Now count also uses the custom filter
     prisma.menuItem.count({ where }),
 
-    // Сите категории и поткатегории
+    // All categories and subcategories
     prisma.category.findMany({
       orderBy: { displayOrder: 'asc' },
       select: {

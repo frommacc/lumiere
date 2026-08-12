@@ -14,8 +14,7 @@ export function EditProfileButton() {
       onClick={open}
       className='mt-6 border-primary/40 text-primary hover:bg-primary hover:text-primary-foreground'
     >
-      <Pencil />
-      Уреди профил
+      <Pencil />      Edit profile
     </Button>
   )
 }

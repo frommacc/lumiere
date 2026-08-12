@@ -9,7 +9,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
 
-// UI компоненти
+// UI components
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -44,21 +44,20 @@ export default function LoginPage() {
       })
 
       if (apiError) {
-        setServerError(apiError.message || 'Невалидна е-пошта или лозинка.')
+        setServerError(apiError.message || 'Invalid email or password.')
       } else {
         router.push(redirectUrl)
         router.refresh()
       }
     } catch {
-      setServerError('Се појави неочекувана грешка.')
+      setServerError('An unexpected error occurred.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>
-      {/* Лева страна: Visual & Branding */}
+    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>      {/* Left Side: Visual & Branding */}
       <section className='relative w-full md:w-1/2 min-h-[40vh] md:min-h-screen overflow-hidden'>
         <Image
           alt='Lumière Ambiance'
@@ -76,11 +75,9 @@ export default function LoginPage() {
             </span>
           </div>
           <div className='max-w-md my-auto py-12 md:py-0'>
-            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>
-              Добредојдовте назад
+            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>              Welcome back
             </h2>
-            <p className='text-base md:text-lg text-outline'>
-              Влезете во вашиот профил и продолжете го софистицираното искуство.
+            <p className='text-base md:text-lg text-outline'>              Log in to your profile and continue the sophisticated experience.
             </p>
           </div>
           <div className='hidden md:block'>
@@ -89,22 +86,16 @@ export default function LoginPage() {
             </span>
           </div>
         </div>
-      </section>
-
-      {/* Десна страна: Login Form */}
+      </section>      {/* Right side: Login Form */}
       <section className='w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-background'>
         <div className='w-full max-w-md'>
           <header className='mb-10'>
-            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>
-              Најава
+            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>              Announcement
             </h1>
-            <p className='text-outline text-sm'>
-              Внесете ги вашите пристапни податоци.
+            <p className='text-outline text-sm'>              Enter your login details.
             </p>
-          </header>
-
-          {/* Серверска грешка */}
-          {serverError && (
+          </header>          {/* Server Error */}
+          { serverError && (
             <div className='mb-6 border border-destructive/40 bg-destructive/10 p-3.5 text-xs text-destructive rounded'>
               {serverError}
             </div>
@@ -124,8 +115,7 @@ export default function LoginPage() {
                   <Label
                     htmlFor='email'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Е-пошта
+                  >                    Email
                   </Label>
                   <Input
                     {...field}
@@ -162,8 +152,7 @@ export default function LoginPage() {
                     <Label
                       htmlFor='password'
                       className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300'
-                    >
-                      Лозинка
+                    >                      Password
                     </Label>
                     <div className='flex items-center gap-4'>
                       {/* Toggle password visibility */}
@@ -175,12 +164,12 @@ export default function LoginPage() {
                         {showPassword ? (
                           <>
                             <EyeOff className='h-3.5 w-3.5' />
-                            <span>Скриј</span>
+                            <span>Hide</span>
                           </>
                         ) : (
                           <>
                             <Eye className='h-3.5 w-3.5' />
-                            <span>Прикажи</span>
+                            <span>Show</span>
                           </>
                         )}
                       </button>
@@ -188,8 +177,7 @@ export default function LoginPage() {
                       <Link
                         href='/forgot-password'
                         className='text-[10px] text-outline hover:text-primary transition-colors tracking-widest uppercase'
-                      >
-                        Заборавена?
+                      >                        Forgotten?
                       </Link>
                     </div>
                   </div>
@@ -224,17 +212,15 @@ export default function LoginPage() {
                 type='submit'
                 disabled={loading}
                 className='w-full bg-primary text-primary-foreground py-4 text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container disabled:opacity-50 shadow-lg cursor-pointer'
-              >
-                {loading ? 'СЕ НАЈАВУВА...' : 'НАЈАВИ СЕ'}
+              >                {loading ? 'LOGINING...' : 'LOGIN'}
               </button>
 
               <div className='flex flex-col items-center space-y-2'>
-                <p className='text-outline text-xs'>Немате профил?</p>
+                <p className='text-outline text-xs'>Don't have an account?</p>
                 <Link
                   href='/register'
                   className='text-[11px] font-semibold tracking-widest text-primary border-b border-primary/30 hover:border-primary transition-all pb-0.5 uppercase'
-                >
-                  КРЕИРАЈ НОВ
+                >                  CREATE NEW
                 </Link>
               </div>
             </div>

@@ -100,16 +100,16 @@ export function KdsOrderCard({ order, role }: KdsOrderCardProps) {
             {order.deliveryMethod === DeliveryMethod.ADDRESS ? (
               <>
                 <Bike className='size-3.5' />
-                <span>ДОСТАВА</span>
+                <span>DELIVERY</span>
               </>
             ) : (
               <>
                 <ShoppingBag className='size-3.5 text-primary' />
-                <span className='text-primary'>ПОДИГНУВАЊЕ</span>
+                <span className='text-primary'>LIFTING</span>
               </>
             )}
             {order.paymentStatus === PaymentStatus.PAID && (
-              <span className='text-primary'>• ПЛАТЕНО</span>
+              <span className='text-primary'>• PAID</span>
             )}
           </div>
         </div>
@@ -155,8 +155,7 @@ export function KdsOrderCard({ order, role }: KdsOrderCardProps) {
         <div className='flex items-start gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-destructive shadow-sm'>
           <AlertTriangle className='mt-0.5 size-4 shrink-0' />
           <div className='flex flex-col'>
-            <span className='text-[10px] font-bold uppercase tracking-wider'>
-              БЕЛЕШКА / АЛЕРГИЈА
+            <span className='text-[10px] font-bold uppercase tracking-wider'>              NOTE / ALLERGY
             </span>
             <span className='text-xs leading-snug text-destructive-foreground'>
               {order.notes}
@@ -167,8 +166,7 @@ export function KdsOrderCard({ order, role }: KdsOrderCardProps) {
 
       {/* Card Footer & Action Buttons */}
       <div className='mt-auto flex items-center justify-between border-t border-outline-variant/10 pt-4'>
-        <span className='text-xs font-bold uppercase tracking-wider text-muted-foreground'>
-          {order.customerName || 'ГОСТИН'}
+        <span className='text-xs font-bold uppercase tracking-wider text-muted-foreground'>          {order.customerName || 'GUEST'}
         </span>
         <OrderStatusActions
           orderId={order.id}

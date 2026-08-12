@@ -8,11 +8,11 @@ import { DeliveryMethod } from '@/lib/generated/prisma'
 import { generateUniqueOrderNumber } from '@/lib/utils/generate-order-number'
 import { pusherServer } from '@/lib/pusher'
 
-// 1. Дефинирање на типови за влезните податоци
+// 1. Defining input data types
 export interface CartItemInput {
   menuItemId: string
   quantity: number
-  price: number // Цената што му се прикажувала на корисникот во кошничката
+  price: number // The price that was displayed to the user in the shopping cart
 }
 
 export interface CreateOrderInput {
@@ -26,7 +26,7 @@ export interface CreateOrderInput {
   items: CartItemInput[]
 }
 
-// 2. Типови за грешки при проверка
+// 2. Types of checking errors
 export interface ItemIssue {
   menuItemId: string
   name: string
@@ -48,7 +48,7 @@ export async function createOrder(
   data: CreateOrderInput,
 ): Promise<CreateOrderResponse> {
   try {
-    // A. Автентикација преку Better Auth
+    // A. Authentication through Better Auth
     const session = await auth.api.getSession({
       headers: await headers(),
     })
@@ -56,25 +56,25 @@ export async function createOrder(
     if (!session || !session.user?.id) {
       return {
         success: false,
-        message: 'Мора да бидете најавени за да направите нарачка.',
+        message: 'You must be logged in to place an order.',
       }
     }
 
     const userId = session.user.id
-    const customerName = session.user.name || 'Анонимен'
+    const customerName = session.user.name || 'Anonymous'
 
-    // B. Основни валидации на формата
+    // B. Basic form validations
     if (!data.items || data.items.length === 0) {
       return {
         success: false,
-        message: 'Вашата кошничка е празна.',
+        message: 'Your cart is empty.',
       }
     }
 
     if (!data.phone || !data.phone.trim()) {
       return {
         success: false,
-        message: 'Ве молиме внесете телефонски број за контакт.',
+        message: 'Please enter a contact phone number.',
       }
     }
 
@@ -84,11 +84,11 @@ export async function createOrder(
     ) {
       return {
         success: false,
-        message: 'Ве молиме внесете адреса за достава.',
+        message: 'Please enter a shipping address.',
       }
     }
 
-    // C. Извлекување на најновите податоци за артиклите од базата
+    // C. Retrieving the latest item data from the database
     const itemIds = data.items.map((item) => item.menuItemId)
     const dbMenuItems = await prisma.menuItem.findMany({
       where: {
@@ -107,17 +107,17 @@ export async function createOrder(
 
     let calculatedSubtotal = 0
 
-    // D. Проверка на секој артикл (дали постои и дали цената е иста)
+    // D. Checking each item (if it exists and if the price is the same)
     for (const clientItem of data.items) {
       const dbItem = dbItemsMap.get(clientItem.menuItemId)
 
-      // 1. Проверка дали артиклот е избришан/не постои
+      // 1. Checking if the item has been deleted/does not exist
       if (!dbItem) {
         issues.push({
           menuItemId: clientItem.menuItemId,
-          name: 'Непознат артикл',
+          name: 'Unknown item',
           reason: 'ITEM_UNAVAILABLE',
-          message: 'Артиклот повеќе не е достапен во менито.',
+          message: 'The item is no longer available in the menu.',
         })
         continue
       }
@@ -132,33 +132,33 @@ export async function createOrder(
         continue
       }
 
-      // 2. Проверка за промена на цена
+      // 2. Check for a price change
       if (dbItem.price !== clientItem.price) {
         issues.push({
           menuItemId: dbItem.id,
           name: dbItem.name,
           reason: 'PRICE_CHANGED',
-          message: `Цената за "${dbItem.name}" е променета од ${clientItem.price} ден. на ${dbItem.price} ден.`,
+          message: `The price for "${dbItem.name}" has changed since ${clientItem.price} days. on ${dbItem.price} day.`,
           oldPrice: clientItem.price,
           newPrice: dbItem.price,
         })
       }
 
-      // Пресметка со вистинската цена од базата
+      // Calculation with the actual price from the base
       calculatedSubtotal += dbItem.price * clientItem.quantity
     }
 
-    // E. Доколку има каква било разлика, ја прекинуваме нарачката
+    // E. If there is any difference, we cancel the order
     if (issues.length > 0) {
       return {
         success: false,
         message:
-          'Настанаа измени во менито или цените. Ве молиме прегледајте ги известувањата.',
+          'There have been changes to the menu or prices. Please review the notices.',
         issues,
       }
     }
 
-    // F. Пресметување достава и тотал
+    // F. Calculation of delivery and total
     const deliveryFee = calculateDeliveryFee(
       calculatedSubtotal,
       data.deliveryMethod,
@@ -166,7 +166,7 @@ export async function createOrder(
     const finalTotal = calculatedSubtotal + deliveryFee
     const orderNumber = await generateUniqueOrderNumber('LM')
 
-    // G. Креирање на нарачката во базата
+    // G. Creating the order in the database
     const newOrder = await prisma.order.create({
       data: {
         userId,
@@ -207,16 +207,16 @@ export async function createOrder(
 
     return {
       success: true,
-      message: 'Нарачката е успешно креирана!',
+      message: 'Order successfully created!',
       orderId: newOrder.id,
       orderNumber: newOrder.orderNumber,
     }
   } catch (error) {
-    console.error('Грешка при креирање на нарачка:', error)
+    console.error('Error creating order:', error)
     return {
       success: false,
       message:
-        'Настана системска грешка. Ве молиме обидете се повторно подоцна.',
+        'A system error has occurred. Please try again later.',
     }
   }
 }

@@ -22,15 +22,15 @@ export default async function AdminTablesPage() {
   return (
     <>
       <BackofficeHeader
-        eyebrow='Поставување на сала'
-        title='Маси'
-        description='Физичките маси се одвоени од амбиентот и типот, а денешната состојба се чита од резервациите.'
+        eyebrow='Setting up the hall'
+        title='Tables'
+        description='Physical masses are separated from the environment and type, and the current state is read from the reservations.'
       />
       <div className='space-y-6 px-6 py-8 md:px-10'>
         <Tabs defaultValue='tables' className='w-full space-y-6'>
           <TabsList>
-            <TabsTrigger value='tables'>Маси</TabsTrigger>
-            <TabsTrigger value='types'>Типови на маси</TabsTrigger>
+            <TabsTrigger value='tables'>Tables</TabsTrigger>
+            <TabsTrigger value='types'>Types of tables</TabsTrigger>
           </TabsList>
 
           <TabsContent value='tables'>

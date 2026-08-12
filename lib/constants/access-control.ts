@@ -30,43 +30,43 @@ export const ROLE_HOME: Record<Role, string> = {
 }
 
 const MANAGEMENT_LINKS: RoleNavLink[] = [
-  { href: '/admin/dashboard', label: 'Контролна табла', Icon: LayoutDashboard },
-  { href: '/admin/orders', label: 'Нарачки', Icon: Receipt },
-  { href: '/admin/reservations', label: 'Резервации', Icon: CalendarDays },
-  { href: '/admin/tables', label: 'Маси', Icon: TableProperties },
-  { href: '/admin/menu', label: 'Мени', Icon: UtensilsCrossed },
-  { href: '/admin/menu/categories', label: 'Мени Категории', Icon: Layers },
-  { href: '/admin/reviews', label: 'Рецензии', Icon: Star },
+  { href: '/admin/dashboard', label: 'Control Panel', Icon: LayoutDashboard },
+  { href: '/admin/orders', label: 'Orders', Icon: Receipt },
+  { href: '/admin/reservations', label: 'Reservations', Icon: CalendarDays },
+  { href: '/admin/tables', label: 'Tables', Icon: TableProperties },
+  { href: '/admin/menu', label: 'Menu', Icon: UtensilsCrossed },
+  { href: '/admin/menu/categories', label: 'Menu Categories', Icon: Layers },
+  { href: '/admin/reviews', label: 'Reviews', Icon: Star },
 ]
 
 export const ROLE_NAVIGATION: Record<Role, RoleNavLink[]> = {
   USER: [
-    { href: '/profile', label: 'Мој профил', Icon: Users },
+    { href: '/profile', label: 'My Profile', Icon: Users },
     {
       href: '/profile/reservations',
-      label: 'Мои резервации',
+      label: 'My bookings',
       Icon: CalendarDays,
     },
-    { href: '/profile/orders', label: 'Мои нарачки', Icon: ShoppingBag },
+    { href: '/profile/orders', label: 'My Orders', Icon: ShoppingBag },
   ],
   STAFF: [
-    { href: '/staff/tables', label: 'Активни маси', Icon: ClipboardList },
+    { href: '/staff/tables', label: 'Active Tables', Icon: ClipboardList },
     {
       href: '/staff/reservations',
-      label: 'Денешни резервации',
+      label: "Today's bookings",
       Icon: CalendarDays,
     },
-    { href: '/staff/orders', label: 'Предавање нарачки', Icon: ShoppingBag },
+    { href: '/staff/orders', label: 'Delivering orders', Icon: ShoppingBag },
   ],
-  KITCHEN: [{ href: '/kitchen/orders', label: 'Кујнски екран', Icon: ChefHat }],
+  KITCHEN: [{ href: '/kitchen/orders', label: 'Kitchen Screen', Icon: ChefHat }],
   MANAGER: MANAGEMENT_LINKS,
   ADMIN: [
     ...MANAGEMENT_LINKS,
-    { href: '/admin/users', label: 'Корисници', Icon: Users },
+    { href: '/admin/users', label: 'Users', Icon: Users },
   ],
 }
 
-const routeRules: Array<{ prefix: string; roles: Role[] }> = [
+const routeRules : Array<{ prefix: string; roles: Role[] }> = [
   { prefix: '/admin/users', roles: [Role.ADMIN] },
   { prefix: '/admin', roles: [Role.ADMIN, Role.MANAGER] },
   { prefix: '/kitchen', roles: [Role.ADMIN, Role.MANAGER, Role.KITCHEN] },

@@ -29,7 +29,7 @@ interface OrderActionsMenuProps {
   orderId: string
   currentStatus: OrderStatus
   role: Role
-  deliveryMethod?: DeliveryMethod // За проверка на дозволени статуси
+  deliveryMethod?: DeliveryMethod // To check allowed statuses
 }
 
 export function OrderActionsMenu({
@@ -40,14 +40,14 @@ export function OrderActionsMenu({
   const [isPending, startTransition] = useTransition()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
-  // Дозволени статуси според ролата
+  // Allowed statuses according to the roll
   const allowedStatuses = getAllowedOrderStatuses(
     role,
     currentStatus,
     'ADDRESS',
   )
 
-  // Промена на статус
+  // Change of status
   const handleStatusChange = (newStatus: OrderStatus) => {
     startTransition(async () => {
       const res = await updateOrderStatusAction({ orderId, status: newStatus })
@@ -59,7 +59,7 @@ export function OrderActionsMenu({
     })
   }
 
-  // Извршување на бришењето
+  // Execution of the deletion
   const handleDeleteConfirm = () => {
     startTransition(async () => {
       const res = await deleteOrderAction(orderId)
@@ -100,17 +100,16 @@ export function OrderActionsMenu({
               <span className='text-xs font-medium'>
                 {statusActionLabels[status]}
               </span>
-            </DropdownMenuItem>
-          ))}
+            </DropdownMenuItem>          ))}
 
-          {/* Бришење нарачка (само за ADMIN) */}
-          {role === Role.ADMIN && (
+          {/* Delete order (for ADMIN only) */}
+          { role === Role.ADMIN && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 disabled={isPending}
                 className='text-destructive focus:text-destructive cursor-pointer'
-                onSelect={() => setShowDeleteConfirm(true)} // 👈 Го отвораме Confirm Dialog-от
+                onSelect={() => setShowDeleteConfirm(true)} // 👈 We open the Confirm Dialog
               >
                 <Trash2 className='mr-2 h-4 w-4' />
                 {orderActionLabels.deleteOrder}
@@ -125,10 +124,10 @@ export function OrderActionsMenu({
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={handleDeleteConfirm}
-        title='Избриши нарачка'
-        description={`Дали сте сигурни дека сакате трајно да ја избришете нарачката? Оваа акција е неповратна.`}
-        confirmText='Избриши'
-        cancelText='Откажи'
+        title='Delete order'
+        description={`Are you sure you want to permanently delete the order? This action is irreversible.`}
+        confirmText='Delete'
+        cancelText='Give up'
         variant='destructive'
         isLoading={isPending}
       />

@@ -12,15 +12,14 @@ import {
 export default async function AdminReservationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ date?: string; tab?: string }>
-}) {
+  searchParams: Promise<{ date?: string; tab?: string }>}) {
   const user = await requireRouteAccess('/admin/reservations')
   const params = await searchParams
 
   const date = params.date || getReservationDateKey(new Date())
   const role = user.role as Role
 
-  // Паралелно вчитување на податоците
+  // Load the data in parallel
   const [pendingReservations, agendaReservations] = await Promise.all([
     getAllPendingReservations(),
     getAgendaReservationsForDate(date),
@@ -29,9 +28,9 @@ export default async function AdminReservationsPage({
   return (
     <>
       <BackofficeHeader
-        eyebrow='Оператива'
-        title='Резервации'
-        description='Управување со нови барања и дневна агенда.'
+        eyebrow='Operative'
+        title='Reservations'
+        description='Management of new requests and daily agenda.'
       />
 
       <div className='px-6 py-8 md:px-10'>

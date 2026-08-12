@@ -60,29 +60,21 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
       <Table className='min-w-200 text-sm'>
         <TableHeader className='border-b border-outline-variant/15 bg-surface-container-low/80'>
           <TableRow className='hover:bg-transparent'>
-            <TableHead className='w-16 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Слика
+            <TableHead className='w-16 px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Picture
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Јадење
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Eating
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Ознаки
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Tags
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Категорија / Поткатегорија
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Category / Subcategory
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Цена
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Price
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Статус
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Status
             </TableHead>
-            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Онлајн достапност
+            <TableHead className='px-5 py-4 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Online availability
             </TableHead>
-            <TableHead className='px-5 py-4 text-right text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>
-              Акции
+            <TableHead className='px-5 py-4 text-right text-[10px] uppercase tracking-[0.16em] text-on-surface-variant font-medium'>              Actions
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -98,8 +90,7 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
               <TableRow
                 key={item.id}
                 className='hover:bg-surface-container/30 transition-colors border-outline-variant/10'
-              >
-                {/* 1. Слика */}
+              >                {/* 1st Image */}
                 <TableCell className='px-5 py-3'>
                   <div className='relative h-20 w-20 overflow-hidden bg-surface-container border border-outline-variant/20'>
                     {item.image ? (
@@ -117,9 +108,7 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                       </div>
                     )}
                   </div>
-                </TableCell>
-
-                {/* 2. Име и Опис */}
+                </TableCell>                {/* 2. Name and Description */}
                 <TableCell className='px-5 py-4 max-w-xs'>
                   <p className='font-medium text-on-surface'>{item.name}</p>
                   {item.description && (
@@ -127,24 +116,19 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                       {item.description}
                     </p>
                   )}
-                </TableCell>
-
-                {/* 3. Ознаки */}
+                </TableCell>                {/* 3. Tags */}
                 <TableCell className='px-5 py-4'>
                   <div className='flex flex-wrap gap-1'>
                     {item.isPopular && (
-                      <span className='inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-400 border border-amber-500/20'>
-                        Популарно
+                      <span className='inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-400 border border-amber-500/20'>                        Popular
                       </span>
                     )}
                     {item.isSpecial && (
-                      <span className='inline-flex items-center rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-medium text-purple-400 border border-purple-500/20'>
-                        Специјалитет
+                      <span className='inline-flex items-center rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-medium text-purple-400 border border-purple-500/20'>                        Specialty
                       </span>
                     )}
                     {item.isExclusive && (
-                      <span className='inline-flex items-center rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-400 border border-rose-500/20'>
-                        Ексклузивно
+                      <span className='inline-flex items-center rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-400 border border-rose-500/20'>                        Exclusively
                       </span>
                     )}
                     {!item.isPopular &&
@@ -155,9 +139,7 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                         </span>
                       )}
                   </div>
-                </TableCell>
-
-                {/* 4. Категорија и Поткатегорија */}
+                </TableCell>                {/* 4. Category and Subcategory */}
                 <TableCell className='px-5 py-4 text-on-surface-variant'>
                   <div className='flex flex-col gap-1 items-start'>
                     <span className='inline-flex items-center rounded-md bg-surface-container px-2 py-0.5 text-xs font-medium border border-outline-variant/20'>
@@ -169,14 +151,10 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                       </span>
                     )}
                   </div>
-                </TableCell>
-
-                {/* 5. Цена */}
+                </TableCell>                {/* 5. Price */}
                 <TableCell className='px-5 py-4 font-semibold text-on-surface whitespace-nowrap'>
                   {formatCurrency(item.price)}
-                </TableCell>
-
-                {/* 6. Статус */}
+                </TableCell>                {/* 6. Status */}
                 <TableCell className='px-5 py-4 whitespace-nowrap'>
                   <span
                     className={`inline-flex items-center gap-1.5 text-xs font-medium ${
@@ -191,8 +169,7 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                           ? 'bg-emerald-400'
                           : 'bg-on-surface-variant/40'
                       }`}
-                    />
-                    {item.isAvailable ? 'Достапно' : 'Повлечено'}
+                    />                    {item.isAvailable ? 'Available' : 'Withdrawn'}
                   </span>
                 </TableCell>
 
@@ -211,12 +188,9 @@ export function MenuTable({ items, categories, pagination }: MenuTableProps) {
                           ? 'bg-emerald-400'
                           : 'bg-on-surface-variant/40'
                       }`}
-                    />
-                    {item.isOrderable ? 'Достапно' : 'само во ресторан'}
+                    />                    {item.isOrderable ? 'Available' : 'only in restaurant'}
                   </span>
-                </TableCell>
-
-                {/* 7. Акции */}
+                </TableCell>                {/* 7. Actions */}
                 <TableCell className='px-5 py-4 text-right'>
                   <div className='flex justify-end'>
                     <MenuItemActions item={item} categories={categories} />

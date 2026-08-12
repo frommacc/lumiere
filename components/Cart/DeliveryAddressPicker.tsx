@@ -8,7 +8,7 @@ interface DeliveryAddressPickerProps {
   onCoordsChange: (lat: number, lng: number) => void
 }
 
-// Помошна компонента за синхронизација на центарот на мапата со новите координати
+// Helper component for synchronizing the center of the map with the new coordinates
 function MapController({ coords }: { coords: { lat: number; lng: number } }) {
   const map = useMap()
 
@@ -32,10 +32,10 @@ export function DeliveryAddressPicker({
       <Map
         defaultCenter={coords}
         defaultZoom={16}
-        // 'greedy' овозможува влечење на мапата со 1 прст на мобилен и директен drag на десктоп
+        // 'greedy' allows dragging the map with 1 finger on mobile and direct drag on desktop
         gestureHandling={'greedy'}
         disableDefaultUI={true}
-        // Овозможуваме основни контроли за подобро корисничко искуство
+        // We enable basic controls for a better user experience
         zoomControl={true}
         mapId={'delivery_address_picker'}
         className='w-full h-full'
@@ -59,9 +59,8 @@ export function DeliveryAddressPicker({
         </AdvancedMarker>
       </Map>
 
-      <div className='absolute bottom-2 left-2 right-2 bg-background/90 backdrop-blur-xs text-[10px] text-muted-foreground px-2 py-1 rounded-xs text-center border border-border/30 pointer-events-none z-10'>
-        💡 Можеш да ја влечеш мапата или да ја поместиш иглата точно над твојот
-        влез
+      <div className='absolute bottom-2 left-2 right-2 bg-background/90 backdrop-blur-xs text-[10px] text-muted-foreground px-2 py-1 rounded-xs text-center border border-border/30 pointer-events-none z-10'>        💡 You can drag the map or move the pin right over yours
+        entry
       </div>
     </div>
   )

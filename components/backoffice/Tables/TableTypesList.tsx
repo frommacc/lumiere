@@ -8,16 +8,14 @@ export async function TableTypesList() {
   return (
     <div className='space-y-6'>
       <div className='flex items-center justify-between'>
-        <p className='text-sm text-on-surface-variant'>
-          Вкупно типови:{' '}
+        <p className='text-sm text-on-surface-variant'>          Total Types:{' '}
           <span className='font-semibold text-foreground'>{types.length}</span>
         </p>
         <TableTypeModal />
       </div>
 
       {types.length === 0 ? (
-        <div className='rounded-xl border border-dashed border-outline-variant/30 p-8 text-center text-sm text-on-surface-variant'>
-          Нема внесено типови на маси.
+        <div className='rounded-xl border border-dashed border-outline-variant/30 p-8 text-center text-sm text-on-surface-variant'>          No table types entered.
         </div>
       ) : (
         <div className='grid gap-4 sm:grid-cols-2 xl:grid-cols-3'>

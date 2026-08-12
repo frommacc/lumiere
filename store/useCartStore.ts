@@ -6,7 +6,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface CartStore {
-  _hasHydrated: boolean // 1. Следење дали е вчитано од localStorage
+  _hasHydrated: boolean // 1. Monitoring if it is loaded from localStorage
   setHasHydrated: (state: boolean) => void
 
   isOpen: boolean
@@ -120,7 +120,7 @@ export const useCartStore = create<CartStore>()(
         deliveryMethod: state.deliveryMethod,
         paymentMethod: state.paymentMethod,
       }),
-      // 2. Се повикува кога завршува или започнува процесот на хидратација од localStorage
+      // 2. Called when the hydration process from localStorage ends or starts
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true)
       },

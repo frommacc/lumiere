@@ -105,7 +105,7 @@ export function EditProfileForm({ user, onSuccess }: EditProfileFormProps) {
 
       <div className='grid grid-cols-1 gap-5 sm:grid-cols-2'>
         <div className='space-y-2'>
-          <Label htmlFor='edit-profile-name'>Име и презиме</Label>
+          <Label htmlFor='edit-profile-name'>Name and surname</Label>
           <Input
             id='edit-profile-name'
             autoComplete='name'
@@ -117,7 +117,7 @@ export function EditProfileForm({ user, onSuccess }: EditProfileFormProps) {
         </div>
 
         <div className='space-y-2'>
-          <Label htmlFor='edit-profile-phone'>Телефонски број</Label>
+          <Label htmlFor='edit-profile-phone'>Telephone number</Label>
           <Input
             id='edit-profile-phone'
             type='tel'
@@ -133,19 +133,17 @@ export function EditProfileForm({ user, onSuccess }: EditProfileFormProps) {
       </div>
 
       <div className='rounded-lg border border-outline-variant/20 bg-surface-container-low/50 p-4'>
-        <p className='font-label-caps text-[10px] tracking-widest uppercase text-outline'>
-          Е-пошта
+        <p className='font-label-caps text-[10px] tracking-widest uppercase text-outline'>          Email
         </p>
         <p className='mt-1 text-sm text-on-surface'>{user.email ?? '—'}</p>
-        <p className='mt-1 text-xs text-on-surface-variant'>
-          Промената на е-пошта ќе биде достапна со посебен безбеден процес.
+        <p className='mt-1 text-xs text-on-surface-variant'>          Change of e-mail will be available with a special secure process.
         </p>
       </div>
 
       <div className='flex justify-end gap-3 border-t border-outline-variant/20 pt-5'>
         <Button type='submit' disabled={isPending} className='min-w-40'>
           {isPending ? <LoaderCircle className='animate-spin' /> : <Save />}
-          {isPending ? 'Зачувување...' : 'Зачувај промени'}
+          {isPending ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>
     </form>

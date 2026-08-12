@@ -6,16 +6,16 @@ export type ActionResult =
 
 export const forbidden = (): ActionResult => ({
   success: false,
-  message: 'Немате дозвола за оваа акција.',
+  message: 'You do not have permission for this action.',
 })
 
 export const unauthorized = (): ActionResult => ({
   success: false,
-  message: 'Мора да бидете најавени за оваа акција.',
+  message: 'You must be logged in for this action.',
 })
 
 export const serverError = (
-  message = 'Настана грешка, обидете се повторно.',
+  message = 'An error occurred, please try again.',
 ): ActionResult => ({
   success: false,
   message,

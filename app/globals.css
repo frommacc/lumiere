@@ -184,11 +184,11 @@
 }
 
 @utility custom-scrollbar {
-  /* За Firefox */
+  /* For Firefox */
   scrollbar-width: thin;
   scrollbar-color: var(--outline-variant) transparent;
 
-  /* За Chrome, Edge, Safari и Opera */
+  /* For Chrome, Edge, Safari and Opera */
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -200,7 +200,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    /* Користиме color-mix за перфектно прилагодување на проѕирноста во OKLCH */
+    /* We use color-mix to perfectly adjust the transparency in OKLCH */
     background-color: color-mix(
       in oklch,
       var(--outline-variant) 60%,

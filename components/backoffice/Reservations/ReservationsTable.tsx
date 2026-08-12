@@ -39,8 +39,7 @@ export function ReservationsTable({
 }: ReservationsTableProps) {
   if (!reservations.length) {
     return (
-      <div className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-12 text-center text-sm text-on-surface-variant'>
-        Нема резервации за овој ден.
+      <div className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-12 text-center text-sm text-on-surface-variant'>        There are no reservations for this day.
       </div>
     )
   }
@@ -50,11 +49,11 @@ export function ReservationsTable({
       <Table className='min-w-230'>
         <TableHeader className='border-b border-outline-variant/15 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant'>
           <TableRow className='hover:bg-transparent'>
-            <TableHead className='px-5 py-4'>Време / Гост</TableHead>
-            <TableHead className='px-5 py-4'>Маса</TableHead>
-            <TableHead className='px-5 py-4'>Контакт</TableHead>
-            <TableHead className='px-5 py-4'>Статус</TableHead>
-            <TableHead className='px-5 py-4'>Акции</TableHead>
+            <TableHead className='px-5 py-4'>Time / Guest</TableHead>
+            <TableHead className='px-5 py-4'>Mass</TableHead>
+            <TableHead className='px-5 py-4'>Contact</TableHead>
+            <TableHead className='px-5 py-4'>Status</TableHead>
+            <TableHead className='px-5 py-4'>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className='divide-y divide-outline-variant/10'>
@@ -62,35 +61,28 @@ export function ReservationsTable({
             <TableRow
               key={reservation.id}
               className='transition-colors hover:bg-surface-container-high/30'
-            >
-              {/* Време и Гост */}
+            >              {/* Time and Guest */}
               <TableCell className='px-5 py-4'>
-                <div className='flex items-center gap-3.5'>
-                  {/* Модерен Badge за Часот */}
+                <div className='flex items-center gap-3.5'>                  {/* Modern Badge for the Hour */}
                   <div className='flex flex-col items-center justify-center rounded-lg border border-outline-variant/30 bg-surface-container-high/80 px-2.5 py-1.5 shadow-xs'>
                     <span className='font-mono text-xl font-bold tracking-tight text-on-surface'>
                       {formatBackofficeTime(reservation.startTime)}
                     </span>
-                  </div>
-
-                  {/* Информации за Гостинот */}
+                  </div>                  {/* Guest Information */}
                   <div className='space-y-0.5'>
                     <p className='font-semibold text-on-surface tracking-wide text-sm'>
                       {reservation.name}
                     </p>
                     <div className='flex items-center gap-1.5 text-xs text-on-surface-variant'>
-                      <span className='font-medium text-on-surface/80'>
-                        {reservation.guests}{' '}
-                        {reservation.guests === 1 ? 'гост' : 'гости'}
+                      <span className='font-medium text-on-surface/80'>                        {reservation.guests}{' '}
+                        {reservation.guests === 1 ? 'guest' : 'guests'}
                       </span>
                       <span>·</span>
-                      <span>{reservation.durationMinutes} мин.</span>
+                      <span>{reservation.durationMinutes} min.</span>
                     </div>
                   </div>
                 </div>
-              </TableCell>
-
-              {/* Маса */}
+              </TableCell>              {/* Mass */}
               <TableCell className='px-5 py-4'>
                 <div className='flex items-baseline gap-1.5'>
                   <span className='font-bold text-on-surface text-base'>
@@ -100,9 +92,7 @@ export function ReservationsTable({
                     {reservation.table.tableType.name}
                   </span>
                 </div>
-              </TableCell>
-
-              {/* Контакт */}
+              </TableCell>              {/* Contact */}
               <TableCell className='px-5 py-4'>
                 <p className='font-medium text-on-surface text-xs'>
                   {reservation.phone}
@@ -110,14 +100,10 @@ export function ReservationsTable({
                 <p className='mt-0.5 text-xs text-on-surface-variant/80'>
                   {reservation.email}
                 </p>
-              </TableCell>
-
-              {/* Статус */}
+              </TableCell>              {/* Status */}
               <TableCell className='px-5 py-4'>
                 <ReservationStatusBadge status={reservation.status} />
-              </TableCell>
-
-              {/* Акции */}
+              </TableCell>              {/* Actions */}
               <TableCell className='px-5 py-4'>
                 <ReservationActions
                   reservationId={reservation.id}

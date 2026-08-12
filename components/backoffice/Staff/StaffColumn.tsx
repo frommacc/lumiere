@@ -30,10 +30,8 @@ export function StaffColumn({
         <span className='rounded-full bg-surface-container-high px-3 py-1 text-xs font-bold text-foreground shadow-sm'>
           {count}
         </span>
-      </div>
-
-      {/* Orders List:
-          - Мобилен: flex-row, overflow-x-auto, snap-x za scroll carousel
+      </div>      {/* Orders List:
+          - Mobile: flex-row, overflow-x-auto, snap-x for scroll carousel
           - Desktop (md:): flex-col, overflow-x-visible
       */}
       <div className='flex flex-row snap-x snap-mandatory gap-4 overflow-x-auto pb-4 md:flex-col md:overflow-x-visible md:pb-0'>

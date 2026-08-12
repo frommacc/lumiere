@@ -48,12 +48,10 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className='flex items-center gap-6'>
-          {/* Универзално копче за кошничка (се прикажува и на mobile и на desktop) */}
-          <button
+        <div className='flex items-center gap-6'>          {/* Universal cart button (shown on both mobile and desktop) */}<button
             onClick={openCart}
             className='group relative text-foreground hover:text-primary transition-colors duration-300'
-            aria-label='Отвори ја кошничката'
+            aria-label='Open the basket'
           >
             <ShoppingBag size={26} />
             {hasHydrated && cartCount > 0 && (
@@ -74,17 +72,12 @@ export default function Navbar() {
                 <UserIcon size={26} />
               </Link>
             )}
-          </div>
-
-          {/* Desktop кнопка за резервација */}
+          </div>          {/* Desktop booking button */}
           <button
             onClick={openReservation}
             className='hidden xl:block bg-primary hover:bg-primary-container text-primary-foreground font-sans text-xs uppercase tracking-widest font-semibold px-6 py-2.5 active:scale-95 transition-all duration-300'
-          >
-            Резервација
-          </button>
-
-          {/* Mobile Drawer trigger (само на mobile) */}
+          >            Reservation
+          </button>          {/* Mobile Drawer trigger (only on mobile) */}
           <MobileNav
             session={session}
             isPending={isPending}

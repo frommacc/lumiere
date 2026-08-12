@@ -11,8 +11,7 @@ import { prisma } from '@/lib/prisma'
 import { updateTag } from 'next/cache'
 
 /**
- * Промена на статус на рецензија (APPROVED / REJECTED)
- */
+ * Change of review status (APPROVED / REJECTED)*/
 export async function moderateReviewAction(
   input: unknown,
 ): Promise<ActionResult> {
@@ -21,8 +20,8 @@ export async function moderateReviewAction(
   if (!parsed.success) {
     return {
       success: false,
-      // ⬇️ Променето од .errors[0] во .issues[0]
-      message: parsed.error.issues[0]?.message || 'Невалидни податоци.',
+      // ⬇️ Changed from .errors[0] to .issues[0]
+      message: parsed.error.issues[0]?.message || 'Invalid data.',
     }
   }
 
@@ -37,18 +36,21 @@ export async function moderateReviewAction(
     })
 
     updateTag('reviews')
-    return { success: true, message: 'Рецензијата е успешно модерирана.' }
+    return {
+      success: true,
+      message: 'The review has been successfully moderated.',
+    }
   } catch (error) {
     console.error('Failed to moderate review:', error)
     return {
       success: false,
-      message: 'Настана грешка при промена на статусот.',
+      message: 'An error occurred while changing the status.',
     }
   }
 }
 
 /**
- * Трајно бришење на рецензија
+ * Permanent deletion of a review
  */
 export async function deleteReviewAction(
   input: unknown,
@@ -58,8 +60,8 @@ export async function deleteReviewAction(
   if (!parsed.success) {
     return {
       success: false,
-      // ⬇️ Променето од .errors[0] во .issues[0]
-      message: parsed.error.issues[0]?.message || 'Невалиден идентификатор.',
+      // ⬇️ Changed from .errors[0] to .issues[0]
+      message: parsed.error.issues[0]?.message || 'Invalid identifier.',
     }
   }
 
@@ -73,12 +75,12 @@ export async function deleteReviewAction(
     })
 
     updateTag('reviews')
-    return { success: true, message: 'Рецензијата е успешно избришана.' }
+    return { success: true, message: 'Review successfully deleted.' }
   } catch (error) {
     console.error('Failed to delete review:', error)
     return {
       success: false,
-      message: 'Настана грешка при бришење на рецензијата.',
+      message: 'An error occurred while deleting the review.',
     }
   }
 }

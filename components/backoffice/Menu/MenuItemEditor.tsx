@@ -81,16 +81,16 @@ export default function MenuItemEditor({
     }
   }
 
-  // Одредување на почетна категорија
+  // Specify initial category
   const initialCategoryId =
     item?.categoryId ?? item?.subcategory?.categoryId ?? categories[0]?.id ?? ''
   const initialSubcategoryId = item?.subcategoryId ?? 'none'
 
-  const [selectedCategoryId, setSelectedCategoryId] =
+  const [ selectedCategoryId , setSelectedCategoryId ] =
     useState(initialCategoryId)
-  const [selectedSubcategoryId, setSelectedSubcategoryId] =
+  const [ selectedSubcategoryId , setSelectedSubcategoryId ] =
     useState(initialSubcategoryId)
-  const [imageFile, setImageFile] = useState<File | undefined>()
+  const [ imageFile , setImageFile ] = useState<File | undefined>()
 
   const availableSubcategories = useMemo(() => {
     const found = categories.find((c) => c.id === selectedCategoryId)
@@ -175,21 +175,20 @@ export default function MenuItemEditor({
             {item ? (
               <Pencil className='size-3.5' />
             ) : (
-              <Plus className='size-3.5' />
-            )}
-            {item ? 'Измени' : 'Нов артикл'}
+              <Plus className='size-3.5' />            )}
+            {item ? 'Edit' : 'New Article'}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className='max-h-[90vh] overflow-y-auto custom-scrollbar border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-2xl'>
         <DialogHeader>
-          <DialogTitle>{item ? 'Уреди артикл' : 'Нов артикл'}</DialogTitle>
+          <DialogTitle>{item ? 'Edit Article' : 'New Article'}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={submit} className='grid gap-5 sm:gap-6 sm:grid-cols-2'>
           {/* Form Content */}
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-name'>Име</Label>
+            <Label htmlFor='item-name'>Name</Label>
             <Input
               id='item-name'
               name='name'
@@ -199,13 +198,13 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2'>
-            <Label>Категорија</Label>
+            <Label>Category</Label>
             <Select
               value={selectedCategoryId}
               onValueChange={handleCategoryChange}
             >
               <SelectTrigger className='w-full'>
-                <SelectValue placeholder='Избери категорија' />
+                <SelectValue placeholder='Choose a category' />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((category) => (
@@ -218,7 +217,7 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2'>
-            <Label>Поткатегорија (Опционално)</Label>
+            <Label>Subcategory (Optional)</Label>
             <Select
               value={selectedSubcategoryId}
               onValueChange={setSelectedSubcategoryId}
@@ -228,13 +227,13 @@ export default function MenuItemEditor({
                 <SelectValue
                   placeholder={
                     availableSubcategories.length
-                      ? 'Без поткатегорија'
-                      : 'Нема поткатегории'
+                      ? 'No subcategory'
+                      : 'There are no subcategories'
                   }
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='none'>Без поткатегорија</SelectItem>
+                <SelectItem value='none'>No subcategory</SelectItem>
                 {availableSubcategories.map((sub) => (
                   <SelectItem key={sub.id} value={sub.id}>
                     {sub.name}
@@ -245,7 +244,7 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-price'>Цена (МКД)</Label>
+            <Label htmlFor='item-price'>Price ($)</Label>
             <Input
               id='item-price'
               name='price'
@@ -258,17 +257,17 @@ export default function MenuItemEditor({
 
           <div className='sm:col-span-2'>
             <ImageUploadField
-              label='Слика на артикл'
+              label='Item picture'
               currentImage={item?.image ?? undefined}
               value={imageFile}
-              fallback={item?.name?.slice(0, 2).toUpperCase() ?? 'МЕ'}
+              fallback={item?.name?.slice(0, 2).toUpperCase() ?? 'ME'}
               onChange={setImageFile}
               disabled={pending}
             />
           </div>
 
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-description'>Опис</Label>
+            <Label htmlFor='item-description'>Description</Label>
             <Textarea
               id='item-description'
               name='description'
@@ -279,68 +278,67 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-ingredients'>
-              Состојки (одвоени со запирка)
+            <Label htmlFor='item-ingredients'>              Ingredients (comma separated)
             </Label>
             <Input
               id='item-ingredients'
               name='ingredients'
               defaultValue={item?.ingredients?.join(', ') ?? ''}
-              placeholder='Домати, Моцарела, Босилек'
+              placeholder='Tomatoes, Mozzarella, Basil'
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='item-allergens'>Алергени (со запирка)</Label>
+            <Label htmlFor='item-allergens'>Allergens (with a comma)</Label>
             <Input
               id='item-allergens'
               name='allergens'
               defaultValue={item?.allergens?.join(', ') ?? ''}
-              placeholder='Глутен, Млеко'
+              placeholder='Gluten, Milk'
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='item-dietary'>Ознаки за исхрана (со запирка)</Label>
+            <Label htmlFor='item-dietary'>Nutrition labels (with a comma)</Label>
             <Input
               id='item-dietary'
               name='dietary'
               defaultValue={item?.dietary?.join(', ') ?? ''}
-              placeholder='Вегетаријанско, Веганско'
+              placeholder='Vegetarian, Vegan'
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='item-origin'>Потекло</Label>
+            <Label htmlFor='item-origin'>Origin</Label>
             <Input
               id='item-origin'
               name='origin'
               defaultValue={item?.origin ?? ''}
-              placeholder='Италија / Локално'
+              placeholder='Italy / Local'
             />
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='item-pairing'>Препорачана комбинација</Label>
+            <Label htmlFor='item-pairing'>Recommended combination</Label>
             <Input
               id='item-pairing'
               name='pairing'
               defaultValue={item?.pairing ?? ''}
-              placeholder='Црвено вино / Вранец'
+              placeholder='Red wine / Vranec'
             />
           </div>
 
           <div className='sm:col-span-2 flex flex-wrap gap-x-6 gap-y-3 pt-2'>
             {[
-              { id: 'isAvailable', label: 'Достапно', key: 'isAvailable' },
+              { id: 'isAvailable', label: 'Available', key: 'isAvailable' },
               {
                 id: 'isOrderable',
-                label: 'Може да се нарача',
+                label: 'It can be ordered',
                 key: 'isOrderable',
               },
-              { id: 'isPopular', label: 'Популарно', key: 'isPopular' },
-              { id: 'isExclusive', label: 'Ексклузивно', key: 'isExclusive' },
-              { id: 'isSpecial', label: 'Специјалитет', key: 'isSpecial' },
+              { id: 'isPopular', label: 'Popular', key: 'isPopular' },
+              { id: 'isExclusive', label: 'Exclusively', key: 'isExclusive' },
+              { id: 'isSpecial', label: 'Specialty', key: 'isSpecial' },
             ].map(({ id, label, key }) => (
               <div key={id} className='flex items-center space-x-2'>
                 <Checkbox
@@ -369,7 +367,7 @@ export default function MenuItemEditor({
             className='sm:col-span-2 mt-2'
           >
             {pending && <LoaderCircle className='size-4 animate-spin mr-2' />}
-            Зачувај
+            Save
           </Button>
         </form>
       </DialogContent>

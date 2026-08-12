@@ -45,18 +45,18 @@ export function UserMenu({ user }: UserMenuProps) {
       await signOut({
         fetchOptions: {
           onSuccess: () => {
-            toast.success('Успешно се одјавивте.', {
-              description: 'Се гледаме наскоро во Lumière!',
+            toast.success('You have successfully logged out.', {
+              description: 'See you soon at Lumière!',
             })
             router.refresh()
           },
           onError: () => {
-            toast.error('Не успеавме да ве одјавиме.')
+            toast.error('We were unable to log you out.')
           },
         },
       })
     } catch (err) {
-      toast.error('Се случи грешка при одјавување.')
+      toast.error('An error occurred while logging out.')
       console.error('Sign out error:', err)
     }
   }
@@ -126,7 +126,7 @@ export function UserMenu({ user }: UserMenuProps) {
                     className='flex w-full items-center gap-2.5 px-3 py-2 text-xs font-label-caps uppercase tracking-wider text-on-surface hover:text-gold-accent focus:bg-gold-accent/10 focus:text-gold-accent rounded-none cursor-pointer transition-colors'
                   >
                     <Users className='h-4 w-4 text-gold-accent' />
-                    <span>Корисници</span>
+                    <span>Users</span>
                   </Link>
                 </DropdownMenuItem>
               )}
@@ -164,7 +164,7 @@ export function UserMenu({ user }: UserMenuProps) {
             className='flex w-full items-center gap-2.5 px-3 py-2 text-xs font-label-caps uppercase tracking-wider text-on-surface hover:text-gold-accent focus:bg-gold-accent/10 focus:text-gold-accent rounded-none cursor-pointer transition-colors'
           >
             <Settings className='h-4 w-4' />
-            <span>Уреди Профил</span>
+            <span>Edit Profile</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -175,7 +175,7 @@ export function UserMenu({ user }: UserMenuProps) {
           className='flex w-full items-center gap-2.5 px-3 py-2 text-xs font-label-caps uppercase tracking-wider text-destructive hover:bg-destructive/10 focus:bg-destructive/10 rounded-none cursor-pointer transition-colors'
         >
           <LogOut className='h-4 w-4' />
-          <span>Одјави се</span>
+          <span>Sign out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

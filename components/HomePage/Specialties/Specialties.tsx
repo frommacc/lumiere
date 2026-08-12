@@ -20,27 +20,22 @@ export default async function Specialties() {
       {/* Title block */}
       <div className='flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6'>
         <div className='max-w-2xl'>
-          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block mb-3'>
-            КУЛИНАРСКИ РЕМЕК-ДЕЛА
+          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block mb-3'>            CULINARY MASTERPIECES
           </span>
-          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold'>
-            Нашите Специјалитети
+          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold'>            Our Specialties
           </h2>
         </div>
 
         <Link
           href='/menu'
           className='inline-flex items-center gap-2 text-xs font-semibold tracking-widest font-sans uppercase text-primary hover:text-primary-container transition-colors group'
-        >
-          Види го целосното мени
+        >          See the full menu
           <ArrowRight
             size={14}
             className='transition-transform group-hover:translate-x-1'
           />
         </Link>
-      </div>
-
-      {/* Го користиме истиот компонент, но без категории */}
+      </div>      {/* We use the same component but without categories */}
       <MenuClientGrid items={specialties} showCategories={false} />
     </section>
   )

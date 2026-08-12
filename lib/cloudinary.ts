@@ -17,8 +17,8 @@ export async function uploadImagesToCloudinary(
     const arrayBuffer = await file.arrayBuffer()
     const originalBuffer = Buffer.from(arrayBuffer)
 
-    // --- ОВДЕ СЕ СЛУЧУВА МАГИЈАТА ---
-    // Ја оптимизираме сликата пред upload. Стандардно ја правиме max 1200px ширина во WebP.
+    // --- THIS IS WHERE THE MAGIC HAPPENS ---
+    // We optimize the image before upload. By default we make it max 1200px width in WebP.
     const optimizedBuffer = await optimizeImage(originalBuffer, 1200)
 
     return new Promise<{ url: string; imageId: string }>((resolve, reject) => {
@@ -55,6 +55,6 @@ export async function deleteImageFromCloudinary(publicId: string) {
     return result
   } catch (error) {
     console.error('Cloudinary Delete Error:', error)
-    throw new Error('Неуспешно бришење на слика од Cloudinary')
+    throw new Error('Failed to delete image from Cloudinary')
   }
 }

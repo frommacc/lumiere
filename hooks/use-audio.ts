@@ -7,35 +7,35 @@ export function useAudio(defaultSoundUrl = '/sounds/kds-alarm.mp3') {
   const soundEnabledRef = useRef(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  // Синхронизација на Ref за да нема stale state во Pusher callback
+  // Synchronization of Ref so that there is no stale state in the Pusher callback
   useEffect(() => {
     soundEnabledRef.current = soundEnabled
   }, [soundEnabled])
 
-  // Пуштање звук кога ќе пристигне нова нарачка
+  // Play a sound when a new order arrives
   const playSound = useCallback(() => {
     if (!soundEnabledRef.current || !audioRef.current) return
 
     audioRef.current.currentTime = 0
     audioRef.current.play().catch((err) => {
-      console.warn('Аудиото не можеше да се репродуцира:', err)
+      console.warn('The audio could not be played:', err)
     })
   }, [])
 
-  // Вклучување / Исклучување на звукот
+  // Turn on / off the sound
   const toggleSound = useCallback(async () => {
     if (!soundEnabled) {
-      // Иницијализирај Audio инстанца доколку сè уште не постои
+      // Initialize an Audio instance if it doesn't already exist
       if (!audioRef.current) {
         audioRef.current = new Audio(defaultSoundUrl)
       }
 
       try {
-        // Ова е потребниот "User Interaction Gesture" за да го отклучиме звукот во прелистувачот
+        // This is the required "User Interaction Gesture" to unlock the sound in the browser
         await audioRef.current.play()
         setSoundEnabled(true)
       } catch (error) {
-        console.error('Грешка при активирање на звукот:', error)
+        console.error('Error activating sound:', error)
         setSoundEnabled(false)
       }
     } else {
@@ -47,7 +47,7 @@ export function useAudio(defaultSoundUrl = '/sounds/kds-alarm.mp3') {
     }
   }, [soundEnabled, defaultSoundUrl])
 
-  // Cleanup при unmount
+  // Cleanup during unmount
   useEffect(() => {
     return () => {
       if (audioRef.current) {

@@ -10,25 +10,25 @@ interface SearchInputProps {
   placeholder?: string
 }
 
-export function SearchInput({ placeholder = 'Пребарај...' }: SearchInputProps) {
+export function SearchInput({ placeholder = 'Search...' }: SearchInputProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  // Дебаунс функција која ќе се изврши 500ms откако корисникот ќе престане да пишува
+  // A debounce function that will be executed 500ms after the user stops typing
   const handleSearch = useDebouncedCallback((term: string) => {
     let params: URLSearchParams
 
     if (term) {
-      // Кога корисникот пребарува, бришеме сè и почнуваме од нула со чисти параметри
+      // When the user searches, we delete everything and start from scratch with clean parameters
       params = new URLSearchParams()
       params.set('q', term)
     } else {
-      // Кога ќе го избрише пребарувањето, ги земаме постоечките параметри и само го отстрануваме 'q'
+      // When it clears the search, we take the existing parameters and just remove the 'q'
       params = new URLSearchParams(searchParams.toString())
       params.delete('q')
-      params.delete('page') // исто така ресетираме на прва страница
+      params.delete('page') // we also reset to the first page
     }
 
     startTransition(() => {
@@ -48,10 +48,8 @@ export function SearchInput({ placeholder = 'Пребарај...' }: SearchInput
         placeholder={placeholder}
         onChange={(e) => handleSearch(e.target.value)}
         className='bg-surface-container-high pl-9 pr-9'
-      />
-
-      {/* Спинер кој се прикажува додека Next.js ги влече новите филтрирани податоци */}
-      {isPending && (
+      />      {/* A spinner that displays while Next.js pulls the new filtered data */}
+      { isPending && (
         <Loader2 className='absolute right-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-primary' />
       )}
     </div>

@@ -2,7 +2,7 @@ import { ReviewStatus, Review, User } from '@/lib/generated/prisma'
 import { getUserInitials } from '@/lib/utils'
 import { formatBackofficeDateTime } from '@/components/backoffice/formatters'
 import { ReviewActions } from '@/components/backoffice/Reviews/ReviewActions'
-import { ReviewDropdownActions } from '@/components/backoffice/Reviews/ReviewDropdownActions' // НОВО
+import { ReviewDropdownActions } from '@/components/backoffice/Reviews/ReviewDropdownActions' // NEW
 
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -47,18 +47,14 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 {formatBackofficeDateTime(review.createdAt)}
               </p>
             </div>
-          </div>
-
-          {/* Горе десно: Баџ за статус + Три точки (Dropdown) */}
+          </div>          {/* Top Right: Status Badge + Three Dots (Dropdown) */}
           <div className='flex items-center gap-2'>
             <Badge
               variant='outline'
               className={`text-[10px] font-semibold uppercase tracking-wider ${reviewStatusStyle[review.status]}`}
             >
               {review.status}
-            </Badge>
-
-            {/* Ова е новото паѓачко мени */}
+            </Badge>            {/* This is the new dropdown menu */}
             <ReviewDropdownActions
               reviewId={review.id}
               currentStatus={review.status}
@@ -83,10 +79,8 @@ export function ReviewCard({ review }: ReviewCardProps) {
 
       <CardContent className='py-2 text-sm text-foreground/90 leading-relaxed'>
         <p className='whitespace-pre-line'>{review.text}</p>
-      </CardContent>
-
-      {/* Оставаме големи копчиња САМО за PENDING (за побрзо работење на новите) */}
-      {review.status === ReviewStatus.PENDING && (
+      </CardContent>      {/* We leave large buttons ONLY for PENDING (for faster operation of new ones) */}
+      { review.status === ReviewStatus.PENDING && (
         <CardFooter className='pt-4 border-t border-border/40 mt-auto'>
           <ReviewActions reviewId={review.id} currentStatus={review.status} />
         </CardFooter>

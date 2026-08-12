@@ -27,7 +27,7 @@ interface DateRangePickerProps {
 export function DateRangePicker({
   fromParamName = 'from',
   toParamName = 'to',
-  placeholder = 'Избери опсег',
+  placeholder = 'Select a range',
   className,
   dateFormat = 'yyyy-MM-dd',
   disabled,
@@ -40,7 +40,7 @@ export function DateRangePicker({
   const fromParam = searchParams.get(fromParamName)
   const toParam = searchParams.get(toParamName)
 
-  // 1. Го пресметуваме опсегот од URL
+  // 1. We calculate the range from the URL
   const urlRange: DateRange | undefined =
     fromParam || toParam
       ? {
@@ -49,11 +49,11 @@ export function DateRangePicker({
         }
       : undefined
 
-  // 2. Локален state за интеракција во самиот календар
+  // 2. Local state for interaction in the calendar itself
   const [range, setRange] = useState<DateRange | undefined>(urlRange)
 
-  // 3. Синхронизација без useEffect (Render-phase update):
-  // Ги следиме претходните параметри од URL за да детектираме кога се промениле од надвор
+  // 3. Synchronization without useEffect (Render-phase update):
+  // We track the previous parameters from the URL to detect when they have changed externally
   const [prevParams, setPrevParams] = useState({ fromParam, toParam })
 
   if (prevParams.fromParam !== fromParam || prevParams.toParam !== toParam) {
@@ -61,7 +61,7 @@ export function DateRangePicker({
     setRange(urlRange)
   }
 
-  // Помошна функција за ажурирање на URL
+  // URL update helper function
   const applyRangeToUrl = (newRange: DateRange | undefined) => {
     const params = new URLSearchParams(searchParams.toString())
 
@@ -85,20 +85,20 @@ export function DateRangePicker({
   }
 
   const handleSelect = (selected: DateRange | undefined, selectedDay: Date) => {
-    // 1. Ако веќе имаме завршен range (од и до) и кликнеме нов ден -> ресетирај и започни нов range од кликнатиот ден
+    // 1. If we already have a completed range (from and to) and we click a new day -> reset and start a new range from the clicked day
     if (range?.from && range?.to) {
       setRange({ from: selectedDay, to: undefined })
       return
     }
 
-    // 2. Ако НЕМАМЕ уште избрано 'from' (ова е прв клик воопшто или после clear) -> постави го САМО 'from'
+    // 2. If we DON'T have 'from' selected yet (this is the first click at all or after clear) -> set ONLY 'from'
     if (!range?.from) {
       setRange({ from: selectedDay, to: undefined })
       return
     }
 
-    // 3. Ако веќе имаме 'from', а немаме 'to' (ова е вториот клик) -> формирај го комплетниот range
-    // Забелешка: Се грижиме за редоследот ако корисникот кликнал помал датум од почетниот
+    // 3. If we already have 'from' and we don't have 'to' (this is the second click) -> form the complete range
+    // Note: We care about the order if the user clicked a smaller date than the starting date
     let nextRange: DateRange | undefined
 
     if (selectedDay < range.from) {
@@ -109,7 +109,7 @@ export function DateRangePicker({
 
     setRange(nextRange)
 
-    // Дури СЕГА го затвораме календарот и запишуваме во URL бидејќи ова е вториот клик!
+    // We're only NOW closing the calendar and writing in the URL because this is the second click!
     applyRangeToUrl(nextRange)
     setOpen(false)
   }
@@ -123,7 +123,7 @@ export function DateRangePicker({
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen)
 
-    // При рачно затворање на календарот, ажурирај го URL-то со моменталната состојба
+    // When manually closing the calendar, update the URL with the current state
     if (!isOpen) {
       if (range?.from !== urlRange?.from || range?.to !== urlRange?.to) {
         applyRangeToUrl(range)
@@ -172,7 +172,7 @@ export function DateRangePicker({
                 className='absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors'
               >
                 <X className='h-3.5 w-3.5' />
-                <span className='sr-only'>Исчисти филтер</span>
+                <span className='sr-only'>Clear filter</span>
               </span>
             )}
           </Button>

@@ -11,13 +11,13 @@ import { getAdminSubcategories } from '@/lib/db/backoffice/categories.services'
 export default async function AdminMenuCategoriesPage() {
   await requireRouteAccess('/admin/menu/categories')
 
-  // Вчитување на податоците паралелно
+  // Loading the data in parallel
   const [categories, subcategories] = await Promise.all([
     getAdminCategories(),
     getAdminSubcategories(),
   ])
 
-  // Листа со поедноставени категории за селект менито во SubcategoryEditor
+  // List of simplified categories for the select menu in the SubcategoryEditor
   const simpleCategories = categories.map((c) => ({
     id: c.id,
     name: c.name,
@@ -26,9 +26,9 @@ export default async function AdminMenuCategoriesPage() {
   return (
     <>
       <BackofficeHeader
-        eyebrow='Мени контрола'
-        title='Категории и Подкатегории'
-        description='Управувајте со сите главни категории и подкатегории за јадењата.'
+        eyebrow='Menu control'
+        title='Categories and Subcategories'
+        description='Manage all main food categories and subcategories.'
         actions={
           <div className='flex items-center gap-2'>
             <CategoryEditor />
@@ -38,32 +38,25 @@ export default async function AdminMenuCategoriesPage() {
       />
 
       <div className='px-6 py-8 md:px-10'>
-        <Tabs defaultValue='categories' className='w-full space-y-6'>
-          {/* Контролна лента со табови */}
+        <Tabs defaultValue='categories' className='w-full space-y-6'>          {/* Tab control bar */}
           <TabsList className='bg-surface-container-low border border-outline-variant/20'>
             <TabsTrigger
               value='categories'
               className='data-[state=active]:bg-surface-container data-[state=active]:text-on-surface'
-            >
-              Категории ({categories.length})
+            >              Categories ({categories.length})
             </TabsTrigger>
             <TabsTrigger
               value='subcategories'
               className='data-[state=active]:bg-surface-container data-[state=active]:text-on-surface'
-            >
-              Подкатегории ({subcategories.length})
+            >              Subcategories ({subcategories.length})
             </TabsTrigger>
-          </TabsList>
-
-          {/* Таб 1: Главни Категории */}
+          </TabsList>          {/* Tab 1: Main Categories */}
           <TabsContent
             value='categories'
             className='space-y-4 focus-visible:outline-none'
           >
             <CategoriesTable categories={categories} />
-          </TabsContent>
-
-          {/* Таб 2: Подкатегории */}
+          </TabsContent>          {/* Tab 2: Subcategories */}
           <TabsContent
             value='subcategories'
             className='space-y-4 focus-visible:outline-none'

@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { CheckCircle2 } from 'lucide-react'
 
-// UI компоненти
+// UI components
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -30,13 +30,13 @@ export default function ForgotPasswordPage() {
       })
 
       if (result.error) {
-        setError('Не успеавме да пратиме е-пошта за ресетирање.')
+        setError('We failed to send reset email.')
       } else {
         setSuccess(true)
-        toast.success(`Линк за ресетирање е пратен на: ${email}`)
+        toast.success(`Reset link sent to: ${email}`)
       }
     } catch (err) {
-      setError('Се случи грешка. Ве молиме обидете се повторно.')
+      setError('An error occurred. Please try again.')
       console.error('Forgot password error:', err)
     } finally {
       setLoading(false)
@@ -44,8 +44,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>
-      {/* Лева страна: Visual & Identity */}
+    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>      {/* Left Side: Visual & Identity */}
       <section className='relative w-full md:w-1/2 min-h-[40vh] md:min-h-screen overflow-hidden'>
         <Image
           alt='Lumière Ambiance'
@@ -63,12 +62,10 @@ export default function ForgotPasswordPage() {
             </span>
           </div>
           <div className='max-w-md my-auto py-12 md:py-0'>
-            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>
-              Ја заборавивте лозинката?
+            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>              Forgot your password?
             </h2>
-            <p className='text-base md:text-lg text-outline'>
-              Не грижете се. Внесете ја вашата е-пошта и ќе ви испратиме
-              безбеден линк за да изберете нова.
+            <p className='text-base md:text-lg text-outline'>              Don't worry. Enter your email and we'll send it to you
+              secure link to choose a new one.
             </p>
           </div>
           <div className='hidden md:block'>
@@ -77,25 +74,19 @@ export default function ForgotPasswordPage() {
             </span>
           </div>
         </div>
-      </section>
-
-      {/* Десна страна: Форма / Success состојба */}
+      </section>      {/* Right side: Form / Success state */}
       <section className='w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-background'>
-        <div className='w-full max-w-md'>
-          {/* СЛУЧАЈ 1: УСПЕШНО ПРАТЕН ЛИНК (SUCCESS) */}
-          {success ? (
+        <div className='w-full max-w-md'>          {/* CASE 1: SUCCESS SENT LINK */}
+          {success? (
             <div className='space-y-8 animate-[fadeIn_0.5s_ease-out_forwards]'>
               <div className='border border-primary/30 bg-primary/5 p-6 rounded-none space-y-3 relative overflow-hidden'>
                 <div className='flex items-center gap-3 text-primary'>
                   <CheckCircle2 className='h-5 w-5 shrink-0' />
-                  <h3 className='text-xs font-semibold uppercase tracking-widest'>
-                    Линкот е испратен!
+                  <h3 className='text-xs font-semibold uppercase tracking-widest'>                    The link has been sent!
                   </h3>
                 </div>
-                <p className='text-xs text-outline leading-relaxed'>
-                  Ви испративме е-пошта со инструкции за ресетирање на{' '}
-                  <span className='font-semibold text-foreground'>{email}</span>
-                  . Проверете го вашето сандаче.
+                <p className='text-xs text-outline leading-relaxed'>                  We've sent you an email with reset instructions on{' '}
+                  <span className='font-semibold text-foreground'>{email}</span>                  . Check your inbox.
                 </p>
               </div>
 
@@ -103,25 +94,19 @@ export default function ForgotPasswordPage() {
                 <Link
                   href='/login'
                   className='block w-full bg-primary text-primary-foreground py-4 text-center text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container shadow-lg'
-                >
-                  ОДИ КОН НАЈАВА
+                >                  GO TO ANNOUNCEMENT
                 </Link>
               </div>
-            </div>
-          ) : (
-            /* СЛУЧАЈ 2: СТАНДАРДНА ФОРМА */
+            </div>          ) : (
+            /* CASE 2: STANDARD FORM */
             <div>
               <header className='mb-10'>
-                <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>
-                  Заборавена лозинка
+                <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>                  Forgot password
                 </h1>
-                <p className='text-outline text-sm'>
-                  Внесете ја вашата е-пошта за да добиете линк за ресетирање.
+                <p className='text-outline text-sm'>                  Enter your email to receive a reset link.
                 </p>
-              </header>
-
-              {/* Серверска / Локална грешка */}
-              {error && (
+              </header>              {/* Server / Local error */}
+              { error && (
                 <div className='mb-6 border border-destructive/40 bg-destructive/10 p-3.5 text-xs text-destructive rounded'>
                   {error}
                 </div>
@@ -137,8 +122,7 @@ export default function ForgotPasswordPage() {
                   <Label
                     htmlFor='email'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Е-пошта
+                  >                    Email
                   </Label>
                   <Input
                     id='email'
@@ -158,19 +142,16 @@ export default function ForgotPasswordPage() {
                     type='submit'
                     disabled={loading}
                     className='w-full bg-primary text-primary-foreground py-4 text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container disabled:opacity-50 shadow-lg cursor-pointer'
-                  >
-                    {loading ? 'СЕ ИСПРАЌА...' : 'ПРАТИ ЛИНК'}
+                  >                    {loading ? 'SENDING...' : 'SEND LINK'}
                   </button>
 
                   <div className='flex flex-col items-center space-y-2'>
-                    <p className='text-outline text-xs'>
-                      Се сетивте на лозинката?
+                    <p className='text-outline text-xs'>                      Remember your password?
                     </p>
                     <Link
                       href='/login'
                       className='text-[11px] font-semibold tracking-widest text-primary border-b border-primary/30 hover:border-primary transition-all pb-0.5 uppercase'
-                    >
-                      НАЗАД КОН НАЈАВА
+                    >                      BACK TO ANNOUNCEMENT
                     </Link>
                   </div>
                 </div>

@@ -4,21 +4,15 @@ export default function OrderLoading() {
       {/* 1. OrderHeader Skeleton */}
       <section className='relative w-full py-12 md:py-16 px-6 md:px-12 bg-background border-b border-border/20 overflow-hidden'>
         <div className='relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6'>
-          <div className='flex flex-col gap-2 w-full md:w-auto'>
-            {/* Назад линк */}
-            <div className='h-4 w-36 bg-muted rounded mb-4' />
-            {/* Мал наслов */}
-            <div className='h-3 w-32 bg-muted rounded' />
-            {/* Број на нарачка */}
-            <div className='h-10 md:h-12 w-48 bg-muted rounded mt-1' />
-            {/* Датум и Време */}
+          <div className='flex flex-col gap-2 w-full md:w-auto'>            {/* Back Link */}
+            <div className='h-4 w-36 bg-muted rounded mb-4' />            {/* Small title */}
+            <div className='h-3 w-32 bg-muted rounded' />            {/* Order number */}
+            <div className='h-10 md:h-12 w-48 bg-muted rounded mt-1' />            {/* Date and Time */}
             <div className='flex items-center gap-4 mt-2'>
               <div className='h-4 w-28 bg-muted rounded' />
               <div className='h-4 w-20 bg-muted rounded' />
             </div>
-          </div>
-
-          {/* Статус Баџ */}
+          </div>          {/* Status Badge */}
           <div className='h-10 w-36 bg-muted rounded-full' />
         </div>
       </section>
@@ -30,7 +24,7 @@ export default function OrderLoading() {
             {/* Background Line */}
             <div className='absolute top-1/2 left-0 w-full h-0.5 bg-border/40 -translate-y-1/2 z-0' />
 
-            {/* 4 Стекогаши (Circles & Labels) */}
+            {/* 4 Stekogashi (Circles & Labels) */}
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
@@ -46,26 +40,17 @@ export default function OrderLoading() {
 
       {/* Main Content Grid */}
       <section className='w-full max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-16'>
-        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>
-          {/* Лева Колона: OrderItemsList Skeleton */}
-          <div className='lg:col-span-7 flex flex-col'>
-            {/* Наслов: Вашиот Избор */}
-            <div className='h-6 w-40 bg-muted rounded mb-6 border-b border-border/20 pb-4' />
-
-            {/* Артикли (3 dummy ставка) */}
+        <div className='grid grid-cols-1 lg:grid-cols-12 gap-12'>          {/* Left Column: OrderItemsList Skeleton */}
+          <div className='lg:col-span-7 flex flex-col'>            {/* Title: Your Choice */}
+            <div className='h-6 w-40 bg-muted rounded mb-6 border-b border-border/20 pb-4' />            {/* Items (3 dummy item) */}
             <div className='flex flex-col divide-y divide-border/20'>
               {[...Array(3)].map((_, i) => (
-                <div key={i} className='py-6 flex items-center gap-6'>
-                  {/* Слика */}
-                  <div className='w-20 h-20 md:w-24 md:h-24 rounded-md bg-muted shrink-0' />
-
-                  {/* Име и Опис */}
+                <div key={i} className='py-6 flex items-center gap-6'>                  {/* Image */}
+                  <div className='w-20 h-20 md:w-24 md:h-24 rounded-md bg-muted shrink-0' />                  {/* Name and Description */}
                   <div className='grow space-y-2'>
                     <div className='h-5 w-3/4 bg-muted rounded' />
                     <div className='h-3 w-1/2 bg-muted rounded' />
-                  </div>
-
-                  {/* Количина и Цена */}
+                  </div>                  {/* Quantity and Price */}
                   <div className='flex flex-col items-end gap-2 shrink-0'>
                     <div className='h-3 w-16 bg-muted rounded' />
                     <div className='h-5 w-20 bg-muted rounded' />
@@ -73,9 +58,7 @@ export default function OrderLoading() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Десна Колона: OrderDeliveryCard & OrderSummaryCard Skeleton */}
+          </div>          {/* Right Column: OrderDeliveryCard & OrderSummaryCard Skeleton */}
           <div className='lg:col-span-5 flex flex-col gap-6'>
             {/* 3. OrderDeliveryCard Skeleton */}
             <div className='bg-card p-6 md:p-8 rounded-lg border border-border/30 relative overflow-hidden space-y-6'>

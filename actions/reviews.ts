@@ -27,7 +27,7 @@ async function getAuthenticatedUser() {
 export async function getReviewEligibilityAction(): Promise<ReviewEligibilityResult> {
   const user = await getAuthenticatedUser()
   if (!user) {
-    return { success: false, message: 'Најавете се за да оставите review.' }
+    return { success: false, message: 'Log in to leave a review.' }
   }
 
   const eligibility = await getReviewEligibility(user.id)
@@ -37,15 +37,15 @@ export async function getReviewEligibilityAction(): Promise<ReviewEligibilityRes
       allowed: false,
       message:
         eligibility.eligibleExperiences === 0
-          ? 'Review може да оставите по испорачана нарачка или завршена резервација.'
-          : 'Веќе имате испратен review за сите ваши завршени искуства.',
+          ? "You can leave a review after the order has been delivered or the reservation has been completed."
+          : 'You have already sent a review for all your completed experiences.',
     }
   }
 
   return {
     success: true,
     allowed: true,
-    message: 'Споделете го вашето искуство со Lumière.',
+    message: 'Share your Lumière experience.',
   }
 }
 
@@ -54,14 +54,14 @@ export async function createReviewAction(
 ): Promise<{ success: true; message: string } | ReviewActionError> {
   const user = await getAuthenticatedUser()
   if (!user) {
-    return { success: false, message: 'Најавете се за да оставите review.' }
+    return { success: false, message: 'Log in to leave a review.' }
   }
 
   const parsed = createReviewSchema.safeParse(input)
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Проверете ги внесените податоци.',
+      message: 'Check the entered data.',
       fieldErrors: parsed.error.flatten().fieldErrors,
     }
   }
@@ -75,13 +75,13 @@ export async function createReviewAction(
     return {
       success: false,
       message:
-        'За да оставите нов review, потребна е нова испорачана нарачка или завршена резервација.',
+        'To leave a new review, a new delivered order or completed reservation is required.',
     }
   }
 
   return {
     success: true,
     message:
-      'Review-от е испратен на одобрување. Ќе биде јавно видлив по проверка.',
+      'The review has been sent for approval. It will be publicly visible after verification.',
   }
 }

@@ -1,16 +1,16 @@
 const MONTHS_MK = [
-  'јануари',
-  'февруари',
-  'март',
-  'април',
-  'мај',
-  'јуни',
-  'јули',
-  'август',
-  'септември',
-  'октомври',
-  'ноември',
-  'декември',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ] as const
 
 function getDateParts(date: Date) {
@@ -45,7 +45,7 @@ function getTimeParts(date: Date) {
 
 export function formatReservationDate(date: Date) {
   const { day, month, year } = getDateParts(date)
-  return `${Number(day)} ${MONTHS_MK[Number(month) - 1]} ${year} г.`
+  return `${Number(day)} ${MONTHS_MK[Number(month) - 1]} ${year} d.`
 }
 
 export function formatReservationTime(date: Date) {
@@ -56,7 +56,7 @@ export function formatReservationTime(date: Date) {
 export function formatReservationDuration(durationMinutes: number) {
   const hours = Math.floor(durationMinutes / 60)
   const minutes = durationMinutes % 60
-  const hourLabel = hours === 1 ? 'час' : 'часа'
+  const hourLabel = hours === 1 ? 'hour' : 'hours'
 
-  return `${hours} ${hourLabel}${minutes ? ` и ${minutes} мин.` : ''}`
+  return `${hours} ${hourLabel}${minutes ? ` and ${minutes} min.` : ''}`
 }

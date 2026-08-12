@@ -6,11 +6,11 @@ import {
 export type NavLinkItem = RoleNavLink
 
 export const NAV_LINKS = [
-  { label: 'Специјалитети', href: '/#specialties' },
-  { label: 'Мени', href: '/menu' },
-  { label: 'За нас', href: '/#about' },
-  { label: 'Препораки', href: '/#reviews' },
-  { label: 'Контакт', href: '/#contact' },
+  { label: 'Specialties', href: '/#specialties' },
+  { label: 'Menu', href: '/menu' },
+  { label: 'For us', href: '/#about' },
+  { label: 'Recommendations', href: '/#reviews' },
+  { label: 'Contact', href: '/#contact' },
 ]
 
 export const MANAGEMENT_LINKS = ROLE_NAVIGATION.MANAGER

@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { canAccessPath, getRoleHome } from '@/lib/constants/access-control'
 
-// Дефинирање на помошни функции за рутите
+// Defining helper functions for routes
 const isProfileRoute = (pathname: string) => pathname.startsWith('/profile')
 const isAdminRoute = (pathname: string) => pathname.startsWith('/admin')
 const isKitchenRoute = (pathname: string) => pathname.startsWith('/kitchen')
 const isStaffRoute = (pathname: string) => pathname.startsWith('/staff')
 
-// Променети во /login и /register
+// Changed to /login and /register
 const isAuthRoute = (pathname: string) =>
   pathname === '/login' ||
   pathname === '/register' ||
@@ -24,29 +24,29 @@ export default async function proxy(request: NextRequest) {
   const isStaff = isStaffRoute(pathname)
   const isAuth = isAuthRoute(pathname)
 
-  // Ако рутата не е заштитена, веднаш продолжи
+  // If the route is not protected, proceed immediately
   if (!isPrivate && !isAdmin && !isKitchen && !isStaff && !isAuth) {
     return NextResponse.next()
   }
 
-  // Влечење на сесијата од Better Auth
+  // Pulling the session from Better Auth
   const session = await auth.api.getSession({
     headers: request.headers,
   })
 
-  // 1. Ако корисникот е веќе најавен, а пробува да отвори /login или /register
+  // 1. If the user is already logged in, and tries to open /login or /register
   if (session && isAuth) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // 2. Доколку нема сесија за која било заштитена рута -> Пренасочи кон /login
+  // 2. If there is no session for any secure route -> Redirect to /login
   if (!session && (isPrivate || isAdmin || isKitchen || isStaff)) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('redirect_url', pathname)
     return NextResponse.redirect(loginUrl)
   }
 
-  // 3. Контрола на пристап според Роли (Role Authorization)
+  // 3. Access control according to Role (Role Authorization)
   if (session) {
     if (!canAccessPath(session.user.role, pathname)) {
       return NextResponse.redirect(
@@ -56,12 +56,12 @@ export default async function proxy(request: NextRequest) {
 
     const role = session.user.role
 
-    // Админ рути: Достапни за ADMIN и MANAGER
+    // Admin Routes: Available for ADMIN and MANAGER
     if (isAdmin && role !== 'ADMIN' && role !== 'MANAGER') {
       return NextResponse.redirect(new URL('/', request.url))
     }
 
-    // Кујнски екран: Достапен за KITCHEN, MANAGER и ADMIN
+    // Kitchen screen: Available for KITCHEN, MANAGER and ADMIN
     if (
       isKitchen &&
       role !== 'KITCHEN' &&
@@ -71,7 +71,7 @@ export default async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL('/', request.url))
     }
 
-    // Персонал (келнери): Достапен за STAFF, MANAGER и ADMIN
+    // Staff (waiters): Available for STAFF, MANAGER and ADMIN
     if (isStaff && role !== 'STAFF' && role !== 'MANAGER' && role !== 'ADMIN') {
       return NextResponse.redirect(new URL('/', request.url))
     }

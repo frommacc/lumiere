@@ -19,8 +19,7 @@ interface OrderItemsListProps {
 export function OrderItemsList({ items }: OrderItemsListProps) {
   return (
     <div className='flex flex-col'>
-      <h2 className='text-xl font-bold text-foreground mb-6 border-b border-border/20 pb-4'>
-        Вашиот Избор
+      <h2 className='text-xl font-bold text-foreground mb-6 border-b border-border/20 pb-4'>        Your Choice
       </h2>
       <div className='flex flex-col divide-y divide-border/20'>
         {items.map((item) => {

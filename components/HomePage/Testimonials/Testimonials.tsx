@@ -18,11 +18,9 @@ export default async function Testimonials() {
       <div className='max-w-5xl mx-auto'>
         {/* Title */}
         <div className='text-center mb-16'>
-          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block uppercase mb-3'>
-            ИСКУСТВА НА ГОСТИТЕ
+          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block uppercase mb-3'>            GUEST EXPERIENCES
           </span>
-          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold'>
-            Осврти од Нашите Посетители
+          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold'>            Reviews from Our Visitors
           </h2>
           <div className='mt-6 flex justify-center'>
             <ReviewButton compact />
@@ -32,8 +30,7 @@ export default async function Testimonials() {
         {reviews.length ? (
           <TestimonialsClient reviews={reviews} />
         ) : (
-          <p className='text-center text-sm text-on-surface-variant'>
-            Сè уште нема одобрени reviews. Бидете први што ќе сподели искуство.
+          <p className='text-center text-sm text-on-surface-variant'>            There are no approved reviews yet. Be the first to share an experience.
           </p>
         )}
       </div>

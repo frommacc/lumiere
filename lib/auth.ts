@@ -27,7 +27,7 @@ export const auth = betterAuth({
         type: 'string',
         required: false,
       },
-      // ADD THIS: Додајте го status во зачуваните полиња на корисникот
+      // ADD THIS: Add status to the user's saved fields
       status: {
         type: 'string',
         defaultValue: UserStatus.ACTIVE,

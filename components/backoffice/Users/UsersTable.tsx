@@ -49,7 +49,7 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
 
-  // Се чува само ЕДЕН корисник за уредување и ЕДЕН за бришење
+  // Only ONE user is kept for editing and ONE for deletion
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [deletingUser, setDeletingUser] = useState<User | null>(null)
 
@@ -74,13 +74,13 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
         <Table className='min-w-230'>
           <TableHeader className='border-b border-outline-variant/15 text-[10px] uppercase tracking-[0.16em] text-on-surface-variant'>
             <TableRow>
-              <TableHead className='px-5 py-4'>Корисник</TableHead>
-              <TableHead className='px-5 py-4'>Верифициран</TableHead>
-              <TableHead className='px-5 py-4'>Телефон</TableHead>
-              <TableHead className='px-5 py-4'>Член од</TableHead>
-              <TableHead className='px-5 py-4'>Улога</TableHead>
-              <TableHead className='px-5 py-4'>Статус</TableHead>
-              <TableHead className='px-5 py-4 text-right'>Акции</TableHead>
+              <TableHead className='px-5 py-4'>User</TableHead>
+              <TableHead className='px-5 py-4'>Verified</TableHead>
+              <TableHead className='px-5 py-4'>Telephone</TableHead>
+              <TableHead className='px-5 py-4'>Member of</TableHead>
+              <TableHead className='px-5 py-4'>Role</TableHead>
+              <TableHead className='px-5 py-4'>Status</TableHead>
+              <TableHead className='px-5 py-4 text-right'>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className='divide-y divide-outline-variant/10'>
@@ -91,11 +91,9 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                     <div className='flex size-12 items-center justify-center rounded-full bg-surface-container-high text-on-surface-variant/70'>
                       <UserX className='size-6' />
                     </div>
-                    <p className='font-medium text-on-surface'>
-                      Не се пронајдени корисници
+                    <p className='font-medium text-on-surface'>                      No users found
                     </p>
-                    <p className='text-xs text-on-surface-variant'>
-                      Обидете се со поинаков поим за пребарување.
+                    <p className='text-xs text-on-surface-variant'>                      Try a different search term.
                     </p>
                   </div>
                 </TableCell>
@@ -116,7 +114,7 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                         {user.image ? (
                           <Image
                             src={user.image}
-                            alt={user.name || 'Корисник'}
+                            alt={user.name || 'User'}
                             fill
                             sizes='160px'
                             className='object-cover'
@@ -139,11 +137,11 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                   <TableCell className='px-5 py-4'>
                     {user.emailVerified ? (
                       <span className='inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400'>
-                        <CheckCircle2 className='size-3.5' /> Верифициран
+                        <CheckCircle2 className='size-3.5' /> Verified
                       </span>
                     ) : (
                       <span className='inline-flex items-center gap-1 text-xs text-on-surface-variant/70'>
-                        <XCircle className='size-3.5' /> Неверифициран
+                        <XCircle className='size-3.5' /> Unverified
                       </span>
                     )}
                   </TableCell>
@@ -173,16 +171,13 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
                       <Badge
                         variant='destructive'
                         className='px-2 py-0.5 text-[10px]'
-                      >
-                        Блокиран
+                      >                        Blocked
                       </Badge>
                     ) : (
                       <Badge
                         variant='secondary'
                         className='bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-600 dark:text-emerald-400'
-                      >
-                        Активен
-                      </Badge>
+                      >                        Active</Badge>
                     )}
                   </TableCell>
 
@@ -199,41 +194,37 @@ export function UsersTable({ users, currentUserId }: UsersTableProps) {
             )}
           </TableBody>
         </Table>
-      </div>
-
-      {/* 1. САМО ЕДЕН МОДАЛ ЗА УРЕДУВАЊЕ */}
-      {editingUser && (
+      </div>      {/* 1. ONLY ONE EDIT MODAL */}
+      { editingUser && (
         <EditUserModal
           key={editingUser.id}
           user={editingUser}
           isSelf={editingUser.id === currentUserId}
           open={!!editingUser}
           onOpenChange={(open) => !open && setEditingUser(null)}
-        />
-      )}
+        />      )}
 
-      {/* 2. САМО ЕДЕН DIALOG ЗА БРИШЕЊЕ */}
+      {/* 2. ONLY ONE DELETE DIALOG */}
       <AlertDialog
         open={!!deletingUser}
         onOpenChange={(open) => !open && setDeletingUser(null)}
       >
         <AlertDialogContent className='bg-surface-container text-on-surface'>
           <AlertDialogHeader>
-            <AlertDialogTitle>Дали сте сигурни?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Оваа акција е трајна. Корисникот{' '}
-              <strong>{deletingUser?.name}</strong> ќе биде избришан.
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>              This action is permanent. User{' '}
+              <strong>{deletingUser?.name}</strong> will be deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={pending}>Откажи</AlertDialogCancel>
+            <AlertDialogCancel disabled={pending}>Give up</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               disabled={pending}
               className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
             >
               {pending && <LoaderCircle className='mr-2 size-4 animate-spin' />}
-              Избриши
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

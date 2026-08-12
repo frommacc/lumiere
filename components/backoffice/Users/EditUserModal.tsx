@@ -87,18 +87,15 @@ export function EditUserModal({
       <DialogContent className='bg-surface-container text-on-surface sm:max-w-lg'>
         <DialogHeader>
           <DialogTitle className='flex items-center gap-2 text-lg font-semibold'>
-            <UserPen className='size-5 text-primary' /> Уреди кориснички профил
+            <UserPen className='size-5 text-primary' /> Edit user profile
           </DialogTitle>
-          <DialogDescription className='text-xs text-on-surface-variant'>
-            Измената на е-поштата и аватарот не се дозволени од овој панел.
+          <DialogDescription className='text-xs text-on-surface-variant'>            Editing of email and avatar is not allowed by this panel.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className='space-y-4 py-2'>
-          {/* Име и презиме */}
+        <form onSubmit={handleSubmit} className='space-y-4 py-2'>          {/* First and last name */}
           <div className='space-y-1.5'>
-            <Label htmlFor='name' className='text-xs font-medium'>
-              Име и презиме
+            <Label htmlFor='name' className='text-xs font-medium'>              Name and surname
             </Label>
             <Input
               id='name'
@@ -106,16 +103,13 @@ export function EditUserModal({
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
               }
-              placeholder='Внесете име'
+              placeholder='Enter a name'
               required
               className='bg-surface-container-high border-outline-variant/30 text-sm'
             />
-          </div>
-
-          {/* Е-пошта (Disabled) */}
+          </div>          {/* Email (Disabled) */}
           <div className='space-y-1.5'>
-            <Label htmlFor='email' className='text-xs font-medium opacity-70'>
-              Е-пошта (не може да се менува)
+            <Label htmlFor='email' className='text-xs font-medium opacity-70'>              Email (cannot be changed)
             </Label>
             <Input
               id='email'
@@ -123,12 +117,9 @@ export function EditUserModal({
               disabled
               className='bg-surface-container-low border-outline-variant/20 opacity-60 text-sm cursor-not-allowed'
             />
-          </div>
-
-          {/* Телефонски број */}
+          </div>          {/* Phone number */}
           <div className='space-y-1.5'>
-            <Label htmlFor='phone' className='text-xs font-medium'>
-              Телефонски број
+            <Label htmlFor='phone' className='text-xs font-medium'>              Telephone number
             </Label>
             <Input
               id='phone'
@@ -140,13 +131,10 @@ export function EditUserModal({
               required
               className='bg-surface-container-high border-outline-variant/30 text-sm'
             />
-          </div>
-
-          {/* Грид за Улога и Статус */}
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-            {/* Работна улога */}
+          </div>          {/* Role and Status Grid */}
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>            {/* Job role */}
             <div className='space-y-1.5'>
-              <Label className='text-xs font-medium'>Работна улога</Label>
+              <Label className='text-xs font-medium'>Job role</Label>
               <Select
                 value={formData.role}
                 disabled={isSelf}
@@ -165,11 +153,9 @@ export function EditUserModal({
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            {/* Статус */}
+            </div>            {/* Status */}
             <div className='space-y-1.5'>
-              <Label className='text-xs font-medium'>Статус на сметка</Label>
+              <Label className='text-xs font-medium'>Account status</Label>
               <Select
                 value={formData.status}
                 disabled={isSelf}
@@ -184,14 +170,12 @@ export function EditUserModal({
                   <SelectItem
                     value={UserStatus.ACTIVE}
                     className='text-xs text-emerald-600'
-                  >
-                    Активен
+                  >                    Active
                   </SelectItem>
                   <SelectItem
                     value={UserStatus.BLOCKED}
                     className='text-xs text-destructive'
-                  >
-                    Блокиран
+                  >                    Blocked
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -204,12 +188,11 @@ export function EditUserModal({
               variant='ghost'
               onClick={() => onOpenChange(false)}
               disabled={pending}
-            >
-              Откажи
+            >              Give up
             </Button>
             <Button type='submit' disabled={pending}>
               {pending && <LoaderCircle className='mr-2 size-4 animate-spin' />}
-              Зачувај промени
+              Save changes
             </Button>
           </DialogFooter>
         </form>

@@ -21,7 +21,7 @@ export function OrderCard({ order }: OrderCardProps) {
     )
     .join(', ')
 
-  const formattedDate = new Intl.DateTimeFormat('mk-MK', {
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -41,8 +41,7 @@ export function OrderCard({ order }: OrderCardProps) {
         {/* Header Info */}
         <div className='flex flex-wrap items-center gap-x-6 gap-y-2'>
           <OrderStatusBadge status={order.status} />
-          <span className='font-label-caps text-label-caps text-outline uppercase tracking-widest'>
-            Бр. Нарачка: #{order.orderNumber}
+          <span className='font-label-caps text-label-caps text-outline uppercase tracking-widest'>            No. Order: #{order.orderNumber}
           </span>
           <span className='font-label-caps text-label-caps text-outline uppercase tracking-widest'>
             {formattedDate}
@@ -66,8 +65,7 @@ export function OrderCard({ order }: OrderCardProps) {
         {/* Footer Info */}
         <div className='flex items-center gap-8 pt-4'>
           <div className='flex flex-col'>
-            <span className='font-label-caps text-[10px] text-outline uppercase tracking-tighter'>
-              Вкупно
+            <span className='font-label-caps text-[10px] text-outline uppercase tracking-tighter'>              In total
             </span>
             <span
               className={`font-headline-sm text-headline-sm ${isCompleted ? 'text-on-surface-variant' : 'text-primary'}`}
@@ -77,8 +75,7 @@ export function OrderCard({ order }: OrderCardProps) {
           </div>
           <div className='h-10 w-px bg-outline-variant/30'></div>
           <div className='flex flex-col'>
-            <span className='font-label-caps text-[10px] text-outline uppercase tracking-tighter'>
-              Начин
+            <span className='font-label-caps text-[10px] text-outline uppercase tracking-tighter'>              A way
             </span>
             <span className='font-body-md text-on-surface'>
               {formatDeliveryMethod(order.deliveryMethod)}
@@ -96,13 +93,11 @@ export function OrderCard({ order }: OrderCardProps) {
               ? 'border border-outline-variant/30 text-on-surface-variant hover:border-primary hover:text-primary duration-300'
               : 'border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground duration-500'
           }`}
-        >
-          Детали
+        >          Details
         </Link>
 
         {isCompleted && (
-          <button className='w-full py-4 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-primary/10'>
-            Повтори Нарачка
+          <button className='w-full py-4 bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-primary/10'>            Repeat Order
           </button>
         )}
       </div>

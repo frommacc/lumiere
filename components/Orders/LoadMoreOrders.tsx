@@ -28,7 +28,7 @@ export function LoadMoreOrders({
     params.set('limit', nextLimit.toString())
 
     startTransition(() => {
-      // scroll: false овозможува корисникот да остане на истото место на скролот
+      // scroll: false allows the user to stay in the same place on the scroll
       router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     })
   }
@@ -42,13 +42,11 @@ export function LoadMoreOrders({
         className='font-label-caps text-label-caps uppercase tracking-[0.4em] text-outline hover:text-primary transition-colors flex items-center gap-4 group disabled:opacity-50 cursor-pointer'
       >
         {isPending ? (
-          <>
-            Се вчитува...
+          <>            Loading...
             <Loader2 className='w-5 h-5 animate-spin text-primary' />
           </>
         ) : (
-          <>
-            Вчитај повеќе
+          <>            Load more
             <ChevronDown className='w-5 h-5 group-hover:translate-y-1 transition-transform' />
           </>
         )}

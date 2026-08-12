@@ -37,7 +37,7 @@ export function TableCard({ table, tableTypes = [] }: TableCardProps) {
   const handleDelete = () => {
     if (
       !confirm(
-        `Дали сте сигурни дека сакате да ја избришете масата ${table.number}?`,
+        `Are you sure you want to delete table ${table.number}?`,
       )
     ) {
       return
@@ -63,9 +63,7 @@ export function TableCard({ table, tableTypes = [] }: TableCardProps) {
             {table.tableType.name}
           </span>
           <p className='mt-2 font-display text-3xl font-bold'>{table.number}</p>
-        </div>
-
-        {/* Брзи акции за Менаџирање */}
+        </div>        {/* Management Quick Actions */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -92,7 +90,7 @@ export function TableCard({ table, tableTypes = [] }: TableCardProps) {
               }}
               trigger={
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <Pencil className='mr-2 size-4' /> Измени
+                  <Pencil className='mr-2 size-4' /> Edit
                 </DropdownMenuItem>
               }
             />
@@ -102,7 +100,7 @@ export function TableCard({ table, tableTypes = [] }: TableCardProps) {
               onClick={handleDelete}
               disabled={isPending}
             >
-              <Trash2 className='mr-2 size-4' /> Избриши
+              <Trash2 className='mr-2 size-4' /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -110,10 +108,8 @@ export function TableCard({ table, tableTypes = [] }: TableCardProps) {
 
       <div className='mt-6 flex items-center gap-1.5 text-xs text-on-surface-variant border-t border-outline-variant/15 pt-3'>
         <Users className='size-4 text-primary' />
-        <span>
-          Капацитет:{' '}
-          <strong className='text-foreground'>{table.capacity}</strong> лица
-        </span>
+        <span>          Capacity:{' '}
+          <strong className='text-foreground'>{table.capacity}</strong> persons</span>
       </div>
     </article>
   )

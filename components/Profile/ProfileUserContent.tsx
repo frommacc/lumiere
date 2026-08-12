@@ -20,14 +20,14 @@ import { EditProfileButton } from './EditProfileButton'
 import { ReviewButton } from '@/components/Reviews/ReviewButton'
 import { ChangePasswordButton } from './ChangePasswordButton'
 
-const dateFormatter = new Intl.DateTimeFormat('mk-MK', {
+const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
   timeZone: 'Europe/Skopje',
 })
 
-const timeFormatter = new Intl.DateTimeFormat('mk-MK', {
+const timeFormatter = new Intl.DateTimeFormat('en-US', {
   hour: '2-digit',
   minute: '2-digit',
   hourCycle: 'h23',
@@ -84,8 +84,7 @@ export async function ProfileUserContent() {
           </h1>
           <div className='flex items-center gap-3'>
             <span className='h-px w-8 bg-primary/40' />
-            <span className='font-label-caps text-xs text-primary tracking-[0.3em] uppercase'>
-              Lumière член
+            <span className='font-label-caps text-xs text-primary tracking-[0.3em] uppercase'>              Lumière member
             </span>
             <span className='h-px w-8 bg-primary/40' />
           </div>
@@ -97,19 +96,18 @@ export async function ProfileUserContent() {
       <section className='px-6 md:px-12 mb-24'>
         <div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8'>
           <div className='lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-surface-container-low/40 backdrop-blur-md p-8 md:p-10 rounded-xl border border-outline-variant/10'>
-            <ProfileField label='Име и презиме' value={user.name} icon={UserRound} />
-            <ProfileField label='Е-пошта' value={user.email} icon={Mail} />
-            <ProfileField label='Телефонски број' value={user.phone} icon={Phone} />
-            <ProfileField label='Член од' value={dateFormatter.format(user.createdAt)} icon={CalendarDays} />
+            <ProfileField label='Name and surname' value={user.name} icon={UserRound} />
+            <ProfileField label='Email' value={user.email} icon={Mail} />
+            <ProfileField label='Telephone number' value={user.phone} icon={Phone} />
+            <ProfileField label='Member of' value={dateFormatter.format(user.createdAt)} icon={CalendarDays} />
             <div className='md:col-span-2 flex flex-col gap-4 border-t border-outline-variant/15 pt-6 sm:flex-row sm:items-center sm:justify-between'>
               <div className='flex items-start gap-3'>
                 <div className='mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary'>
                   <ShieldCheck className='size-4' />
                 </div>
                 <div>
-                  <p className='text-sm font-medium text-on-surface'>Безбедност на акаунтот</p>
-                  <p className='mt-0.5 text-xs leading-relaxed text-on-surface-variant'>
-                    Ажурирајте ја лозинката за да остане заштитен вашиот профил.
+                  <p className='text-sm font-medium text-on-surface'>Account security</p>
+                  <p className='mt-0.5 text-xs leading-relaxed text-on-surface-variant'>                    Update your password to keep your account secure.
                   </p>
                 </div>
               </div>
@@ -120,29 +118,24 @@ export async function ProfileUserContent() {
           <aside className='lg:col-span-4 relative p-8 md:p-10 bg-linear-to-br from-surface-container-highest to-surface-container border border-primary/20 rounded-xl shadow-2xl overflow-hidden'>
             <div className='absolute -top-10 -right-10 size-40 bg-primary/10 rounded-full blur-3xl' />
             <div className='relative z-10'>
-              <p className='font-label-caps text-[11px] text-primary tracking-[0.3em] uppercase mb-1'>
-                Lumière профил
+              <p className='font-label-caps text-[11px] text-primary tracking-[0.3em] uppercase mb-1'>                Lumière profile
               </p>
-              <h2 className='font-display text-2xl text-on-surface'>
-                Последна резервација
+              <h2 className='font-display text-2xl text-on-surface'>                Last reservation
               </h2>
             </div>
             <div className='relative z-10 mt-10 border-t border-outline-variant/20 pt-6'>
               {latestReservation ? (
-                <p className='text-sm text-on-surface leading-relaxed'>
-                  {latestReservation.table.tableType.name} · {dateFormatter.format(latestReservation.startTime)} во {timeFormatter.format(latestReservation.startTime)}
+                <p className='text-sm text-on-surface leading-relaxed'>                  {latestReservation.table.tableType.name} · {dateFormatter.format(latestReservation.startTime)} in {timeFormatter.format(latestReservation.startTime)}
                 </p>
               ) : (
-                <p className='text-sm text-on-surface-variant'>
-                  Сè уште немате направено резервација.
+                <p className='text-sm text-on-surface-variant'>                  You have not made a reservation yet.
                 </p>
               )}
 
               <Link
                 href='/profile/reservations'
                 className='mt-6 inline-flex items-center justify-center border border-primary/50 px-4 py-2.5 font-label-caps text-[10px] uppercase tracking-widest text-primary transition-colors hover:bg-primary hover:text-primary-foreground'
-              >
-                Погледни ги сите резервации
+              >                View all bookings
               </Link>
             </div>
           </aside>
@@ -156,10 +149,9 @@ export async function ProfileUserContent() {
               <MessageSquareHeart className='size-5' />
             </div>
             <div>
-              <p className='font-label-caps text-[10px] uppercase tracking-[0.22em] text-primary'>Вашето искуство</p>
-              <h2 className='mt-1 font-display text-2xl text-on-surface'>Споделете го вашиот впечаток</h2>
-              <p className='mt-1 max-w-2xl text-sm leading-relaxed text-on-surface-variant'>
-                По успешна нарачка или завршена резервација, вашиот review ни помага да создадеме уште подобро искуство.
+              <p className='font-label-caps text-[10px] uppercase tracking-[0.22em] text-primary'>Your experience</p>
+              <h2 className='mt-1 font-display text-2xl text-on-surface'>Share your impression</h2>
+              <p className='mt-1 max-w-2xl text-sm leading-relaxed text-on-surface-variant'>                After a successful order or completed reservation, your review helps us create an even better experience.
               </p>
             </div>
           </div>

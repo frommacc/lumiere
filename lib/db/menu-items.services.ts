@@ -59,31 +59,31 @@ export const menuItemSelect = {
 //     where: {
 //       isPublished: true,
 
-//       // Проверка на објавеност врз основа на структурите:
+//       // Validity check based on structures:
 //       AND: [
 //         {
 //           OR: [
-//             // Случај 1: Артиклот е директно во Категорија (нема поткатегорија)
+//             // Case 1: Item is directly in Category (no subcategory)
 //             {
 //               subcategory: null,
 //               category: {
 //                 isPublished: true,
 //               },
 //             },
-//             // Случај 2: Артиклот е во Поткатегорија (category е null)
+//             // Case 2: The article is in a Subcategory (category is null)
 //             {
 //               category: null,
 //               subcategory: {
 //                 isPublished: true,
 //                 category: {
-//                   isPublished: true, // Родителската категорија исто така мора да е објавена
+//                   isPublished: true, // The parent category must also be published
 //                 },
 //               },
 //             },
 //           ],
 //         },
 
-//         // Филтрирање по специфичен categoryId/slug ако е проследен
+//         // Filter by specific categoryId/slug if forwarded
 //         ...(filterCategory
 //           ? [
 //               {
@@ -131,15 +131,15 @@ export async function getMenuItems(categoryId?: string) {
     where: {
       isPublished: true,
 
-      // Секогаш мора да биде објавена и нејзината главна категорија
+      // Its main category must always be published as well
       category: {
         isPublished: true,
       },
 
-      // Ако има поткатегорија, и таа мора да е објавена
+      // If there is a subcategory, it must be published as well
       OR: [{ subcategory: null }, { subcategory: { isPublished: true } }],
 
-      // Филтрирањето е директно и екстремно брзо
+      // Filtering is straightforward and extremely fast
       ...(filterCategory
         ? {
             OR: [

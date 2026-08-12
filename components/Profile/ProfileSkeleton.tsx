@@ -9,7 +9,7 @@ export function ProfileSkeleton() {
 
 export function ProfileUserSkeleton() {
   return (
-    <section aria-busy='true' aria-label='Се вчитува профилот'>
+    <section aria-busy='true' aria-label='Profile is loading'>
       <section className='relative isolate mb-12 w-full overflow-hidden border-y border-primary/10 bg-linear-to-br from-surface-container via-surface to-surface-container-high/80 px-6 py-16 md:mb-16 md:px-12'>
         <div className='absolute inset-0 pointer-events-none bg-linear-to-br from-primary/10 via-transparent to-tertiary/10' />
         <div className='absolute -left-1/4 top-0 h-full w-2/3 -skew-x-12 bg-linear-to-r from-primary/10 to-transparent blur-3xl pointer-events-none' />

@@ -14,20 +14,19 @@ export function OrderHeader({
   createdAt,
   status,
 }: OrderHeaderProps) {
-  const formattedDate = new Intl.DateTimeFormat('mk-MK', {
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   }).format(createdAt)
 
-  const formattedTime = new Intl.DateTimeFormat('mk-MK', {
+  const formattedTime = new Intl.DateTimeFormat('en-US', {
     hour: '2-digit',
     minute: '2-digit',
   }).format(createdAt)
 
   return (
-    <section className='relative w-full py-12 md:py-16 px-6 md:px-12 bg-background border-b border-border/20 overflow-hidden'>
-      {/* Позадинска слика со Overlay за добар контраст */}
+    <section className='relative w-full py-12 md:py-16 px-6 md:px-12 bg-background border-b border-border/20 overflow-hidden'>      {/* Background image with Overlay for good contrast */}
       <div className='absolute inset-0 z-0'>
         <Image
           src='/images/order-page-bg.jpg'
@@ -35,8 +34,7 @@ export function OrderHeader({
           fill
           priority
           className='object-cover object-center opacity-25'
-        />
-        {/* Градиент за мазен премин кон позадината */}
+        />        {/* Gradient for a smooth transition to the background */}
         <div className='absolute inset-0 bg-linear-to-t from-background via-background/60 to-background/30' />
       </div>
 
@@ -47,12 +45,10 @@ export function OrderHeader({
             className='mb-4 flex items-center gap-2 group text-outline hover:text-primary transition-colors'
           >
             <ArrowLeft className='w-5 h-5' />
-            <span className='font-label-caps text-label-caps uppercase'>
-              Назад кон Нарачки
+            <span className='font-label-caps text-label-caps uppercase'>              Back to Orders
             </span>
           </Link>
-          <span className='text-xs font-semibold text-primary uppercase tracking-[0.3em]'>
-            Детали за нарачката
+          <span className='text-xs font-semibold text-primary uppercase tracking-[0.3em]'>            Order details
           </span>
           <h1 className='text-3xl md:text-5xl font-bold text-foreground'>
             #{orderNumber}
@@ -63,8 +59,7 @@ export function OrderHeader({
               {formattedDate}
             </span>
             <span className='flex items-center gap-1.5'>
-              <Clock className='w-4 h-4 text-muted-foreground' />
-              {formattedTime} ч.
+              <Clock className='w-4 h-4 text-muted-foreground' />              {formattedTime} h.
             </span>
           </div>
         </div>
@@ -75,10 +70,9 @@ export function OrderHeader({
               <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75'></span>
               <span className='relative inline-flex rounded-full h-3 w-3 bg-primary'></span>
             </span>
-            <span className='text-xs font-semibold text-primary uppercase tracking-wider'>
-              {status === OrderStatus.CANCELLED
-                ? 'Откажана'
-                : 'Активна нарачка'}
+            <span className='text-xs font-semibold text-primary uppercase tracking-wider'>              { status === OrderStatus.CANCELLED
+                ? 'cancelled'
+                : 'Active Order'}
             </span>
           </div>
         </div>

@@ -29,7 +29,7 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
     inTransitOrders,
   } = useStaffOrders(initialOrders, playSound)
 
-  // Тракирање за доцнење (delayed orders)
+  // Delay tracking (delayed orders)
   const [now, setNow] = useState<number>(() => Date.now())
 
   useEffect(() => {
@@ -51,12 +51,10 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
         onToggleSound={toggleSound}
         totalOrders={orders.length}
         delayedCount={delayedCount}
-      />
-
-      {/* Main Board - 4 Колони */}
+      />      {/* Main Board - 4 Columns */}
       <div className='relative z-10 flex flex-1 gap-6 overflow-x-auto px-8 pb-8'>
         <StaffColumn
-          title='НОВИ НАРАЧКИ'
+          title='NEW ORDERS'
           count={pendingOrders.length}
           iconIndicator={
             <Clock className='size-4 text-amber-500 animate-pulse' />
@@ -68,7 +66,7 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
         <div className='w-px bg-linear-to-b from-outline-variant/5 via-outline-variant/30 to-outline-variant/5' />
 
         <StaffColumn
-          title='ЗА ПОДИГНУВАЊЕ (TAKEAWAY)'
+          title='TAKEAWAY'
           count={pickupReadyOrders.length}
           iconIndicator={
             <ShoppingBag className='size-4 text-primary animate-pulse' />
@@ -80,7 +78,7 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
         <div className='w-px bg-linear-to-b from-outline-variant/5 via-outline-variant/30 to-outline-variant/5' />
 
         <StaffColumn
-          title='СПРЕМНИ ЗА ДОСТАВА'
+          title='READY FOR DELIVERY'
           count={deliveryReadyOrders.length}
           iconIndicator={
             <CheckCircle2 className='size-4 text-emerald-500 animate-pulse' />
@@ -92,7 +90,7 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
         <div className='w-px bg-linear-to-b from-outline-variant/5 via-outline-variant/30 to-outline-variant/5' />
 
         <StaffColumn
-          title='ВО ТРАНЗИТ'
+          title='IN TRANSIT'
           count={inTransitOrders.length}
           iconIndicator={
             <Truck className='size-4 text-sky-500 animate-bounce' />
@@ -104,10 +102,9 @@ export function StaffBoardView({ initialOrders, role }: StaffBoardViewProps) {
         {filteredOrders.length === 0 && (
           <div className='col-span-full flex w-full flex-col items-center justify-center py-24 text-center text-muted-foreground'>
             <Bell className='mb-4 size-12 text-primary' />
-            <p className='text-lg'>
-              {searchQuery
-                ? `Нема пронајдено нарачки за "${searchQuery}"`
-                : 'Нема активни нарачки на таблата.'}
+            <p className='text-lg'>              { searchQuery
+                ? `No orders found for "${searchQuery}"`
+                : 'There are no active orders on the board.'}
             </p>
           </div>
         )}

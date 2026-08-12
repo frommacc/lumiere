@@ -13,7 +13,7 @@ export async function updateReservationStatusAction(
   const parsed = updateReservationStatusSchema.safeParse(input)
 
   if (!parsed.success)
-    return { success: false, message: 'Невалиден статус на резервација.' }
+    return { success: false, message: 'Invalid booking status.' }
 
   const user = await getAuthorizedUser([Role.ADMIN, Role.MANAGER, Role.STAFF])
 
@@ -25,7 +25,7 @@ export async function updateReservationStatusAction(
   })
 
   if (!reservation)
-    return { success: false, message: 'Резервацијата не постои.' }
+    return { success: false, message: 'The reservation does not exist.' }
 
   const allowed = getAllowedReservationStatuses(
     user.role as Role,
@@ -33,7 +33,7 @@ export async function updateReservationStatusAction(
   )
 
   if (!allowed.includes(parsed.data.status as ReservationStatus)) {
-    return { success: false, message: 'Овој статусен премин не е дозволен.' }
+    return { success: false, message: 'This status transition is not allowed.' }
   }
 
   await prisma.reservation.update({
@@ -43,17 +43,17 @@ export async function updateReservationStatusAction(
 
   refreshOperations()
 
-  return { success: true, message: 'Статусот на резервацијата е ажуриран.' }
+  return { success: true, message: 'The booking status has been updated.' }
 }
 
 export async function deleteReservationAction(
   reservationId: string,
 ): Promise<ActionResult> {
   if (!reservationId || typeof reservationId !== 'string') {
-    return { success: false, message: 'Невалиден ID на резервација.' }
+    return { success: false, message: 'Invalid booking ID.' }
   }
 
-  // Само ADMIN и MANAGER смеат да бришат резервација
+  // Only ADMIN and MANAGER are allowed to delete a reservation
   const user = await getAuthorizedUser([Role.ADMIN, Role.MANAGER])
 
   if (!user) return forbidden()
@@ -64,7 +64,7 @@ export async function deleteReservationAction(
   })
 
   if (!reservation) {
-    return { success: false, message: 'Резервацијата не постои.' }
+    return { success: false, message: 'The reservation does not exist.' }
   }
 
   await prisma.reservation.delete({
@@ -73,5 +73,8 @@ export async function deleteReservationAction(
 
   refreshOperations()
 
-  return { success: true, message: 'Резервацијата е успешно избришана.' }
+  return {
+    success: true,
+    message: 'The reservation has been successfully deleted.',
+  }
 }

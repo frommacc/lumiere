@@ -18,37 +18,37 @@ import { requireRouteAccess } from '@/lib/authorization'
 import { OrderStatus, Role } from '@/lib/generated/prisma'
 import { getAdminDashboard } from '@/lib/db/backoffice/dashboard.services'
 
-// Превод и бои за статусите на нарачките
+// Translation and colors for order statuses
 const orderStatusMap: Record<
   OrderStatus,
   { label: string; colorClass: string }
 > = {
   PENDING: {
-    label: 'Нова',
+    label: 'New',
     colorClass: 'bg-amber-500/10 text-amber-500 border-amber-500/20',
   },
   CONFIRMED: {
-    label: 'Потврдена',
+    label: 'Confirmed',
     colorClass: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
   },
   PREPARING: {
-    label: 'Се спрема',
+    label: 'Ready',
     colorClass: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
   },
   READY: {
-    label: 'Подготвена',
+    label: 'Ready',
     colorClass: 'bg-teal-500/10 text-teal-500 border-teal-500/20',
   },
   IN_TRANSIT: {
-    label: 'Во достава',
+    label: 'Shipping',
     colorClass: 'bg-purple-500/10 text-purple-500 border-purple-500/20',
   },
   DELIVERED: {
-    label: 'Доставена',
+    label: 'Delivered',
     colorClass: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
   },
-  CANCELLED: {
-    label: 'Откажана',
+  CANCELED: {
+    label: 'Cancelled',
     colorClass: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
   },
 }
@@ -60,32 +60,32 @@ export default async function AdminDashboardPage() {
 
   const kpiMetrics = [
     {
-      label: 'Дневен Промет',
-      value: `${dashboard.todayRevenue.toLocaleString('mk-MK')} ден.`,
+      label: 'Daily Traffic',
+      value: `${dashboard.todayRevenue.toLocaleString('en-US')} day.`,
       Icon: Banknote,
       href: '/admin/orders',
       highlight: true,
     },
     {
-      label: 'Нови нарачки',
+      label: 'New Orders',
       value: dashboard.newOrders,
       Icon: Receipt,
       href: '/admin/orders',
     },
     {
-      label: 'Во кујна',
+      label: 'In the kitchen',
       value: dashboard.kitchenOrdersCount,
       Icon: ChefHat,
       href: '/admin/orders?status=PREPARING',
     },
     {
-      label: 'Активни резервации',
+      label: 'Active bookings',
       value: dashboard.activeReservations,
       Icon: CalendarDays,
       href: '/admin/reservations',
     },
     {
-      label: 'Зафатени маси',
+      label: 'Busy Tables',
       value: `${dashboard.occupiedTables}/${dashboard.totalTables}`,
       Icon: TableProperties,
       href: '/admin/tables',
@@ -95,13 +95,13 @@ export default async function AdminDashboardPage() {
   return (
     <>
       <BackofficeHeader
-        eyebrow='Оперативен преглед'
-        title='Контролна табла'
-        description='Дневната состојба на ресторанот, аналитика и клучни акции на едно место.'
+        eyebrow='Operational review'
+        title='Control panel'
+        description='Daily restaurant status, analytics and key actions in one place.'
       />
 
       <div className='space-y-8 px-6 py-8 md:px-10'>
-        {/* --- ПРЕДУПРЕДУВАЊА / ИЗВЕСТУВАЊА (ALERT BADGES) --- */}
+        {/* --- ALERT BADGES --- */}
         {(dashboard.pendingReviewsCount > 0 ||
           dashboard.unavailableMenuItemsCount > 0) && (
           <div className='grid gap-4 md:grid-cols-2'>
@@ -112,12 +112,11 @@ export default async function AdminDashboardPage() {
               >
                 <div className='flex items-center gap-3'>
                   <MessageSquare className='size-5 text-amber-400' />
-                  <span className='text-sm font-medium'>
-                    Имате{' '}
+                  <span className='text-sm font-medium'>                    You have {' '}
                     <strong className='font-bold'>
                       {dashboard.pendingReviewsCount}
                     </strong>{' '}
-                    нови рецензии кои чекаат одобрување.
+                    new reviews awaiting approval.
                   </span>
                 </div>
                 <ArrowRight className='size-4 text-amber-400' />
@@ -135,17 +134,15 @@ export default async function AdminDashboardPage() {
                     <strong className='font-bold'>
                       {dashboard.unavailableMenuItemsCount}
                     </strong>{' '}
-                    артикли во менито се означени како недостапни.
+                    menu items are marked as unavailable.
                   </span>
                 </div>
                 <ArrowRight className='size-4 text-rose-400' />
               </Link>
             )}
-          </div>
-        )}
+          </div>        )}
 
-        {/* --- KPI МЕТРИКИ --- */}
-        <section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
+        {/* --- KPI METRICS --- */}<section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
           {kpiMetrics.map(({ label, value, Icon, href, highlight }) => (
             <Link
               key={label}
@@ -170,33 +167,26 @@ export default async function AdminDashboardPage() {
               </p>
             </Link>
           ))}
-        </section>
-
-        {/* --- ДВЕ КОЛОНИ: ПОСЛЕДНИ НАРАЧКИ & ЧЕКААТ РЕЗЕРВАЦИИ --- */}
-        <div className='grid gap-8 lg:grid-cols-2'>
-          {/* Последни нарачки */}
+        </section>        {/* --- TWO COLUMNS: LAST ORDERS & PENDING RESERVATIONS --- */}
+        <div className='grid gap-8 lg:grid-cols-2'>          {/* Recent Orders */}
           <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
             <div className='mb-5 flex items-center justify-between'>
               <div>
-                <h3 className='text-lg font-semibold text-on-surface'>
-                  Последни Нарачки
+                <h3 className='text-lg font-semibold text-on-surface'>                  Last Orders
                 </h3>
-                <p className='text-xs text-on-surface-variant'>
-                  Најновите нарачки влезени во системот
+                <p className='text-xs text-on-surface-variant'>                  The latest orders entered into the system
                 </p>
               </div>
               <Link
                 href='/admin/orders'
                 className='flex items-center gap-1 text-xs font-medium text-primary hover:underline'
-              >
-                Види сите <ArrowRight className='size-3' />
+              >                See all <ArrowRight className='size-3' />
               </Link>
             </div>
 
             <div className='space-y-3'>
               {dashboard.recentOrders.length === 0 ? (
-                <p className='py-8 text-center text-sm text-outline'>
-                  Нема нови нарачки денес.
+                <p className='py-8 text-center text-sm text-outline'>                  No new orders today.
                 </p>
               ) : (
                 dashboard.recentOrders.map((order) => {
@@ -220,18 +210,17 @@ export default async function AdminDashboardPage() {
                         <p className='flex items-center gap-1 text-xs text-on-surface-variant'>
                           <User className='size-3' />{' '}
                           {order.customerName || order.user.name} (
-                          {order.items.length} артикли)
+                          {order.items.length} items)
                         </p>
                       </div>
 
                       <div className='flex items-center justify-between sm:flex-col sm:items-end'>
-                        <span className='font-display text-base font-bold text-on-surface'>
-                          {order.total.toLocaleString('mk-MK')} ден.
+                        <span className='font-display text-base font-bold text-on-surface'>                          {order.total.toLocaleString('en-US')} day.
                         </span>
                         <span className='flex items-center gap-1 text-[11px] text-outline'>
                           <Clock className='size-3' />
                           {new Date(order.createdAt).toLocaleTimeString(
-                            'mk-MK',
+                            'en-US',
                             {
                               hour: '2-digit',
                               minute: '2-digit',
@@ -244,31 +233,25 @@ export default async function AdminDashboardPage() {
                 })
               )}
             </div>
-          </section>
-
-          {/* Резервации кои чекаат потврда */}
+          </section>          {/* Reservations awaiting confirmation */}
           <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
             <div className='mb-5 flex items-center justify-between'>
               <div>
-                <h3 className='text-lg font-semibold text-on-surface'>
-                  Чекаат Потврда
+                <h3 className='text-lg font-semibold text-on-surface'>                  Awaiting Confirmation
                 </h3>
-                <p className='text-xs text-on-surface-variant'>
-                  Резервации кои бараат одобрување
+                <p className='text-xs text-on-surface-variant'>                  Reservations requiring approval
                 </p>
               </div>
               <Link
                 href='/admin/reservations?status=PENDING'
                 className='flex items-center gap-1 text-xs font-medium text-primary hover:underline'
-              >
-                Управувај <ArrowRight className='size-3' />
+              >                Manage <ArrowRight className='size-3' />
               </Link>
             </div>
 
             <div className='space-y-3'>
               {dashboard.pendingReservations.length === 0 ? (
-                <p className='py-8 text-center text-sm text-outline'>
-                  Нема резервации кои чекаат потврда.
+                <p className='py-8 text-center text-sm text-outline'>                  There are no reservations awaiting confirmation.
                 </p>
               ) : (
                 dashboard.pendingReservations.map((res) => (
@@ -278,24 +261,23 @@ export default async function AdminDashboardPage() {
                   >
                     <div className='space-y-1'>
                       <p className='font-medium text-on-surface'>{res.name}</p>
-                      <p className='text-xs text-on-surface-variant'>
-                        Маса:{' '}
+                      <p className='text-xs text-on-surface-variant'>                        Table:{' '}
                         <strong className='text-on-surface'>
                           #{res.table.number}
                         </strong>{' '}
-                        ({res.table.tableType.name}) &bull; {res.guests} гости
+                        ({res.table.tableType.name}) • {res.guests} guests
                       </p>
                     </div>
 
                     <div className='flex items-center justify-between sm:flex-col sm:items-end'>
                       <span className='rounded bg-primary/10 px-2 py-1 text-xs font-medium text-primary'>
-                        {new Date(res.startTime).toLocaleTimeString('mk-MK', {
+                        {new Date(res.startTime).toLocaleTimeString('en-US', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
                       </span>
                       <span className='mt-1 text-[11px] text-outline'>
-                        {new Date(res.startTime).toLocaleDateString('mk-MK')}
+                        {new Date(res.startTime).toLocaleDateString('en-US')}
                       </span>
                     </div>
                   </div>
@@ -303,20 +285,16 @@ export default async function AdminDashboardPage() {
               )}
             </div>
           </section>
-        </div>
-
-        {/* --- СЕКЦИЈА НА ДНОТО: ТОП ПРОДАВАНИ ЈАДЕЊА --- */}
+        </div>        {/* --- BOTTOM SECTION: TOP SELLING DISHES --- */}
         <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
           <div className='mb-5 flex items-center gap-2'>
             <Flame className='size-5 text-amber-500' />
-            <h3 className='text-lg font-semibold text-on-surface'>
-              Топ 5 Најпродавани Јадења
+            <h3 className='text-lg font-semibold text-on-surface'>              Top 5 Best Selling Dishes
             </h3>
           </div>
 
           {dashboard.topSellingItems.length === 0 ? (
-            <p className='py-4 text-center text-sm text-outline'>
-              Нема доволно податоци за продажба.
+            <p className='py-4 text-center text-sm text-outline'>              Not enough sales data.
             </p>
           ) : (
             <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-5'>
@@ -332,8 +310,7 @@ export default async function AdminDashboardPage() {
                     {item.name}
                   </p>
                   <div className='mt-4 flex items-baseline justify-between'>
-                    <span className='text-xs text-on-surface-variant'>
-                      Продадени:
+                    <span className='text-xs text-on-surface-variant'>                      Sold:
                     </span>
                     <span className='font-mono text-base font-bold text-primary'>
                       {item._sum.quantity}

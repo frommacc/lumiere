@@ -37,8 +37,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className='font-sans text-xs uppercase tracking-[0.3em] text-primary block mb-4'
-        >
-          КУЛИНАРСКА ЕЛЕГАНЦИЈА &amp; ПРЕСТИЖ
+        >          CULINARY ELEGANCE & PRESTIGE
         </motion.span>
 
         <motion.h1
@@ -55,9 +54,8 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.7 }}
           className='font-sans text-sm md:text-lg text-foreground/80 max-w-2xl mx-auto italic mb-12 leading-relaxed'
-        >
-          Ексклузивна одисеја на вкусови каде светлината се спојува со уметноста
-          на кулинарството.
+        >          An exclusive odyssey of flavors where light meets art
+          of cooking.
         </motion.p>
 
         <motion.div
@@ -69,8 +67,7 @@ export default function Hero() {
           <Link
             href='/menu'
             className='group w-full sm:w-auto bg-primary text-primary-foreground font-sans text-xs uppercase tracking-[0.2em] font-semibold px-10 py-4 hover:shadow-[0_0_25px_rgba(242,202,80,0.4)] hover:bg-primary-container active:scale-95 transition-all duration-300 flex items-center justify-center gap-2'
-          >
-            НАРАЧАЈ ОНЛАЈН
+          >            ORDER ONLINE
             <ArrowRight
               size={14}
               className='group-hover:translate-x-1 transition-transform'
@@ -80,8 +77,7 @@ export default function Hero() {
           <button
             onClick={openReservation}
             className='w-full sm:w-auto border border-surface-variant font-sans text-xs uppercase tracking-[0.2em] font-semibold px-10 py-4 hover:bg-surface-variant/30 active:scale-95 transition-all duration-300'
-          >
-            РЕЗЕРВИРАЈ МАСА
+          >            BOOK A TABLE
           </button>
         </motion.div>
       </div>
@@ -92,11 +88,9 @@ export default function Hero() {
           <div className='flex items-center gap-3'>
             <Clock size={16} className='text-primary' />
             <div className='font-sans text-[10px] tracking-widest uppercase'>
-              <p className='text-on-surface-variant font-medium text-[8px]'>
-                РАБОТНО ВРЕМЕ
+              <p className='text-on-surface-variant font-medium text-[8px]'>                WORKING TIME
               </p>
-              <p className='text-on-surface font-semibold'>
-                12:00 - 00:00 секој ден
+              <p className='text-on-surface font-semibold'>                12:00 - 00:00 every day
               </p>
             </div>
           </div>
@@ -104,8 +98,7 @@ export default function Hero() {
           <div className='flex items-center gap-3'>
             <Phone size={16} className='text-primary' />
             <div className='font-sans text-[10px] tracking-widest uppercase'>
-              <p className='text-on-surface-variant font-medium text-[8px]'>
-                КОНТАКТ РЕЗЕРВАЦИИ
+              <p className='text-on-surface-variant font-medium text-[8px]'>                CONTACT RESERVATIONS
               </p>
               <p className='text-on-surface font-semibold'>+389 2 3123 456</p>
             </div>
@@ -114,11 +107,9 @@ export default function Hero() {
 
         <div className='flex items-center gap-3'>
           <div className='font-sans text-[10px] tracking-widest uppercase text-right'>
-            <p className='text-on-surface-variant font-medium text-[8px]'>
-              ЛОКАЦИЈА
+            <p className='text-on-surface-variant font-medium text-[8px]'>              LOCATION
             </p>
-            <p className='text-on-surface font-semibold'>
-              Ул. Македонија Бр. 1, Скопје
+            <p className='text-on-surface font-semibold'>              Ul. Macedonia No. 1, Skopje
             </p>
           </div>
           <MapPin size={16} className='text-primary' />

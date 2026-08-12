@@ -42,9 +42,8 @@ export function ReviewActions({ reviewId, currentStatus }: ReviewActionsProps) {
           {pending ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />
-          )}
-          Одобри
+            <Check className='size-3.5' />          )}
+          Approve
         </Button>
       )}
 
@@ -61,9 +60,8 @@ export function ReviewActions({ reviewId, currentStatus }: ReviewActionsProps) {
           {pending ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <X className='size-3.5' />
-          )}
-          Одбиј
+            <X className='size-3.5' />          )}
+          Decline
         </Button>
       )}
     </div>

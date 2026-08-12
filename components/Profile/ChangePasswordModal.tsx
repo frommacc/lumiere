@@ -59,14 +59,14 @@ export function ChangePasswordModal() {
       if (error) {
         const message =
           error.code === 'INVALID_PASSWORD'
-            ? 'Тековната лозинка не е точна.'
-            : error.message || 'Не успеавме да ја промениме лозинката. Обидете се повторно.'
+            ? 'The current password is incorrect.'
+            : error.message || 'We could not change the password. Try again.'
         form.setError('currentPassword', { message })
         toast.error(message)
         return
       }
 
-      toast.success('Лозинката е успешно променета. Другите активни сесии се одјавени.')
+      toast.success('Password changed successfully. Other active sessions are logged out.')
       handleClose()
     })
   }
@@ -76,18 +76,16 @@ export function ChangePasswordModal() {
       <DialogContent className='border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-md'>
         <DialogHeader className='text-left'>
           <DialogTitle className='flex items-center gap-2 font-display text-3xl'>
-            <KeyRound className='size-7 text-primary' />
-            Промени лозинка
+            <KeyRound className='size-7 text-primary' />            Change password
           </DialogTitle>
-          <DialogDescription className='text-on-surface-variant'>
-            Внесете ја тековната лозинка, потоа изберете нова безбедна лозинка.
+          <DialogDescription className='text-on-surface-variant'>            Enter your current password, then choose a new secure password.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5' noValidate>
           <PasswordField
             id='current-password'
-            label='Тековна лозинка'
+            label='Current password'
             autoComplete='current-password'
             show={showCurrentPassword}
             onToggle={() => setShowCurrentPassword((value) => !value)}
@@ -97,7 +95,7 @@ export function ChangePasswordModal() {
           />
           <PasswordField
             id='new-password'
-            label='Нова лозинка'
+            label='New password'
             autoComplete='new-password'
             show={showNewPassword}
             onToggle={() => setShowNewPassword((value) => !value)}
@@ -107,7 +105,7 @@ export function ChangePasswordModal() {
           />
           <PasswordField
             id='confirm-password'
-            label='Потврди нова лозинка'
+            label='Confirm new password'
             autoComplete='new-password'
             show={showConfirmPassword}
             onToggle={() => setShowConfirmPassword((value) => !value)}
@@ -117,12 +115,11 @@ export function ChangePasswordModal() {
           />
 
           <div className='flex justify-end gap-3 border-t border-outline-variant/20 pt-5'>
-            <Button type='button' variant='outline' onClick={handleClose} disabled={isPending}>
-              Откажи
+            <Button type='button' variant='outline' onClick={handleClose} disabled={isPending}>              Give up
             </Button>
             <Button type='submit' disabled={isPending}>
               {isPending && <LoaderCircle className='animate-spin' />}
-              Зачувај лозинка
+              Save password
             </Button>
           </div>
         </form>
@@ -172,7 +169,7 @@ function PasswordField({
           onClick={onToggle}
           disabled={disabled}
           className='absolute right-0 top-0 flex h-10 w-10 items-center justify-center text-on-surface-variant hover:text-primary disabled:opacity-50'
-          aria-label={show ? 'Скриј лозинка' : 'Прикажи лозинка'}
+          aria-label={show ? 'Hide password' : 'Show password'}
         >
           {show ? <EyeOff className='size-4' /> : <Eye className='size-4' />}
         </button>

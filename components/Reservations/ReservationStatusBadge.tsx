@@ -1,12 +1,12 @@
 import { ReservationStatus } from '@/lib/generated/prisma'
 
 export const reservationStatusLabels: Record<ReservationStatus, string> = {
-  [ReservationStatus.PENDING]: 'Испратена',
-  [ReservationStatus.CONFIRMED]: 'Потврдена',
-  [ReservationStatus.SEATED]: 'Во тек',
-  [ReservationStatus.COMPLETED]: 'Завршена',
-  [ReservationStatus.CANCELLED]: 'Откажана',
-  [ReservationStatus.NO_SHOW]: 'Не е посетена',
+  [ReservationStatus.PENDING]: 'Sent',
+  [ReservationStatus.CONFIRMED]: 'Confirmed',
+  [ReservationStatus.SEATED]: 'In Progress',
+  [ReservationStatus.COMPLETED]: 'Completed',
+  [ReservationStatus.CANCELLED]: 'Cancelled',
+  [ReservationStatus.NO_SHOW]: 'Not Visited',
 }
 
 const statusConfig: Record<

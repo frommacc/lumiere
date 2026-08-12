@@ -86,9 +86,8 @@ export function ReviewDialog() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className='border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-lg'>
         <DialogHeader className='text-left'>
-          <DialogTitle className='font-display text-3xl'>Споделете искуство</DialogTitle>
-          <DialogDescription className='text-on-surface-variant'>
-            Вашиот review прво оди на кратка проверка, па потоа може да биде објавен.
+          <DialogTitle className='font-display text-3xl'>Share an experience</DialogTitle>
+          <DialogDescription className='text-on-surface-variant'>            Your review first goes through a short check, and then it can be published.
           </DialogDescription>
         </DialogHeader>
 
@@ -99,25 +98,24 @@ export function ReviewDialog() {
           </div>
         ) : !session?.user ? (
           <div className='space-y-4 py-6 text-center'>
-            <p className='text-sm text-on-surface-variant'>Најавете се за да оставите review.</p>
-            <Button asChild><Link href='/login?redirect_url=/'>Најави се</Link></Button>
+            <p className='text-sm text-on-surface-variant'>Log in to leave a review.</p>
+            <Button asChild><Link href='/login?redirect_url=/'>Log in</Link></Button>
           </div>
         ) : !canReview ? (
-          <div className='rounded-lg border border-outline-variant/20 bg-surface-container-high p-4 text-sm text-on-surface-variant'>
-            {eligibilityMessage ?? 'Не успеавме да ја провериме вашата можност за review.'}
+          <div className='rounded-lg border border-outline-variant/20 bg-surface-container-high p-4 text-sm text-on-surface-variant'>            { eligibilityMessage ?? 'We failed to check your ability to review.'}
           </div>
         ) : (
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6' noValidate>
             <div className='space-y-3'>
-              <Label>Оцена</Label>
-              <div className='flex gap-2' aria-label='Оцена од 1 до 5'>
+              <Label>Rating</Label>
+              <div className='flex gap-2' aria-label='Rating from 1 to 5'>
                 {[1, 2, 3, 4, 5].map((value) => (
                   <button
                     key={value}
                     type='button'
                     onClick={() => form.setValue('rating', value, { shouldValidate: true })}
                     className='rounded p-1 text-primary transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
-                    aria-label={`${value} ѕвезди`}
+                    aria-label={`${value} stars`}
                   >
                     <Star className='size-7' fill={value <= rating ? 'currentColor' : 'none'} />
                   </button>
@@ -127,12 +125,12 @@ export function ReviewDialog() {
             </div>
 
             <div className='space-y-3'>
-              <Label htmlFor='review-text'>Вашето искуство</Label>
+              <Label htmlFor='review-text'>Your experience</Label>
               <textarea
                 id='review-text'
                 rows={5}
                 maxLength={1000}
-                placeholder='Кажете ни што ви се допадна и како помина вашето искуство.'
+                placeholder='Let us know what you liked and how your experience went.'
                 className='w-full rounded-md border border-outline-variant/30 bg-surface-container-high p-3 text-sm text-on-surface placeholder:text-muted-foreground focus:border-primary focus:outline-none'
                 {...form.register('text')}
               />
@@ -143,10 +141,10 @@ export function ReviewDialog() {
             </div>
 
             <div className='flex justify-end gap-3 border-t border-outline-variant/20 pt-5'>
-              <Button type='button' variant='outline' onClick={handleClose}>Откажи</Button>
+              <Button type='button' variant='outline' onClick={handleClose}>Give up</Button>
               <Button type='submit' disabled={isSubmitting}>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
-                Испрати review
+                Send a review
               </Button>
             </div>
           </form>

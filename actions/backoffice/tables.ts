@@ -16,7 +16,7 @@ export async function saveTableTypeAction(
   if (!parsed.success)
     return {
       success: false,
-      message: 'Проверете ги податоците за типот на маса.',
+      message: 'Check table type data.',
     }
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
 
@@ -30,13 +30,12 @@ export async function saveTableTypeAction(
   else await prisma.tableType.create({ data })
   updateTag('tables')
   updateTag('reservations')
-  return { success: true, message: 'Типот на маса е зачуван.' }
+  return { success: true, message: 'Table type saved.' }
 }
 
 export async function saveTableAction(input: unknown): Promise<ActionResult> {
   const parsed = tableSchema.safeParse(input)
-  if (!parsed.success)
-    return { success: false, message: 'Проверете ги податоците за масата.' }
+  if (!parsed.success) return { success: false, message: 'Check table data.' }
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
 
   const data = {
@@ -49,12 +48,12 @@ export async function saveTableAction(input: unknown): Promise<ActionResult> {
   else await prisma.table.create({ data })
   updateTag('tables')
   updateTag('reservations')
-  return { success: true, message: 'Масата е зачувана.' }
+  return { success: true, message: 'The table has been saved.' }
 }
 
 export async function deleteTableAction(id: string): Promise<ActionResult> {
   if (!id) {
-    return { success: false, message: 'Невалиден ID на маса.' }
+    return { success: false, message: 'Invalid table ID.' }
   }
 
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
@@ -67,26 +66,26 @@ export async function deleteTableAction(id: string): Promise<ActionResult> {
     updateTag('tables')
     updateTag('reservations')
 
-    return { success: true, message: 'Масата е успешно избришана.' }
+    return { success: true, message: 'The table was successfully deleted.' }
   } catch (error) {
     console.log(error)
     return {
       success: false,
       message:
-        'Настана грешка при бришење на масата (можно е да има поврзани резервации).',
+        'An error occurred while deleting the table (there may be related reservations).',
     }
   }
 }
 
 export async function deleteTableTypeAction(id: string): Promise<ActionResult> {
   if (!id) {
-    return { success: false, message: 'Невалиден ID на тип на маса.' }
+    return { success: false, message: 'Invalid table type ID.' }
   }
 
   if (!(await getAuthorizedUser([...MANAGEMENT_ROLES]))) return forbidden()
 
   try {
-    // Проверка дали има маси со овој тип пред бришење
+    // Checking for tables of this type before deletion
     const tablesCount = await prisma.table.count({
       where: { tableTypeId: id },
     })
@@ -95,7 +94,7 @@ export async function deleteTableTypeAction(id: string): Promise<ActionResult> {
       return {
         success: false,
         message:
-          'Типот не може да се избрише бидејќи има поврзани маси со него.',
+          'The type cannot be deleted because it has tables associated with it.',
       }
     }
 
@@ -106,12 +105,15 @@ export async function deleteTableTypeAction(id: string): Promise<ActionResult> {
     updateTag('tables')
     updateTag('reservations')
 
-    return { success: true, message: 'Типот на маса е успешно избришан.' }
+    return {
+      success: true,
+      message: 'The table type has been successfully deleted.',
+    }
   } catch (error) {
     console.log(error)
     return {
       success: false,
-      message: 'Настана грешка при бришење на типот на маса.',
+      message: 'An error occurred while deleting the table type.',
     }
   }
 }

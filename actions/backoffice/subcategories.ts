@@ -15,7 +15,7 @@ export async function saveSubcategoryAction(
   if (!parsed.success) {
     return {
       success: false,
-      message: 'Проверете ги податоците за подкатегоријата.',
+      message: 'Check subcategory data.',
     }
   }
 
@@ -32,25 +32,25 @@ export async function saveSubcategoryAction(
 
   try {
     if (parsed.data.id) {
-      // 1. Прво ја земаме постоечката подкатегорија за да ја видиме старата categoryId (за кешот)
+      // 1. First we fetch the existing subcategory to see the old categoryId (for the cache)
       const existingSubcategory = await prisma.subcategory.findUnique({
         where: { id: parsed.data.id },
         select: { categoryId: true },
       })
 
-      // 2. Ја ажурираме подкатегоријата
+      // 2. We update the subcategory
       await prisma.subcategory.update({
         where: { id: parsed.data.id },
-        data,
+        dates,
       })
 
-      // 3. АВТОМАТСКИ ги ажурираме сите menuItems што припаѓаат на оваа подкатегорија
+      // 3. We AUTOMATICALLY update all menuItems belonging to this subcategory
       await prisma.menuItem.updateMany({
         where: { subcategoryId: parsed.data.id },
         data: { categoryId: parsed.data.categoryId },
       })
 
-      // Ревалидација за старата категорија ако се сменила
+      // Revalidation for the old category if it has changed
       if (
         existingSubcategory &&
         existingSubcategory.categoryId !== parsed.data.categoryId
@@ -61,7 +61,7 @@ export async function saveSubcategoryAction(
       await prisma.subcategory.create({ data })
     }
 
-    // Кеш ревалидација
+    // Cache revalidation
     updateTag('categories')
     updateTag('subcategories')
     updateTag('menu-items')
@@ -70,12 +70,12 @@ export async function saveSubcategoryAction(
       updateTag(`menu-items-${parsed.data.categoryId}`)
     }
 
-    return { success: true, message: 'Подкатегоријата е зачувана.' }
+    return { success: true, message: 'The subcategory has been saved.' }
   } catch (error) {
-    console.error('Грешка при зачувување подкатегорија:', error)
+    console.error('Error saving subcategory:', error)
     return {
       success: false,
-      message: 'Се појави грешка при зачувување на подкатегоријата.',
+      message: 'An error occurred while saving the subcategory.',
     }
   }
 }
@@ -90,8 +90,7 @@ export async function deleteSubcategoryAction(
   if (used) {
     return {
       success: false,
-      message:
-        'Прво преместете ги или избришете ги артиклите од оваа подкатегорија.',
+      message: 'Move or delete items from this subcategory first.',
     }
   }
 
@@ -103,7 +102,7 @@ export async function deleteSubcategoryAction(
   if (!subcategory) {
     return {
       success: false,
-      message: 'Подкатегоријата не постои.',
+      message: 'The subcategory does not exist.',
     }
   }
 
@@ -114,12 +113,12 @@ export async function deleteSubcategoryAction(
     updateTag('subcategories')
     updateTag(`menu-items-${subcategory.categoryId}`)
 
-    return { success: true, message: 'Подкатегоријата е избришана.' }
+    return { success: true, message: 'Subcategory has been deleted.' }
   } catch (error) {
-    console.error('Грешка при бришење подкатегорија:', error)
+    console.error('Error deleting subcategory:', error)
     return {
       success: false,
-      message: 'Се појави грешка при бришење на подкатегоријата.',
+      message: 'An error occurred while deleting the subcategory.',
     }
   }
 }

@@ -7,18 +7,18 @@ export default function AboutUs() {
   const brandPillars = [
     {
       icon: <Award className='text-primary shrink-0' size={20} />,
-      title: 'Престижни Готвачи',
-      desc: 'Нашиот тим е предводен од кулинарски визионери наградувани низ Европа.',
+      title: 'Prestigious Chefs',
+      desc: 'Our team is led by award-winning culinary visionaries across Europe.',
     },
     {
       icon: <Leaf className='text-primary shrink-0' size={20} />,
-      title: '100% Органско потекло',
-      desc: 'Состојки набавени директно од наши локлани органски фарми и градини.',
+      title: '100% Organic origin',
+      desc: 'Ingredients sourced directly from our local organic farms and gardens.',
     },
     {
       icon: <Sparkles className='text-primary shrink-0' size={20} />,
-      title: 'Модерна Алхемија',
-      desc: 'Техники од молекуларна гастрономија кои ги будат сите пет сетила.',
+      title: 'Modern Alchemy',
+      desc: 'Molecular gastronomy techniques that awaken all five senses.',
     },
   ]
 
@@ -43,34 +43,29 @@ export default function AboutUs() {
             <p className='font-display text-primary text-4xl font-bold mb-1'>
               20
             </p>
-            <p className='font-sans text-[10px] tracking-[0.15em] uppercase font-bold text-on-surface'>
-              ГОДИНИ СТРАСТ &amp; ТРАДИЦИЈА
+            <p className='font-sans text-[10px] tracking-[0.15em] uppercase font-bold text-on-surface'>              YEARS OF PASSION & TRADITION
             </p>
           </div>
         </div>
 
         {/* Right column: Content */}
         <div className='space-y-8'>
-          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block uppercase'>
-            НАШАТА ПРИКАЗНА
+          <span className='font-sans text-primary text-xs tracking-[0.3em] font-semibold block uppercase'>            OUR STORY
           </span>
 
-          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold leading-tight'>
-            Каде Светлината се Среќава со Совршенството на Вкусот
+          <h2 className='font-display text-3xl md:text-5xl text-on-surface font-bold leading-tight'>            Where Light Meets the Perfection of Taste
           </h2>
 
-          <p className='font-sans text-sm md:text-base text-on-surface-variant leading-relaxed'>
-            LUMIÈRE е визија преточена во луксузна реалност. Од основањето во
-            2006 година, нашата мисија е да создаваме не само оброци, туку
-            незаборавни доживувања кои остануваат врежани во сеќавањата на
-            нашите гости. Секоја вечер е ново претставување на беспрекорен
-            гастрономски театар.
+          <p className='font-sans text-sm md:text-base text-on-surface-variant leading-relaxed'>            LUMIÈRE is a vision translated into a luxurious reality. Since the foundation in
+            2006, our mission is to create not only meals, but
+            unforgettable experiences that remain engraved in the memories of
+            our guests. Every night is a new presentation of flawless
+            gastronomic theater.
           </p>
 
-          <p className='font-sans text-sm text-on-surface-variant/85 leading-relaxed'>
-            Софистицираните комбинации на ароми, врвната услуга и смирувачкиот
-            современ амбиент во срцето на Скопје ја носат премиум угостителската
-            индустрија чекор понапред во иднината на финиот вкус.
+          <p className='font-sans text-sm text-on-surface-variant/85 leading-relaxed'>            The sophisticated combinations of aromas, the superior service and the soothing
+            contemporary setting in the heart of Skopje, they bring premium hospitality
+            industry step forward into the future of fine taste.
           </p>
 
           {/* Brand Pillars list */}

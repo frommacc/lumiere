@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-// UI компоненти (ако ги имаш во @/components/ui/...)
+// UI components (if you have them in @/components/ui/...)
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -49,14 +49,14 @@ export default function RegisterPage() {
 
       if (apiError) {
         setServerError(
-          apiError.message || 'Се појави грешка при регистрацијата.',
+          apiError.message || 'An error occurred during registration.',
         )
       } else {
         setRegisteredEmail(data.email)
         setSuccess(true)
       }
     } catch {
-      setServerError('Неочекувана грешка. Обидете се повторно.')
+      setServerError('Unexpected error. Try again.')
     } finally {
       setLoading(false)
     }
@@ -69,21 +69,17 @@ export default function RegisterPage() {
           <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-lg'>
             ✓
           </div>
-          <h2 className='mb-2 font-heading text-2xl font-bold text-foreground'>
-            Успешна регистрација!
+          <h2 className='mb-2 font-heading text-2xl font-bold text-foreground'>            Successful registration!
           </h2>
-          <p className='mb-6 text-sm text-outline'>
-            Ви испративме е-пошта за верификација на{' '}
+          <p className='mb-6 text-sm text-outline'>            We have sent you a verification email to{' '}
             <span className='font-semibold text-primary'>
               {registeredEmail}
-            </span>
-            . Проверете го вашето сандаче за да го активирате профилот.
+            </span>            . Check your inbox to activate your account.
           </p>
           <Link
             href='/login'
             className='inline-block w-full bg-primary py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary-container shadow-md'
-          >
-            ОДИ КОН НАЈАВА
+          >            GO TO ANNOUNCEMENT
           </Link>
         </div>
       </main>
@@ -91,8 +87,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>
-      {/* Лева страна: Visual & Identity */}
+    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>      {/* Left Side: Visual & Identity */}
       <section className='relative w-full md:w-1/2 min-h-[40vh] md:min-h-screen overflow-hidden'>
         <Image
           alt='High-end architectural materials'
@@ -110,11 +105,9 @@ export default function RegisterPage() {
             </span>
           </div>
           <div className='max-w-md my-auto py-12 md:py-0'>
-            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>
-              Придружете се на нашата ексклузивна заедница
+            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>              Join our exclusive community
             </h2>
-            <p className='text-base md:text-lg text-outline'>
-              Искусете го врвот на луксузот и софистицираноста во секој детаљ.
+            <p className='text-base md:text-lg text-outline'>              Experience the pinnacle of luxury and sophistication in every detail.
             </p>
           </div>
           <div className='hidden md:block'>
@@ -123,22 +116,16 @@ export default function RegisterPage() {
             </span>
           </div>
         </div>
-      </section>
-
-      {/* Десна страна: Форма за регистрација */}
+      </section>      {/* Right side: Registration form */}
       <section className='w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-background'>
         <div className='w-full max-w-md'>
           <header className='mb-10'>
-            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>
-              Регистрација
+            <h1 className='font-heading text-3xl font-normal text-foreground mb-2'>              Registration
             </h1>
-            <p className='text-outline text-sm'>
-              Внесете ги вашите детали за да креирате профил.
+            <p className='text-outline text-sm'>              Enter your details to create a profile.
             </p>
-          </header>
-
-          {/* Серверска грешка */}
-          {serverError && (
+          </header>          {/* Server Error */}
+          { serverError && (
             <div className='mb-6 border border-destructive/40 bg-destructive/10 p-3.5 text-xs text-destructive rounded'>
               {serverError}
             </div>
@@ -158,14 +145,13 @@ export default function RegisterPage() {
                   <Label
                     htmlFor='name'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Име и презиме
+                  >                    Name and surname
                   </Label>
                   <Input
                     {...field}
                     id='name'
                     type='text'
-                    placeholder='Петар Петровски'
+                    placeholder='Petar Petrovski'
                     className={`w-full bg-transparent border-0 border-b rounded-none px-2 py-2.5 text-foreground focus-visible:ring-0 focus-visible:outline-none transition-all duration-300 ${
                       fieldState.error
                         ? 'border-destructive'
@@ -232,8 +218,7 @@ export default function RegisterPage() {
                   <Label
                     htmlFor='phone'
                     className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                  >
-                    Телефон
+                  >                    Telephone
                   </Label>
                   <Input
                     {...field}
@@ -263,10 +248,8 @@ export default function RegisterPage() {
             {/* Passwords */}
             <div className='space-y-2'>
               <div className='flex items-center justify-between'>
-                <span className='text-[10px] font-medium uppercase tracking-widest text-outline'>
-                  Сигурност
-                </span>
-                {/* Заедничко копче за прикажување/скривање на двете лозинки */}
+                <span className='text-[10px] font-medium uppercase tracking-widest text-outline'>                  Security
+                </span>                {/* Common button to show/hide both passwords */}
                 <button
                   type='button'
                   onClick={() => setShowPassword((prev) => !prev)}
@@ -275,12 +258,12 @@ export default function RegisterPage() {
                   {showPassword ? (
                     <>
                       <EyeOff className='h-3.5 w-3.5' />
-                      <span>Скриј лозинки</span>
+                      <span>Hide passwords</span>
                     </>
                   ) : (
                     <>
                       <Eye className='h-3.5 w-3.5' />
-                      <span>Прикажи лозинки</span>
+                      <span>Show passwords</span>
                     </>
                   )}
                 </button>
@@ -296,8 +279,7 @@ export default function RegisterPage() {
                       <Label
                         htmlFor='password'
                         className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                      >
-                        Лозинка
+                      >                        Password
                       </Label>
                       <Input
                         {...field}
@@ -333,8 +315,7 @@ export default function RegisterPage() {
                       <Label
                         htmlFor='confirmPassword'
                         className='block text-[10px] font-medium uppercase tracking-widest text-outline group-focus-within:text-primary transition-colors duration-300 mb-1'
-                      >
-                        Потврди Лозинка
+                      >                        Confirm Password
                       </Label>
                       <Input
                         {...field}
@@ -379,13 +360,11 @@ export default function RegisterPage() {
                     <Label
                       htmlFor='terms'
                       className='text-xs text-outline select-none leading-tight font-normal cursor-pointer'
-                    >
-                      Ги прифаќам{' '}
+                    >                      I accept {' '}
                       <a
                         href='#'
                         className='text-primary underline underline-offset-4 decoration-primary/30 hover:decoration-primary transition-all'
-                      >
-                        Условите и Правилата
+                      >                        Terms and Conditions
                       </a>
                     </Label>
                   </div>
@@ -404,17 +383,15 @@ export default function RegisterPage() {
                 type='submit'
                 disabled={loading}
                 className='w-full bg-primary text-primary-foreground py-4 text-[12px] font-semibold uppercase tracking-[0.2em] transition-all hover:bg-primary-container disabled:opacity-50 shadow-lg cursor-pointer'
-              >
-                {loading ? 'СЕ РЕГИСТРИРА...' : 'КРЕИРАЈ ПРОФИЛ'}
+              >                {loading ? 'REGISTERING...' : 'CREATE PROFILE'}
               </button>
 
               <div className='flex flex-col items-center space-y-2'>
-                <p className='text-outline text-xs'>Веќе имате профил?</p>
+                <p className='text-outline text-xs'>Already have an account?</p>
                 <Link
                   href='/login'
                   className='text-[11px] font-semibold tracking-widest text-primary border-b border-primary/30 hover:border-primary transition-all pb-0.5 uppercase'
-                >
-                  НАЈАВЕТЕ СЕ
+                >                  LOG IN
                 </Link>
               </div>
             </div>

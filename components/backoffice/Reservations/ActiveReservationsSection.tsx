@@ -20,7 +20,7 @@ export function ActiveReservationsSection({
   reservations,
   role,
 }: ActiveReservationsSectionProps) {
-  // Default: CONFIRMED и SEATED
+  // Default: CONFIRMED and SEATED
   const [filter, setFilter] = useState<string>('ACTIVE')
 
   const filteredReservations = reservations.filter((r) => {
@@ -51,24 +51,19 @@ export function ActiveReservationsSection({
   return (
     <div className='space-y-4'>
       <div className='flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between'>
-        <h2 className='text-base font-semibold tracking-tight text-on-surface'>
-          Дневна агенда
-        </h2>
-
-        {/* Филтер за втората табела */}
+        <h2 className='text-base font-semibold tracking-tight text-on-surface'>          Daily agenda
+        </h2>        {/* Filter for the second table */}
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className='w-full sm:w-60 bg-surface-container-high border-outline-variant/30 px-2'>
-            <SelectValue placeholder='Филтрирај статус' />
+            <SelectValue placeholder='Filter status' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='ACTIVE'>
-              Потврдени & Седнати ({activeCount})
+            <SelectItem value='ACTIVE'>              Confirmed & Seated ({activeCount})
             </SelectItem>
-            <SelectItem value='ALL'>
-              Сите останати ({reservations.length})
+            <SelectItem value='ALL'>              All others ({reservations.length})
             </SelectItem>
             <SelectItem value='COMPLETED'>
-              Завршени (
+              Completed (
               {
                 reservations.filter(
                   (r) => r.status === ReservationStatus.COMPLETED,
@@ -77,7 +72,7 @@ export function ActiveReservationsSection({
               )
             </SelectItem>
             <SelectItem value='CLOSED'>
-              Откажани / Не дошле (
+              Cancelled / No-shows (
               {
                 reservations.filter(
                   (r) =>

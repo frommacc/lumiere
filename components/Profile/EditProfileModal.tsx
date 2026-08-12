@@ -20,11 +20,9 @@ export function EditProfileModal() {
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
       <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface p-6 sm:max-w-xl'>
         <DialogHeader>
-          <DialogTitle className='font-display normal-case tracking-normal text-2xl text-on-surface'>
-            Уреди профил
+          <DialogTitle className='font-display normal-case tracking-normal text-2xl text-on-surface'>            Edit profile
           </DialogTitle>
-          <DialogDescription>
-            Ажурирајте ги основните податоци и профилната слика.
+          <DialogDescription>            Update your basic information and profile picture.
           </DialogDescription>
         </DialogHeader>
 

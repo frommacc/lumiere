@@ -11,12 +11,12 @@
 // import { updateOrderStatusAction } from '@/actions/backoffice/orders'
 
 // const orderLabels: Partial<Record<OrderStatus, string>> = {
-//   CONFIRMED: 'Потврди',
-//   PREPARING: 'Започни',
-//   READY: 'Готово',
-//   IN_TRANSIT: 'Испрати',
-//   DELIVERED: 'Испорачано',
-//   CANCELLED: 'Откажи',
+//   CONFIRMED: 'Confirm',
+//   PREPARING: 'Start',
+//   READY: 'Done',
+//   IN_TRANSIT: 'Send',
+//   DELIVERED: 'Delivered',
+//   CANCELED: 'Cancel',
 // }
 
 // export function OrderStatusActions({
@@ -89,11 +89,11 @@ import { DeliveryMethod, OrderStatus, Role } from '@/lib/generated/prisma'
 import { updateOrderStatusAction } from '@/actions/backoffice/orders'
 
 const baseOrderLabels: Partial<Record<OrderStatus, string>> = {
-  CONFIRMED: 'Потврди',
-  PREPARING: 'Започни',
-  READY: 'Готово',
-  IN_TRANSIT: 'Испрати',
-  CANCELLED: 'Откажи',
+  CONFIRMED: 'Confirm',
+  PREPARING: 'Get started',
+  READY: 'Done',
+  IN_TRANSIT: 'Send',
+  CANCELLED: 'Give up',
 }
 
 export function OrderStatusActions({
@@ -112,12 +112,12 @@ export function OrderStatusActions({
   const nextStatuses = getAllowedOrderStatuses(role, status, deliveryMethod)
   if (!nextStatuses.length) return null
 
-  // Динамичко одредување на етикетата врз основа на методот на испорака
+  // Dynamic label determination based on shipping method
   const getStatusLabel = (nextStatus: OrderStatus) => {
     if (nextStatus === OrderStatus.DELIVERED) {
       return deliveryMethod === DeliveryMethod.PICKUP
-        ? 'Подигната'
-        : 'Доставена'
+        ? 'Raised'
+        : 'Delivered'
     }
     return baseOrderLabels[nextStatus] ?? nextStatus
   }

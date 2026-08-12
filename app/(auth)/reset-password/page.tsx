@@ -10,8 +10,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
   const { token } = await searchParams
 
   return (
-    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>
-      {/* Лева страна: Visual & Identity */}
+    <main className='flex min-h-screen flex-col md:flex-row bg-background text-foreground'>      {/* Left Side: Visual & Identity */}
       <section className='relative w-full md:w-1/2 min-h-[40vh] md:min-h-screen overflow-hidden'>
         <Image
           alt='Lumière Ambiance'
@@ -29,12 +28,10 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
             </span>
           </div>
           <div className='max-w-md my-auto py-12 md:py-0'>
-            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>
-              Осигурајте ја вашата сметка.
+            <h2 className='font-heading text-3xl md:text-5xl text-foreground mb-6 leading-tight'>              Secure your account.
             </h2>
-            <p className='text-base md:text-lg text-outline'>
-              Изберете силна и уникатна лозинка за да ги заштитите вашите лични
-              податоци и нарачки.
+            <p className='text-base md:text-lg text-outline'>              Choose a strong and unique password to protect your personal information
+              data and orders.
             </p>
           </div>
           <div className='hidden md:block'>
@@ -43,9 +40,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
             </span>
           </div>
         </div>
-      </section>
-
-      {/* Десна страна: Форма / Invalid Token state */}
+      </section>      {/* Right side: Form / Invalid Token state */}
       <section className='w-full md:w-1/2 flex items-center justify-center p-8 md:p-16 bg-background'>
         <div className='w-full max-w-md'>
           {token ? <ResetPasswordForm token={token} /> : <InvalidToken />}

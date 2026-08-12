@@ -15,42 +15,36 @@ type MenuSearchParams = {
 }
 
 interface MenuPageProps {
-  searchParams: Promise<MenuSearchParams>
-}
+  searchParams: Promise<MenuSearchParams>}
 
-// 1. ГО МЕНУВАМЕ ВО СИНХРОНА ФУНКЦИЈА (Без async/await!)
+// 1. WE CHANGE IT TO A SYNCHRONOUS FUNCTION (No async/await!)
 export default function MenuPage({ searchParams }: MenuPageProps) {
   return (
     <main className='flex-1 px-4 py-20 sm:px-8 lg:px-12 w-full max-w-7xl mx-auto'>
       <div className='my-8'>
-        <h1 className='font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-on-surface'>
-          Гастрономско Мени
+        <h1 className='font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-on-surface'>          Gastronomic Menu
         </h1>
-        <p className='mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-on-surface-variant'>
-          Искусете ја уметноста на вкусовите преку нашата внимателно селектирана
-          понуда. Секое јадење е приказна за традицијата и модерната кујна.
+        <p className='mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-on-surface-variant'>          Experience the art of flavors through our carefully selected
+          an offer. Each dish is a story of tradition and modern cuisine.
         </p>
       </div>
 
       <Suspense fallback={<MenuCategoriesSkeleton />}>
         <MenuCategoriesContent searchParams={searchParams} />
-      </Suspense>
-
-      {/* 2. MenuContentWrapper го решава searchParams внатре зад Suspense boundary */}
+      </Suspense>      {/* 2. MenuContentWrapper resolves searchParams inside behind Suspense boundary */}
       <Suspense fallback={<MenuGridSkeleton count={8} />}>
         <MenuContentWrapper searchParams={searchParams} />
       </Suspense>
-    </main>
-  )
+    </main>  )
 }
 
-// Помошна асинхрона компонента што ги содржи сите `await` повици
+// Helper asynchronous component that contains all `await` calls
 async function MenuContentWrapper({ searchParams }: MenuPageProps) {
   const resolvedSearchParams = await searchParams
   const activeCategory = await getActiveCategory(resolvedSearchParams)
 
   return (
-    // Овој внатрешен Suspense со key гарантира скелетон при менување категорија!
+    // This internal Suspense with key guarantees a skeleton when changing category!
     <Suspense key={activeCategory} fallback={<MenuGridSkeleton count={8} />}>
       <Menu categoryId={activeCategory} />
     </Suspense>

@@ -21,7 +21,7 @@ export function KdsBoardView({ initialOrders, role }: KdsBoardViewProps) {
     playSound,
   )
 
-  // Тракирање за доцнење (delayed orders)
+  // Delay tracking (delayed orders)
   const [now, setNow] = useState<number>(() => Date.now())
 
   useEffect(() => {
@@ -37,8 +37,8 @@ export function KdsBoardView({ initialOrders, role }: KdsBoardViewProps) {
   return (
     <div className='relative flex min-h-screen flex-col bg-background text-foreground'>
       <KdsHeader
-        subtitle='СТАТУС НА КУЈНА'
-        title='АКТИВНИ НАРАЧКИ ЗА ГОТВЕЊЕ'
+        subtitle='KITCHEN STATUS'
+        title='ACTIVE COOKING ORDERS'
         totalOrders={orders.length}
         delayedOrdersCount={delayedCount}
         soundEnabled={soundEnabled}
@@ -47,7 +47,7 @@ export function KdsBoardView({ initialOrders, role }: KdsBoardViewProps) {
 
       <div className='relative z-10 flex flex-1 gap-6 overflow-x-auto px-8 pb-8'>
         <KdsColumn
-          title='НАРАЧКИ ЗА ГОТВЕЊЕ'
+          title='COOKING ORDERS'
           count={confirmedOrders.length}
           iconIndicator={
             <div className='size-3 rounded-full bg-primary animate-pulse shadow-[0_0_10px_var(--color-primary)]' />
@@ -59,7 +59,7 @@ export function KdsBoardView({ initialOrders, role }: KdsBoardViewProps) {
         <div className='w-px bg-linear-to-b from-outline-variant/5 via-outline-variant/30 to-outline-variant/5' />
 
         <KdsColumn
-          title='ВО ПОДГОТОВКА'
+          title='IN PREPARATION'
           count={preparingOrders.length}
           iconIndicator={
             <Flame className='size-4 animate-bounce text-primary' />
@@ -71,7 +71,7 @@ export function KdsBoardView({ initialOrders, role }: KdsBoardViewProps) {
         {orders.length === 0 && (
           <div className='col-span-full flex w-full flex-col items-center justify-center py-24 text-center text-muted-foreground'>
             <ChefHat className='mb-4 size-12 text-primary' />
-            <p className='text-lg'>Нема активни нарачки во кујна.</p>
+            <p className='text-lg'>There are no active orders in the kitchen.</p>
           </div>
         )}
       </div>

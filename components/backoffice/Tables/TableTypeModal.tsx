@@ -76,11 +76,11 @@ export function TableTypeModal({
           <Button variant={isEditing ? 'outline' : 'default'}>
             {isEditing ? (
               <>
-                <Pencil className='mr-2 size-4' /> Измени тип
+                <Pencil className='mr-2 size-4' /> Change type
               </>
             ) : (
               <>
-                <Plus className='mr-2 size-4' /> Додај тип
+                <Plus className='mr-2 size-4' /> Add type
               </>
             )}
           </Button>
@@ -91,19 +91,19 @@ export function TableTypeModal({
         <DialogHeader>
           <DialogTitle>
             {isEditing
-              ? `Измени тип: ${initialData?.name}`
-              : 'Додај нов тип на маса'}
+              ? `Change Type: ${initialData?.name}`
+              : 'Add new table type'}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className='space-y-4 pt-4'>
           <div className='space-y-1.5'>
-            <Label htmlFor='table-type-name'>Име на тип</Label>
+            <Label htmlFor='table-type-name'>Type name</Label>
             <Input
               id='table-type-name'
               name='name'
               defaultValue={initialData?.name ?? ''}
-              placeholder='Тераса'
+              placeholder='Terrace'
               required
             />
           </div>
@@ -120,19 +120,19 @@ export function TableTypeModal({
           </div>
 
           <div className='space-y-1.5'>
-            <Label htmlFor='table-type-description'>Опис</Label>
+            <Label htmlFor='table-type-description'>Description</Label>
             <Input
               id='table-type-description'
               name='description'
               defaultValue={initialData?.description ?? ''}
-              placeholder='Отворена тераса'
+              placeholder='Open terrace'
             />
           </div>
 
           <div className='flex justify-end pt-2'>
             <Button disabled={pending} type='submit'>
               {pending && <LoaderCircle className='mr-2 size-4 animate-spin' />}
-              {isEditing ? 'Зачувај измени' : 'Креирај тип'}
+              {isEditing ? 'Save Changes' : 'Create Type'}
             </Button>
           </div>
         </form>

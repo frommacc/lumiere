@@ -28,7 +28,7 @@ export function AddressAutocomplete({
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    // Иницијализирај само откако APIProvider ќе ја вчита Google Maps скриптата
+    // Initialize only after the APIProvider has loaded the Google Maps script
     initOnMount: isApiLoaded,
     requestOptions: {
       componentRestrictions: { country: 'mk' },
@@ -55,9 +55,8 @@ export function AddressAutocomplete({
 
   return (
     <div className='relative group w-full'>
-      <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
-        Адреса за Достава{' '}
-        <span className='ml-1 text-[8px] text-muted-foreground'>(Скопје)</span>
+      <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>        Shipping Address{' '}
+        <span className='ml-1 text-[8px] text-muted-foreground'>(Skopje)</span>
       </label>
 
       <input
@@ -69,7 +68,7 @@ export function AddressAutocomplete({
           setValue(e.target.value)
           onChange(e.target.value)
         }}
-        placeholder='Започни да пишуваш улица...'
+        placeholder='Start typing street...'
         className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm disabled:opacity-50'
       />
 

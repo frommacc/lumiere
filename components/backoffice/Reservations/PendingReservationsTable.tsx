@@ -25,8 +25,7 @@ export function PendingReservationsTable({
 }: PendingReservationsTableProps) {
   if (!reservations.length) {
     return (
-      <div className='rounded-xl border border-dashed border-outline-variant/25 bg-surface-container-low/20 p-8 text-center text-sm text-on-surface-variant'>
-        Нема нови барања за резервација.
+      <div className='rounded-xl border border-dashed border-outline-variant/25 bg-surface-container-low/20 p-8 text-center text-sm text-on-surface-variant'>        There are no new booking requests.
       </div>
     )
   }
@@ -36,10 +35,10 @@ export function PendingReservationsTable({
       <Table className='min-w-230'>
         <TableHeader className='border-b border-amber-500/20 text-[10px] uppercase tracking-[0.16em] text-amber-800 dark:text-amber-300'>
           <TableRow className='hover:bg-transparent'>
-            <TableHead className='px-5 py-3.5'>Датум / Време / Гост</TableHead>
-            <TableHead className='px-5 py-3.5'>Маса</TableHead>
-            <TableHead className='px-5 py-3.5'>Контакт</TableHead>
-            <TableHead className='px-5 py-3.5'>Брза акција</TableHead>
+            <TableHead className='px-5 py-3.5'>Date / Time / Guest</TableHead>
+            <TableHead className='px-5 py-3.5'>Mass</TableHead>
+            <TableHead className='px-5 py-3.5'>Contact</TableHead>
+            <TableHead className='px-5 py-3.5'>Quick action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className='divide-y divide-amber-500/15'>
@@ -49,8 +48,7 @@ export function PendingReservationsTable({
               className='hover:bg-amber-500/10 transition-colors'
             >
               <TableCell className='px-5 py-4'>
-                <div className='flex items-center gap-3.5'>
-                  {/* Баџ со датум (горе) и час (долу) */}
+                <div className='flex items-center gap-3.5'>                  {/* Badge with date (top) and time (bottom) */}
                   <div className='flex flex-col items-center justify-center rounded-lg border border-amber-500/40 bg-background px-3 py-1.5 shadow-xs text-center min-w-22'>
                     <span
                       className='text-[11px] font-semibold text-amber-700 dark:text-amber-400 capitalize whitespace-nowrap'
@@ -61,18 +59,14 @@ export function PendingReservationsTable({
                     <span className='font-mono text-lg font-bold text-on-surface leading-tight'>
                       {formatBackofficeTime(reservation.startTime)}
                     </span>
-                  </div>
-
-                  {/* Информации за гостот */}
+                  </div>                  {/* Guest information */}
                   <div>
                     <p className='font-semibold text-on-surface text-sm'>
                       {reservation.name}
                     </p>
-                    <p className='text-xs text-on-surface-variant'>
-                      {reservation.guests}{' '}
-                      {reservation.guests === 1 ? 'гост' : 'гости'} ·{' '}
-                      {reservation.durationMinutes} мин.
-                    </p>
+                    <p className='text-xs text-on-surface-variant'>                      {reservation.guests}{' '}
+                      {reservation.guests === 1 ? 'guest' : 'guests'} ·{' '}
+                      {reservation.durationMinutes} min.</p>
                   </div>
                 </div>
               </TableCell>

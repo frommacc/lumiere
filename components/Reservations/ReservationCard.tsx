@@ -27,9 +27,8 @@ export function ReservationCard({ reservation, onDetails }: ReservationCardProps
           <h2 className='font-display text-2xl text-on-surface md:text-3xl'>
             {formatReservationDate(reservation.startTime)}
           </h2>
-          <p className='mt-1 text-sm text-on-surface-variant'>
-            Резервација за {reservation.guests}{' '}
-            {reservation.guests === 1 ? 'лице' : 'лица'}
+          <p className='mt-1 text-sm text-on-surface-variant'>            Reservation for {reservation.guests}{' '}
+            {reservation.guests === 1 ? 'face' : 'faces'}
           </p>
         </div>
 
@@ -52,8 +51,7 @@ export function ReservationCard({ reservation, onDetails }: ReservationCardProps
         onClick={() => onDetails(reservation)}
         className='min-w-44 border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground'
       >
-        <CalendarDays />
-        Детали
+        <CalendarDays />        Details
       </Button>
     </article>
   )

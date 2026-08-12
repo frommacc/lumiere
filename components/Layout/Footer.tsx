@@ -37,9 +37,8 @@ export default function Footer() {
           >
             LUMIÈRE
           </a>
-          <p className='font-sans text-xs md:text-sm leading-relaxed'>
-            Премиум гастрономско искуство во Скопје кое ги редефинира границите
-            на луксузот, естетиката и автентичниот вкус.
+          <p className='font-sans text-xs md:text-sm leading-relaxed'>            A premium gastronomic experience in Skopje that redefines the boundaries
+            of luxury, aesthetics and authentic taste.
           </p>
           <div className='flex gap-3'>
             <a
@@ -68,40 +67,35 @@ export default function Footer() {
 
         {/* Col 2: Navigation Links */}
         <div>
-          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em] mb-6'>
-            Линкови
+          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em] mb-6'>            Links
           </h4>
           <ul className='space-y-3 font-sans text-xs text-foreground/90'>
             <li>
               <a
                 href='#home'
                 className='hover:text-primary transition-colors hover:underline decoration-primary/40 underline-offset-4'
-              >
-                Почетна
+              >                Initial
               </a>
             </li>
             <li>
               <a
                 href='#menu'
                 className='hover:text-primary transition-colors hover:underline decoration-primary/40 underline-offset-4'
-              >
-                Нашето Мени
+              >                Our Menu
               </a>
             </li>
             <li>
               <a
                 href='#about'
                 className='hover:text-primary transition-colors hover:underline decoration-primary/40 underline-offset-4'
-              >
-                За Ресторанот
+              >                About the Restaurant
               </a>
             </li>
             <li>
               <a
                 href='#reviews'
                 className='hover:text-primary transition-colors hover:underline decoration-primary/40 underline-offset-4'
-              >
-                Осврти &amp; Препораки
+              >                Reviews & Recommendations
               </a>
             </li>
           </ul>
@@ -109,13 +103,12 @@ export default function Footer() {
 
         {/* Col 3: Contact Info */}
         <div>
-          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em] mb-6'>
-            Контакт
+          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em] mb-6'>            Contact
           </h4>
           <ul className='space-y-4 font-sans text-xs text-foreground/90'>
             <li className='flex items-start gap-2.5'>
               <MapPin size={15} className='text-primary shrink-0 mt-0.5' />
-              <span>Ул. Македонија Бр. 1, Скопје, Македонија</span>
+              <span>Ul. Macedonia No. 1, Skopje, Macedonia</span>
             </li>
             <li className='flex items-center gap-2.5'>
               <Phone size={15} className='text-primary shrink-0' />
@@ -130,18 +123,16 @@ export default function Footer() {
 
         {/* Col 4: Newsletter subscription */}
         <div className='space-y-4'>
-          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em]'>
-            Билтен
+          <h4 className='font-sans text-xs font-bold uppercase tracking-[0.2em]'>            Bulletin
           </h4>
-          <p className='font-sans text-xs text-foreground/90 leading-relaxed'>
-            Претплатете се за да добивате известувања за нашите нови специјални
-            менија и ексклузивни дегустациски настани.
+          <p className='font-sans text-xs text-foreground/90 leading-relaxed'>            Subscribe to receive notifications of our new specials
+            menus and exclusive tasting events.
           </p>
 
           {subscribed ? (
             <div className='flex items-center gap-2 text-primary font-sans text-xs py-1 transition-all'>
               <CheckCircle2 size={16} />
-              <span>Успешна претплата! Ви благодариме.</span>
+              <span>Successful subscription! Thank you.</span>
             </div>
           ) : (
             <form onSubmit={handleSubscribe} className='relative mt-2'>
@@ -150,13 +141,13 @@ export default function Footer() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder='Вашата е-пошта'
+                placeholder='Your email'
                 className='w-full bg-transparent border-b border-outline-variant focus:outline-none focus:border-primary text-xs pb-2 pr-10 placeholder:text-outline-variant/60'
               />
               <button
                 type='submit'
                 className='absolute right-0 bottom-2 text-primary hover:text-primary-container p-1 transition-colors'
-                aria-label='Претплати се'
+                aria-label='Subscribe'
               >
                 <ArrowRight size={16} />
               </button>
@@ -167,13 +158,11 @@ export default function Footer() {
 
       {/* Bottom Bar copyright */}
       <div className='max-w-7xl mx-auto px-6 md:px-16 mt-16 pt-8 border-t border-outline-variant/15 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-sans tracking-wider text-outline'>
-        <p>© 2026 LUMIÈRE GASTRONOMY. СИТЕ ПРАВА СЕ ЗАДРЖАНИ.</p>
+        <p>© 2026 LUMIÈRE GASTRONOMY. ALL RIGHTS RESERVED.</p>
         <div className='flex gap-6 uppercase'>
-          <a href='#' className='hover:text-primary transition-colors'>
-            Правила за користење
+          <a href='#' className='hover:text-primary transition-colors'>            Terms of use
           </a>
-          <a href='#' className='hover:text-primary transition-colors'>
-            Политика за приватност
+          <a href='#' className='hover:text-primary transition-colors'>            Privacy Policy
           </a>
         </div>
       </div>

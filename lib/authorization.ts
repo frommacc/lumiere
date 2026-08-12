@@ -22,7 +22,7 @@ export async function requireRouteAccess(
     redirect(`/login?redirect_url=${encodeURIComponent(pathname)}`)
   }
 
-  // Заштита: Блокираните корисници немаат пристап до заштитени рути
+  // Protection: Blocked users do not have access to protected routes
   if (user.status === UserStatus.BLOCKED) {
     redirect('/login?error=blocked')
   }

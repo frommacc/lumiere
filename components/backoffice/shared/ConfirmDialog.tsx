@@ -28,15 +28,15 @@ export function ConfirmDialog({
   isOpen,
   onClose,
   onConfirm,
-  title = 'Дали сте сигурни?',
-  description = 'Оваа акција е трајна и не може да се врати назад.',
-  confirmText = 'Потврди',
-  cancelText = 'Откажи',
+  title = 'Are you sure?',
+  description = 'This action is permanent and cannot be undone.',
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
   variant = 'destructive',
   isLoading = false,
 }: ConfirmDialogProps) {
   const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault() // Спречува автоматско затворање ако се чека асинхрона акција
+    e.preventDefault() // Prevents automatic closing if an asynchronous action is pending
     onConfirm()
   }
 

@@ -11,18 +11,17 @@ import { Role } from '@/lib/generated/prisma'
 export default async function AdminUsersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; page?: string; role?: string }>
-}) {
+  searchParams: Promise<{ q?: string; page?: string; role?: string }>}) {
   const currentUser = await requireRouteAccess('/admin/users')
-  const { q, page, role } = await searchParams
+  const { q , page , role } = await searchParams
 
   const currentPage = Number(page) || 1
   const pageSize = 10
 
-  // Безбедна проверка дали `role` од URL е валиден Role enum
+  // Safe check that `role` from URL is a valid Role enum
   const selectedRole =
     role && Object.values(Role).includes(role as Role)
-      ? (role as Role)
+      ? (role as role)
       : undefined
 
   const { users, totalItems, totalPages } = await getAdminUsers(
@@ -35,25 +34,20 @@ export default async function AdminUsersPage({
   return (
     <>
       <BackofficeHeader
-        eyebrow='Администрација'
-        title='Корисници и улоги'
-        description='Само Администратор може да управува со работните улоги и пристапот на корисниците.'
+        eyebrow='Administration'
+        title='Users and roles'
+        description='Only an Administrator can manage job roles and user access.'
       />
-      <div className='space-y-6 px-6 py-8 md:px-10'>
-        {/* Форма за пребарување и филтрирање */}
+      <div className='space-y-6 px-6 py-8 md:px-10'>        {/* Search and filter form */}
         <div className='flex flex-col md:flex-row items-center gap-6'>
           <div className='max-w-md w-full'>
-            <SearchInput placeholder='Пребарај име, е-пошта или телефон' />
+            <SearchInput placeholder='Search by name, email or phone' />
           </div>
 
           <RoleSelect />
-        </div>
-
-        {/* Табела со корисници */}
+        </div>        {/* Table of users */}
         <div className='space-y-4'>
-          <UsersTable users={users} currentUserId={currentUser.id} />
-
-          {/* Пагинација */}
+          <UsersTable users={users} currentUserId={currentUser.id} />          {/* Pagination */}
           <PaginationControls
             currentPage={currentPage}
             totalPages={totalPages}

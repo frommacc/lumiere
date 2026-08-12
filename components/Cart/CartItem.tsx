@@ -34,8 +34,7 @@ export function CartItem({ item }: CartItemProps) {
           </h3>
         </div>
 
-        <div className='flex items-center gap-8'>
-          {/* Контрола за количина */}
+        <div className='flex items-center gap-8'>          {/* Quantity control */}
           <div className='flex items-center border border-outline-variant/30 px-3 py-1 gap-4'>
             <button
               className='text-muted-foreground hover:text-primary transition-colors p-1'
@@ -61,7 +60,7 @@ export function CartItem({ item }: CartItemProps) {
               {(menuItem.price * quantity).toLocaleString()}
             </p>
             <p className='text-[10px] text-outline uppercase font-semibold'>
-              MKD
+              $
             </p>
           </div>
         </div>

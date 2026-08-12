@@ -14,8 +14,8 @@ export default async function StaffReservationsPage() {
     <>
       <BackofficeHeader
         eyebrow='Servis'
-        title='Денешни резервации'
-        description='Потврдените гости можат да се означат како седнати, завршени или не-појавени'
+        title="Today's bookings"
+        description='Confirmed guests can be marked as seated, completed or no-show'
       />
       <div className='space-y-3 px-6 py-8 md:px-10'>
         {reservations.map((reservation) => (
@@ -28,13 +28,11 @@ export default async function StaffReservationsPage() {
                 <p className='font-display text-xl'>
                   {formatBackofficeTime(reservation.startTime)}
                 </p>
-                <p className='mt-1 text-xs text-on-surface-variant'>
-                  {reservation.durationMinutes} мин.
+                <p className='mt-1 text-xs text-on-surface-variant'>                  {reservation.durationMinutes} min.
                 </p>
               </div>
               <div>
-                <p className='font-medium'>
-                  {reservation.name} · {reservation.guests} гости
+                <p className='font-medium'>                  {reservation.name} · {reservation.guests} guests
                 </p>
                 <p className='mt-1 text-xs text-on-surface-variant'>
                   {reservation.table.number} ·{' '}
@@ -51,8 +49,7 @@ export default async function StaffReservationsPage() {
           </article>
         ))}
         {!reservations.length ? (
-          <p className='py-24 text-center text-sm text-on-surface-variant'>
-            Нема резервации за денес.
+          <p className='py-24 text-center text-sm text-on-surface-variant'>            There are no reservations for today.
           </p>
         ) : null}
       </div>

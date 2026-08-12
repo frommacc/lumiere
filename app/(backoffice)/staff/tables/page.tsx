@@ -17,8 +17,8 @@ export default async function StaffTablesPage() {
     <>
       <BackofficeHeader
         eyebrow='Servis'
-        title='Активни маси'
-        description='Дневен преглед на масите и гостите кои треба да бидат услужени.'
+        title='Active tables'
+        description='Daily review of tables and guests to be served.'
       />
       <div className='grid gap-4 px-6 py-8 sm:grid-cols-2 md:px-10 xl:grid-cols-3'>
         {tables.map((table) => {
@@ -31,23 +31,20 @@ export default async function StaffTablesPage() {
               <div className='flex items-start justify-between'>
                 <div>
                   <p className='font-display text-3xl'>{table.number}</p>
-                  <p className='mt-1 text-xs text-on-surface-variant'>
-                    {table.tableType.name} · {table.capacity} места
+                  <p className='mt-1 text-xs text-on-surface-variant'>                    {table.tableType.name} · {table.capacity} seats
                   </p>
                 </div>
                 {reservation ? (
                   <ReservationStatusBadge status={reservation.status} />
                 ) : (
-                  <span className='rounded-full bg-surface-container-high px-3 py-1 text-[10px] uppercase tracking-widest text-on-surface-variant'>
-                    Слободна
+                  <span className='rounded-full bg-surface-container-high px-3 py-1 text-[10px] uppercase tracking-widest text-on-surface-variant'>                    Free
                   </span>
                 )}
               </div>
               {reservation ? (
                 <div className='mt-6 space-y-4 border-t border-primary/20 pt-4'>
                   <div>
-                    <p className='font-medium'>
-                      {reservation.name} · {reservation.guests} гости
+                    <p className='font-medium'>                      {reservation.name} · {reservation.guests} guests
                     </p>
                     <p className='mt-1 text-xs text-on-surface-variant'>
                       {formatBackofficeTime(reservation.startTime)} –{' '}
@@ -61,8 +58,7 @@ export default async function StaffTablesPage() {
                   />
                 </div>
               ) : (
-                <p className='mt-6 border-t border-outline-variant/15 pt-4 text-sm text-on-surface-variant'>
-                  Без активна резервација.
+                <p className='mt-6 border-t border-outline-variant/15 pt-4 text-sm text-on-surface-variant'>                  No active booking.
                 </p>
               )}
             </article>
@@ -71,7 +67,7 @@ export default async function StaffTablesPage() {
         {!tables.length ? (
           <div className='col-span-full flex flex-col items-center py-24 text-center text-on-surface-variant'>
             <TableProperties className='mb-4 size-10 text-primary' />
-            <p>Сеуште нема креирано маси.</p>
+            <p>No tables have been created yet.</p>
           </div>
         ) : null}
       </div>

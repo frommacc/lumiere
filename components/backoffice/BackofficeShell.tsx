@@ -29,12 +29,12 @@ type BackofficeShellProps = {
 function isLinkActive(href: string, pathname: string, allHrefs: string[]) {
   if (pathname === href) return true
 
-  // Не правиме prefix match за dashboard
+  // We do not do prefix match for dashboard
   if (href === '/admin/dashboard') return false
 
-  // Ако страницата почнува со овој href + '/'
+  // If the page starts with this href + '/'
   if (pathname.startsWith(`${href}/`)) {
-    // Проверуваме дали има поспецифичен линк од листата што одговара подобро
+    // We check if there is a more specific link from the list that fits better
     const hasMoreSpecificMatch = allHrefs.some(
       (otherHref) =>
         otherHref !== href &&
@@ -55,18 +55,18 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
-  // Проверка дали улогата е KITCHEN
+  // Checking if the role is KITCHEN
 
   const signOutUser = async () => {
     await signOut({
       fetchOptions: {
         onSuccess: () => {
-          toast.success('Успешно се одјавивте.')
+          toast.success('You have successfully logged out.')
           router.replace('/')
           router.refresh()
         },
         onError: () => {
-          toast.error('Не успеавме да ве одјавиме.')
+          toast.error('We were unable to log you out.')
         },
       },
     })
@@ -77,7 +77,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
   const navigation = (
     <nav
       className='flex flex-1 flex-col gap-1'
-      aria-label='Оперативна навигација'
+      aria-label='Operational navigation'
     >
       {links.map(({ href, label, Icon }) => {
         const active = isLinkActive(href, pathname, allHrefs)
@@ -124,8 +124,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
         onClick={signOutUser}
         className='w-full justify-start gap-3 px-3 text-destructive hover:bg-destructive/10 hover:text-destructive'
       >
-        <LogOut className='size-4' />
-        Одјави се
+        <LogOut className='size-4' />        Sign out
       </Button>
     </div>
   )
@@ -141,9 +140,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
         </Link>
         {navigation}
         {account}
-      </aside>
-
-      {/* Хедер кој ќе биде видлив на мобилен за сите, а на десктоп само за KITCHEN */}
+      </aside>      {/* Header that will be visible on mobile for everyone, and on desktop only for KITCHEN */}
       <header className='sticky top-0 z-30 flex h-16 items-center justify-between border-b border-outline-variant/20 bg-surface/90 px-5 backdrop-blur-xl lg:hidden'>
         <p className='font-display tracking-[0.18em] text-primary'>LUMIÈRE</p>
 
@@ -152,7 +149,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
             <Button
               variant='ghost'
               size='icon'
-              aria-label='Отвори оперативно мени'
+              aria-label='Open operating menu'
             >
               <Menu className='size-5' />
             </Button>
@@ -170,7 +167,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
                 variant='ghost'
                 size='icon'
                 onClick={() => setOpen(false)}
-                aria-label='Затвори мени'
+                aria-label='Close menu'
               >
                 <X className='size-5' />
               </Button>
@@ -179,9 +176,7 @@ export function BackofficeShell({ user, children }: BackofficeShellProps) {
             {account}
           </SheetContent>
         </Sheet>
-      </header>
-
-      {/* Главна содржина */}
+      </header>      {/* Main content */}
       <main className='min-w-0 lg:col-start-2'>{children}</main>
     </div>
   )

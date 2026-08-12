@@ -32,16 +32,15 @@ export default async function AdminReviewsPage({ searchParams }: PageProps) {
   return (
     <>
       <BackofficeHeader
-        eyebrow='Модерација'
-        title='Рецензии'
-        description='Прегледајте ги и модерирајте ги корисничките рецензии.'
+        eyebrow='Moderation'
+        title='Reviews'
+        description='Review and moderate user reviews.'
       />
 
-      <div className='px-6 py-8 md:px-10 space-y-6'>
-        {/* Табови */}
+      <div className='px-6 py-8 md:px-10 space-y-6'>        {/* Tabs */}
         <ReviewTabs currentStatus={currentStatus} counts={counts} />
 
-        {/* Мрежа со картички */}
+        {/* Card network */}
         {reviews.length > 0 ? (
           <div className='grid gap-4 md:grid-cols-2 xl:grid-cols-3'>
             {reviews.map((review) => (
@@ -50,11 +49,10 @@ export default async function AdminReviewsPage({ searchParams }: PageProps) {
           </div>
         ) : (
           <div className='rounded-xl border border-dashed p-12 text-center text-muted-foreground'>
-            <p className='text-sm'>Нема рецензии за овој статус.</p>
-          </div>
-        )}
+            <p className='text-sm'>There are no reviews for this status.</p>
+          </div>        )}
 
-        {/* Вашата реупотреблива пагинација */}
+        {/* Your reusable pagination */}
         <div className='rounded-xl border border-outline-variant/20 overflow-hidden'>
           <PaginationControls
             currentPage={currentPage}

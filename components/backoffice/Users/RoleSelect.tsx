@@ -11,10 +11,10 @@ import {
 import { ROLE_CONFIG } from '@/lib/constants/user-roles'
 import { Role } from '@/lib/generated/prisma'
 
-// Автоматски ги генерираме опциите за компонентата од ROLE_CONFIG
+// We automatically generate the component options from ROLE_CONFIG
 const ROLE_OPTIONS = (Object.keys(ROLE_CONFIG) as Role[]).map((role) => ({
   value: role,
-  label: `${ROLE_CONFIG[role].label} (${role})`, // Или користи ROLE_CONFIG[role].shortLabel по желба
+  label: `${ROLE_CONFIG[role].label} (${role})`, // Or use ROLE_CONFIG[role].shortLabel if desired
 }))
 
 export function RoleSelect() {
@@ -41,10 +41,10 @@ export function RoleSelect() {
   return (
     <Select value={selectedRole} onValueChange={handleRoleChange}>
       <SelectTrigger className='w-50'>
-        <SelectValue placeholder='Сите улоги' />
+        <SelectValue placeholder='All roles' />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value='ALL'>Сите улоги</SelectItem>
+        <SelectItem value='ALL'>All roles</SelectItem>
         {ROLE_OPTIONS.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}

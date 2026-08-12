@@ -12,7 +12,7 @@ export function OrderFilters() {
   const { replace } = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  // Функција со одложување (debounce од 300ms)
+  // Delay function (300ms debounce)
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams)
 
@@ -22,15 +22,14 @@ export function OrderFilters() {
       params.delete('q')
     }
 
-    // Додаваме startTransition за мазно ажурирање без сецкање
+    // We add startTransition for a smooth update without chopping
     startTransition(() => {
       replace(`${pathname}?${params.toString()}`)
     })
   }, 300)
 
   return (
-    <div className='relative w-full sm:w-80 group'>
-      {/* Икона за пребарување или Loader додека се менуваат параметрите */}
+    <div className='relative w-full sm:w-80 group'>      {/* Search icon or Loader while changing parameters */}
       {isPending ? (
         <Loader2 className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-primary animate-spin pointer-events-none z-10' />
       ) : (
@@ -39,7 +38,7 @@ export function OrderFilters() {
 
       <Input
         type='text'
-        placeholder='Пребарај нарачка...'
+        placeholder='Search order...'
         defaultValue={searchParams.get('q')?.toString()}
         onChange={(e) => handleSearch(e.target.value)}
         className='pl-9 bg-transparent border-b border-outline-variant/50 rounded-none focus-visible:ring-0 focus-visible:border-primary font-body-md text-on-surface placeholder:text-outline border-t-0 border-x-0'

@@ -32,7 +32,7 @@ export default function TestimonialsClient({
 
   const currentReview = reviews[currentIndex]
 
-  // Слика по подразбирање доколку корисникот нема слика во базата
+  // Default image if the user does not have an image in the database
   const avatarUrl =
     currentReview.user.image ||
     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop'
@@ -95,14 +95,14 @@ export default function TestimonialsClient({
         <button
           onClick={handlePrev}
           className='w-12 h-12 border border-outline-variant/30 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:border-primary hover:bg-primary/5 active:scale-90 transition-all duration-300'
-          aria-label='Претходна препорака'
+          aria-label='Previous recommendation'
         >
           <ChevronLeft size={20} />
         </button>
         <button
           onClick={handleNext}
           className='w-12 h-12 border border-outline-variant/30 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:border-primary hover:bg-primary/5 active:scale-90 transition-all duration-300'
-          aria-label='Следна препорака'
+          aria-label='Next recommendation'
         >
           <ChevronRight size={20} />
         </button>

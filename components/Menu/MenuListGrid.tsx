@@ -22,9 +22,9 @@ const MenuListGrid = ({
     <div
       className={
         horizontalScroll
-          ? // Horizontal Scroll Snap за Mobile -> Grid од md: па нагоре
+          ? // Horizontal Scroll Snap for Mobile -> Grid from md: up
             'flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 pt-2 px-4 no-scrollbar -mx-4 md:mx-0 md:px-0 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-10 md:pb-0 md:overflow-visible'
-          : // Стандарден Grid за сите екрани
+          : // Default Grid for all screens
             'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12 md:gap-10 px-4 md:px-0'
       }
     >
@@ -33,7 +33,7 @@ const MenuListGrid = ({
           key={item.id}
           className={
             horizontalScroll
-              ? // Ширина на картичката на мобилен (80% од екранот за да се гледа следната картичка)
+              ? // Tab width on mobile (80% of screen to view next tab)
                 'w-[82vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none'
               : 'w-full'
           }
