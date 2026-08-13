@@ -63,7 +63,7 @@ export async function saveMenuItemAction(
     if (id) {
       await prisma.menuItem.update({
         where: { id },
-        dates,
+        data,
       })
     } else {
       await prisma.menuItem.create({ data })

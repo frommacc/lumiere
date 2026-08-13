@@ -47,7 +47,7 @@ const orderStatusMap: Record<
     label: 'Delivered',
     colorClass: 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
   },
-  CANCELED: {
+  CANCELLED: {
     label: 'Cancelled',
     colorClass: 'bg-rose-500/10 text-rose-500 border-rose-500/20',
   },
@@ -112,7 +112,9 @@ export default async function AdminDashboardPage() {
               >
                 <div className='flex items-center gap-3'>
                   <MessageSquare className='size-5 text-amber-400' />
-                  <span className='text-sm font-medium'>                    You have {' '}
+                  <span className='text-sm font-medium'>
+                    {' '}
+                    You have{' '}
                     <strong className='font-bold'>
                       {dashboard.pendingReviewsCount}
                     </strong>{' '}
@@ -140,9 +142,10 @@ export default async function AdminDashboardPage() {
                 <ArrowRight className='size-4 text-rose-400' />
               </Link>
             )}
-          </div>        )}
-
-        {/* --- KPI METRICS --- */}<section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
+          </div>
+        )}
+        {/* --- KPI METRICS --- */}
+        <section className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
           {kpiMetrics.map(({ label, value, Icon, href, highlight }) => (
             <Link
               key={label}
@@ -167,26 +170,37 @@ export default async function AdminDashboardPage() {
               </p>
             </Link>
           ))}
-        </section>        {/* --- TWO COLUMNS: LAST ORDERS & PENDING RESERVATIONS --- */}
-        <div className='grid gap-8 lg:grid-cols-2'>          {/* Recent Orders */}
+        </section>{' '}
+        {/* --- TWO COLUMNS: LAST ORDERS & PENDING RESERVATIONS --- */}
+        <div className='grid gap-8 lg:grid-cols-2'>
+          {' '}
+          {/* Recent Orders */}
           <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
             <div className='mb-5 flex items-center justify-between'>
               <div>
-                <h3 className='text-lg font-semibold text-on-surface'>                  Last Orders
+                <h3 className='text-lg font-semibold text-on-surface'>
+                  {' '}
+                  Last Orders
                 </h3>
-                <p className='text-xs text-on-surface-variant'>                  The latest orders entered into the system
+                <p className='text-xs text-on-surface-variant'>
+                  {' '}
+                  The latest orders entered into the system
                 </p>
               </div>
               <Link
                 href='/admin/orders'
                 className='flex items-center gap-1 text-xs font-medium text-primary hover:underline'
-              >                See all <ArrowRight className='size-3' />
+              >
+                {' '}
+                See all <ArrowRight className='size-3' />
               </Link>
             </div>
 
             <div className='space-y-3'>
               {dashboard.recentOrders.length === 0 ? (
-                <p className='py-8 text-center text-sm text-outline'>                  No new orders today.
+                <p className='py-8 text-center text-sm text-outline'>
+                  {' '}
+                  No new orders today.
                 </p>
               ) : (
                 dashboard.recentOrders.map((order) => {
@@ -215,7 +229,9 @@ export default async function AdminDashboardPage() {
                       </div>
 
                       <div className='flex items-center justify-between sm:flex-col sm:items-end'>
-                        <span className='font-display text-base font-bold text-on-surface'>                          {order.total.toLocaleString('en-US')} day.
+                        <span className='font-display text-base font-bold text-on-surface'>
+                          {' '}
+                          {order.total.toLocaleString('en-US')} day.
                         </span>
                         <span className='flex items-center gap-1 text-[11px] text-outline'>
                           <Clock className='size-3' />
@@ -233,25 +249,34 @@ export default async function AdminDashboardPage() {
                 })
               )}
             </div>
-          </section>          {/* Reservations awaiting confirmation */}
+          </section>{' '}
+          {/* Reservations awaiting confirmation */}
           <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
             <div className='mb-5 flex items-center justify-between'>
               <div>
-                <h3 className='text-lg font-semibold text-on-surface'>                  Awaiting Confirmation
+                <h3 className='text-lg font-semibold text-on-surface'>
+                  {' '}
+                  Awaiting Confirmation
                 </h3>
-                <p className='text-xs text-on-surface-variant'>                  Reservations requiring approval
+                <p className='text-xs text-on-surface-variant'>
+                  {' '}
+                  Reservations requiring approval
                 </p>
               </div>
               <Link
                 href='/admin/reservations?status=PENDING'
                 className='flex items-center gap-1 text-xs font-medium text-primary hover:underline'
-              >                Manage <ArrowRight className='size-3' />
+              >
+                {' '}
+                Manage <ArrowRight className='size-3' />
               </Link>
             </div>
 
             <div className='space-y-3'>
               {dashboard.pendingReservations.length === 0 ? (
-                <p className='py-8 text-center text-sm text-outline'>                  There are no reservations awaiting confirmation.
+                <p className='py-8 text-center text-sm text-outline'>
+                  {' '}
+                  There are no reservations awaiting confirmation.
                 </p>
               ) : (
                 dashboard.pendingReservations.map((res) => (
@@ -261,7 +286,9 @@ export default async function AdminDashboardPage() {
                   >
                     <div className='space-y-1'>
                       <p className='font-medium text-on-surface'>{res.name}</p>
-                      <p className='text-xs text-on-surface-variant'>                        Table:{' '}
+                      <p className='text-xs text-on-surface-variant'>
+                        {' '}
+                        Table:{' '}
                         <strong className='text-on-surface'>
                           #{res.table.number}
                         </strong>{' '}
@@ -285,16 +312,21 @@ export default async function AdminDashboardPage() {
               )}
             </div>
           </section>
-        </div>        {/* --- BOTTOM SECTION: TOP SELLING DISHES --- */}
+        </div>{' '}
+        {/* --- BOTTOM SECTION: TOP SELLING DISHES --- */}
         <section className='rounded-xl border border-outline-variant/20 bg-surface-container-low/40 p-6'>
           <div className='mb-5 flex items-center gap-2'>
             <Flame className='size-5 text-amber-500' />
-            <h3 className='text-lg font-semibold text-on-surface'>              Top 5 Best Selling Dishes
+            <h3 className='text-lg font-semibold text-on-surface'>
+              {' '}
+              Top 5 Best Selling Dishes
             </h3>
           </div>
 
           {dashboard.topSellingItems.length === 0 ? (
-            <p className='py-4 text-center text-sm text-outline'>              Not enough sales data.
+            <p className='py-4 text-center text-sm text-outline'>
+              {' '}
+              Not enough sales data.
             </p>
           ) : (
             <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-5'>
@@ -310,7 +342,9 @@ export default async function AdminDashboardPage() {
                     {item.name}
                   </p>
                   <div className='mt-4 flex items-baseline justify-between'>
-                    <span className='text-xs text-on-surface-variant'>                      Sold:
+                    <span className='text-xs text-on-surface-variant'>
+                      {' '}
+                      Sold:
                     </span>
                     <span className='font-mono text-base font-bold text-primary'>
                       {item._sum.quantity}

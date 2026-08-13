@@ -41,7 +41,7 @@ export async function saveSubcategoryAction(
       // 2. We update the subcategory
       await prisma.subcategory.update({
         where: { id: parsed.data.id },
-        dates,
+        data,
       })
 
       // 3. We AUTOMATICALLY update all menuItems belonging to this subcategory

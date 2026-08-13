@@ -35,14 +35,14 @@ const reservationLabels: Partial<Record<ReservationStatus, string>> = {
   CONFIRMED: 'Accept',
   SEATED: 'Sat',
   COMPLETED: 'Finish',
-  CANCELED: 'Cancel',
+  CANCELLED: 'Cancel',
   NO_SHOW: 'Not shown',
 }
 
 export function ReservationActions({
   reservationId,
   status,
-  roles
+  role,
 }: {
   reservationId: string
   status: ReservationStatus
@@ -53,7 +53,7 @@ export function ReservationActions({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   // Keeping track of which action is currently running
-  const [ activeAction , setActiveAction ] = useState<string | null>(null)
+  const [activeAction, setActiveAction] = useState<string | null>(null)
 
   const nextStatuses = getAllowedReservationStatuses(role, status)
   const canDelete = role === Role.ADMIN || role === Role.MANAGER
@@ -104,7 +104,8 @@ export function ReservationActions({
           {isConfirming ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />          )}
+            <Check className='size-3.5' />
+          )}
           Accept
         </Button>
 
@@ -118,10 +119,12 @@ export function ReservationActions({
           {isCancelling ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <X className='size-3.5' />          )}
+            <X className='size-3.5' />
+          )}
           Give up
         </Button>
-      </div>    )
+      </div>
+    )
   }
 
   // No actions for either status change or delete
@@ -152,11 +155,11 @@ export function ReservationActions({
           {isSeating ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />          )}
+            <Check className='size-3.5' />
+          )}
           Sitting down
         </Button>
       )}
-
       {/* SHOW ON SEATED */}
       {status === ReservationStatus.SEATED && (
         <Button
@@ -168,11 +171,11 @@ export function ReservationActions({
           {isFinishing ? (
             <LoaderCircle className='size-3.5 animate-spin' />
           ) : (
-            <Check className='size-3.5' />          )}
-          It's over
+            <Check className='size-3.5' />
+          )}
+          It&apos;s over
         </Button>
       )}
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -214,23 +217,26 @@ export function ReservationActions({
           {nextStatuses.length > 0 && canDelete && <DropdownMenuSeparator />}
 
           {/* Delete */}
-          { canDelete && (
+          {canDelete && (
             <DropdownMenuItem
               disabled={pending}
               onClick={() => setDeleteDialogOpen(true)}
               className='cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10'
             >
-              <Trash2 className='mr-2 size-4' />              Delete
+              <Trash2 className='mr-2 size-4' /> Delete
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>
-      </DropdownMenu>      {/* Confirm deletion via AlertDialog */}
+      </DropdownMenu>{' '}
+      {/* Confirm deletion via AlertDialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>              This action is permanent and the reservation will be completely deleted from
-              the system.
+            <AlertDialogDescription>
+              {' '}
+              This action is permanent and the reservation will be completely
+              deleted from the system.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -247,7 +253,8 @@ export function ReservationActions({
                 <div className='flex items-center gap-2'>
                   <LoaderCircle className='size-3.5 animate-spin' />
                   <span>Deleting...</span>
-                </div>              ) : (
+                </div>
+              ) : (
                 'delete'
               )}
             </AlertDialogAction>

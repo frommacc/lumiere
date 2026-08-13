@@ -30,7 +30,7 @@ export default function CategoryEditor({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
-  const { pending, running } = useSavedAction()
+  const { pending, run } = useSavedAction()
   const [internalOpen, setInternalOpen] = useState(false)
 
   const isControlled = externalOpen !== undefined
@@ -38,7 +38,7 @@ export default function CategoryEditor({
   const setOpen = isControlled ? setExternalOpen : setInternalOpen
 
   // States for the form
-  const [ imageFile , setImageFile ] = useState<File | undefined>()
+  const [imageFile, setImageFile] = useState<File | undefined>()
   const [name, setName] = useState(category?.name ?? '')
   const [slug, setSlug] = useState(category?.slug ?? '')
   const [isPublished, setIsPublished] = useState<boolean>(
@@ -60,7 +60,7 @@ export default function CategoryEditor({
     }
   }
 
-  const submit = ( event : FormEvent<HTMLFormElement>) => {
+  const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = new FormData(event.currentTarget)
 
@@ -99,17 +99,22 @@ export default function CategoryEditor({
             {category ? (
               <Pencil className='size-3.5' />
             ) : (
-              <Plus className='size-3.5' />            )}
+              <Plus className='size-3.5' />
+            )}
             {category ? 'Edit' : 'New Category'}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className='max-h-[90vh] overflow-y-auto border-outline-variant/30 bg-surface-container text-on-surface sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle>            {category ? 'Edit Category' : 'New Category'}
+          <DialogTitle>
+            {' '}
+            {category ? 'Edit Category' : 'New Category'}
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={submit} className='grid gap-4'>          {/* Name */}
+        <form onSubmit={submit} className='grid gap-4'>
+          {' '}
+          {/* Name */}
           <div className='space-y-2'>
             <Label htmlFor='category-name'>Name</Label>
             <Input
@@ -119,7 +124,8 @@ export default function CategoryEditor({
               onChange={handleNameChange}
               required
             />
-          </div>          {/* Slug & Order in two lines */}
+          </div>{' '}
+          {/* Slug & Order in two lines */}
           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             <div className='space-y-2'>
               <Label htmlFor='category-slug'>Slug</Label>
@@ -142,7 +148,8 @@ export default function CategoryEditor({
                 required
               />
             </div>
-          </div>          {/* Image for category */}
+          </div>{' '}
+          {/* Image for category */}
           <ImageUploadField
             label='Category image'
             currentImage={category?.image}
@@ -150,7 +157,8 @@ export default function CategoryEditor({
             fallback={category?.name?.slice(0, 2).toUpperCase() ?? 'CAT'}
             onChange={setImageFile}
             disabled={pending}
-          />          {/* Description */}
+          />{' '}
+          {/* Description */}
           <div className='space-y-2'>
             <Label htmlFor='category-description'>Description</Label>
             <Textarea
@@ -159,15 +167,20 @@ export default function CategoryEditor({
               defaultValue={category?.description ?? ''}
               className='min-h-20 resize-y'
             />
-          </div>          {/* Status (isPublished Switch) */}
+          </div>{' '}
+          {/* Status (isPublished Switch) */}
           <div className='flex items-center justify-between rounded-lg border border-outline-variant/20 bg-surface-container-low p-3 shadow-sm'>
             <div className='space-y-0.5'>
               <Label
                 htmlFor='category-published'
                 className='text-sm font-medium'
-              >                Published category
+              >
+                {' '}
+                Published category
               </Label>
-              <p className='text-xs text-muted-foreground'>                If disabled, the category will not be visible on the menu.
+              <p className='text-xs text-muted-foreground'>
+                {' '}
+                If disabled, the category will not be visible on the menu.
               </p>
             </div>
             <Switch
@@ -176,10 +189,12 @@ export default function CategoryEditor({
               onCheckedChange={setIsPublished}
               disabled={pending}
             />
-          </div>          {/* Save button */}
+          </div>{' '}
+          {/* Save button */}
           <Button disabled={pending} type='submit' className='mt-2'>
             {pending ? (
-              <LoaderCircle className='size-4 animate-spin mr-2' />            ) : null}
+              <LoaderCircle className='size-4 animate-spin mr-2' />
+            ) : null}
             Save
           </Button>
         </form>
