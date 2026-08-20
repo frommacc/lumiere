@@ -127,7 +127,7 @@ export async function createOrder(
           menuItemId: dbItem.id,
           name: dbItem.name,
           reason: 'ITEM_UNAVAILABLE',
-          message: `Artiklot "${dbItem.name}" momentalno ne e dostapen.`,
+          message: `The item "${dbItem.name}" is currently out of stock.`,
         })
         continue
       }
@@ -138,7 +138,7 @@ export async function createOrder(
           menuItemId: dbItem.id,
           name: dbItem.name,
           reason: 'PRICE_CHANGED',
-          message: `The price for "${dbItem.name}" has changed since ${clientItem.price} days. on ${dbItem.price} day.`,
+          message: `The price for "${dbItem.name}" has changed from ${clientItem.price} to ${dbItem.price}.`,
           oldPrice: clientItem.price,
           newPrice: dbItem.price,
         })
@@ -153,7 +153,7 @@ export async function createOrder(
       return {
         success: false,
         message:
-          'There have been changes to the menu or prices. Please review the notices.',
+          'There have been changes to the menu or prices. Please review your cart.',
         issues,
       }
     }
@@ -215,8 +215,7 @@ export async function createOrder(
     console.error('Error creating order:', error)
     return {
       success: false,
-      message:
-        'A system error has occurred. Please try again later.',
+      message: 'A system error has occurred. Please try again later.',
     }
   }
 }

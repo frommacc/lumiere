@@ -13,12 +13,12 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { OrderStatusBadge } from '@/components/Orders/OrderStatusBadge'
 import { formatBackofficeDateTime } from '@/components/backoffice/formatters'
-import { formatCurrency } from '@/lib/utils/order'
 import { Role, DeliveryMethod, PaymentMethod } from '@/lib/generated/prisma'
 import { Eye } from 'lucide-react'
 
 import { OrderDetailsModal, OrderDetailData } from './OrderDetailsModal'
 import { OrderActionsMenu } from './OrderActionsMenu'
+import { Price } from '@/components/shared/Price'
 
 interface OrdersTableProps {
   orders: OrderDetailData[]
@@ -60,7 +60,9 @@ export function OrdersTable({
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>                {/* ID and Date */}
+              <TableRow key={order.id}>
+                {' '}
+                {/* ID and Date */}
                 <TableCell className='font-medium'>
                   <div>#{order.orderNumber}</div>
                   <div
@@ -69,36 +71,48 @@ export function OrdersTable({
                   >
                     {formatBackofficeDateTime(order.createdAt)}
                   </div>
-                </TableCell>                {/* Client */}
+                </TableCell>{' '}
+                {/* Client */}
                 <TableCell>
-                  <div className='font-medium'>                    {order.customerName ?? order.user?.name ?? 'Anonymous'}
+                  <div className='font-medium'>
+                    {' '}
+                    {order.customerName ?? order.user?.name ?? 'Anonymous'}
                   </div>
                   <div className='text-xs text-muted-foreground'>
                     {order.phone}
                   </div>
-                </TableCell>                {/* Delivery */}
+                </TableCell>{' '}
+                {/* Delivery */}
                 <TableCell>
-                  <Badge variant='outline' className='text-xs'>                    { order.deliveryMethod === DeliveryMethod.ADDRESS
+                  <Badge variant='outline' className='text-xs'>
+                    {' '}
+                    {order.deliveryMethod === DeliveryMethod.ADDRESS
                       ? 'Delivery Address'
                       : 'Upload'}
                   </Badge>
-                </TableCell>                {/* Payment */}
+                </TableCell>{' '}
+                {/* Payment */}
                 <TableCell>
-                  <Badge variant='secondary' className='text-xs'>                    {order.paymentMethod === PaymentMethod.CASH
+                  <Badge variant='secondary' className='text-xs'>
+                    {' '}
+                    {order.paymentMethod === PaymentMethod.CASH
                       ? 'Cash'
                       : 'Card'}
                   </Badge>
-                </TableCell>                {/* Amount */}
-                <TableCell className='font-semibold'>
-                  <span suppressHydrationWarning>
-                    {formatCurrency(order.total)}
-                  </span>
-                </TableCell>                {/* Status */}
+                </TableCell>{' '}
+                {/* Amount */}
+                <TableCell>
+                  <Price amount={order.total} className='font-semibold' />
+                </TableCell>{' '}
+                {/* Status */}
                 <TableCell>
                   <OrderStatusBadge status={order.status} />
-                </TableCell>                {/* Details Button + Change Status / Delete */}
+                </TableCell>{' '}
+                {/* Details Button + Change Status / Delete */}
                 <TableCell className='text-right'>
-                  <div className='flex items-center justify-end gap-1'>                    {/* View details */}
+                  <div className='flex items-center justify-end gap-1'>
+                    {' '}
+                    {/* View details */}
                     <Button
                       variant='ghost'
                       size='icon'
@@ -108,7 +122,8 @@ export function OrdersTable({
                     >
                       <Eye className='h-4 w-4 text-muted-foreground hover:text-foreground' />
                       <span className='sr-only'>Details</span>
-                    </Button>                    {/* Action menu */}
+                    </Button>{' '}
+                    {/* Action menu */}
                     <OrderActionsMenu
                       orderId={order.id}
                       currentStatus={order.status}
@@ -120,7 +135,8 @@ export function OrdersTable({
             ))}
           </TableBody>
         </Table>
-      </div>      {/* Details modal */}
+      </div>{' '}
+      {/* Details modal */}
       <OrderDetailsModal
         order={selectedOrder}
         isOpen={!!selectedOrder}

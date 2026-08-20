@@ -30,9 +30,12 @@ export function DeliveryAndPayment() {
     return (
       <div className='flex flex-col items-center justify-center py-12 gap-3 text-muted-foreground'>
         <Loader2 className='w-6 h-6 animate-spin text-primary' />
-        <span className='text-xs uppercase tracking-widest font-medium'>          Checking session...
+        <span className='text-xs uppercase tracking-widest font-medium'>
+          {' '}
+          Checking session...
         </span>
-      </div>    )
+      </div>
+    )
   }
 
   // 2. If the user is NOT logged in
@@ -40,10 +43,14 @@ export function DeliveryAndPayment() {
     return (
       <div className='p-8 text-center border border-outline-variant/30 bg-surface-container-high/20 rounded-xs space-y-6'>
         <div className='space-y-2'>
-          <h3 className='text-base font-semibold text-foreground uppercase tracking-wider'>            Login required
+          <h3 className='text-base font-semibold text-foreground uppercase tracking-wider'>
+            {' '}
+            Login required
           </h3>
-          <p className='text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto'>            To continue processing your order at Lumiere, you
-            please login to your profile.
+          <p className='text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto'>
+            {' '}
+            To continue processing your order at Lumiere, you please login to
+            your profile.
           </p>
         </div>
 
@@ -61,7 +68,8 @@ export function DeliveryAndPayment() {
   return (
     <GoogleMapsProvider>
       <DeliveryAndPaymentForm key={user.id} user={user} />
-    </GoogleMapsProvider>  )
+    </GoogleMapsProvider>
+  )
 }
 
 // Internal component for the form
@@ -85,7 +93,7 @@ function DeliveryAndPaymentForm({
   // The address and coordinate data
   const [address, setAddress] = useState('')
   const [addressDetails, setAddressDetails] = useState('')
-  const [ coords , setCoords ] = useState<{ lat: number; lng: number } | null>(
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
     null,
   )
   const [phone, setPhone] = useState(user.phone || '')
@@ -151,7 +159,9 @@ function DeliveryAndPaymentForm({
         return
       }
 
-      toast.success(`The order has been successfully sent! (#${response.orderNumber})`)
+      toast.success(
+        `The order has been successfully sent! (#${response.orderNumber})`,
+      )
       router.push(`/profile/orders/${response.orderNumber}`)
       setTimeout(() => {
         clearCart()
@@ -161,9 +171,13 @@ function DeliveryAndPaymentForm({
 
   return (
     <form onSubmit={handleOrderSubmit} className='space-y-8 relative'>
-      <div className='space-y-6'>        {/* Select delivery method */}
+      <div className='space-y-6'>
+        {' '}
+        {/* Select delivery method */}
         <div className='space-y-4 mb-8'>
-          <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>            Shipping method
+          <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>
+            {' '}
+            Shipping method
           </label>
           <div className='grid gap-4 grid-cols-2'>
             <label className='relative cursor-pointer group'>
@@ -176,7 +190,9 @@ function DeliveryAndPaymentForm({
               />
               <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
                 <Truck className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-                <span className='text-[10px] text-outline uppercase font-semibold text-center'>                  Delivery to address
+                <span className='text-[10px] text-outline uppercase font-semibold text-center'>
+                  {' '}
+                  Delivery to address
                 </span>
               </div>
             </label>
@@ -191,27 +207,35 @@ function DeliveryAndPaymentForm({
               />
               <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
                 <Store className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-                <span className='text-[10px] text-outline uppercase font-semibold text-center'>                  Personal training
+                <span className='text-[10px] text-outline uppercase font-semibold text-center'>
+                  Pickup
                 </span>
               </div>
             </label>
           </div>
-        </div>        {/* Customer information */}
+        </div>{' '}
+        {/* Customer information */}
         <div className='relative group border-b border-outline-variant/30 pb-2'>
-          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>            Customer name
+          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
+            {' '}
+            Customer name
           </label>
           <p className='text-foreground font-medium text-sm'>{user.name}</p>
         </div>
-
         {deliveryMethod !== 'PICKUP' && (
-          <div className='space-y-4'>            {/* Google Autocomplete for Street / Neighborhood */}
+          <div className='space-y-4'>
+            {' '}
+            {/* Google Autocomplete for Street / Neighborhood */}
             <AddressAutocomplete
               value={address}
               onChange={handleStreetSelect}
               disabled={isPending}
-            />            {/* Text field for Number, Entrance, Apartment (does not affect map coordinates) */}
+            />{' '}
+            {/* Text field for Number, Entrance, Apartment (does not affect map coordinates) */}
             <div>
-              <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>                Number / Entrance / Flat / Floor
+              <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
+                {' '}
+                Number / Entrance / Flat / Floor
               </label>
               <input
                 type='text'
@@ -222,7 +246,8 @@ function DeliveryAndPaymentForm({
                 disabled={isPending}
                 className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
               />
-            </div>            {/* Interactive map with Drag & Drop to refine the pin */}
+            </div>{' '}
+            {/* Interactive map with Drag & Drop to refine the pin */}
             {coords && (
               <DeliveryAddressPicker
                 coords={coords}
@@ -231,9 +256,10 @@ function DeliveryAndPaymentForm({
             )}
           </div>
         )}
-
         <div className='relative group'>
-          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>            Contact phone number
+          <label className='text-[10px] text-outline uppercase mb-1 block font-semibold'>
+            {' '}
+            Contact phone number
           </label>
           <input
             type='tel'
@@ -244,9 +270,12 @@ function DeliveryAndPaymentForm({
             className='w-full bg-transparent border-b border-outline-variant/50 py-3 text-foreground focus:outline-none focus:border-primary transition-colors text-sm'
           />
         </div>
-      </div>      {/* Payment method */}
+      </div>{' '}
+      {/* Payment method */}
       <div className='space-y-4 pt-4'>
-        <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>          Method of Payment
+        <label className='text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-2 block'>
+          {' '}
+          Method of Payment
         </label>
         <div className='grid gap-4 grid-cols-2'>
           <label className='relative cursor-pointer group'>
@@ -259,7 +288,9 @@ function DeliveryAndPaymentForm({
             />
             <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
               <CreditCard className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-              <span className='text-[10px] text-outline uppercase font-semibold'>                Card
+              <span className='text-[10px] text-outline uppercase font-semibold'>
+                {' '}
+                Card
               </span>
             </div>
           </label>
@@ -274,12 +305,15 @@ function DeliveryAndPaymentForm({
             />
             <div className='p-4 border border-outline-variant/30 bg-surface-container-high/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex flex-col items-center gap-2 rounded-xs'>
               <Banknote className='w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors' />
-              <span className='text-[10px] text-outline uppercase font-semibold'>                Cash
+              <span className='text-[10px] text-outline uppercase font-semibold'>
+                {' '}
+                Cash
               </span>
             </div>
           </label>
         </div>
-      </div>      {/* Confirm button */}
+      </div>{' '}
+      {/* Confirm button */}
       <button
         type='submit'
         disabled={isPending || cart.length === 0}
@@ -289,16 +323,19 @@ function DeliveryAndPaymentForm({
         <span className='text-xs text-primary-foreground font-semibold tracking-[0.2em] uppercase relative z-10 flex items-center gap-2'>
           {isPending ? (
             <>
-              <Loader2 className='w-4 h-4 animate-spin' />              Processing...
-            </>          ) : (
+              <Loader2 className='w-4 h-4 animate-spin' /> Processing...
+            </>
+          ) : (
             'Confirm Order'
-          )}</span>
+          )}
+        </span>
         {!isPending && (
           <ArrowRight className='w-5 h-5 text-primary-foreground relative z-10 transition-transform group-hover/btn:translate-x-2' />
         )}
       </button>
-
-      <p className='text-center text-[9px] text-outline uppercase tracking-widest opacity-60 font-semibold'>        By confirming you agree to our terms of use
+      <p className='text-center text-[9px] text-outline uppercase tracking-widest opacity-60 font-semibold'>
+        {' '}
+        By confirming you agree to our terms of use
       </p>
     </form>
   )

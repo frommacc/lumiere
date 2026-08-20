@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { formatCurrency } from '@/lib/utils/order'
+import { Price } from '@/components/shared/Price'
 
 interface OrderItemData {
   id: string
@@ -19,7 +19,9 @@ interface OrderItemsListProps {
 export function OrderItemsList({ items }: OrderItemsListProps) {
   return (
     <div className='flex flex-col'>
-      <h2 className='text-xl font-bold text-foreground mb-6 border-b border-border/20 pb-4'>        Your Choice
+      <h2 className='text-xl font-bold text-foreground mb-6 border-b border-border/20 pb-4'>
+        {' '}
+        Your Choice
       </h2>
       <div className='flex flex-col divide-y divide-border/20'>
         {items.map((item) => {
@@ -48,11 +50,14 @@ export function OrderItemsList({ items }: OrderItemsListProps) {
               </div>
               <div className='flex flex-col items-end gap-1 shrink-0'>
                 <span className='text-xs text-muted-foreground'>
-                  {item.quantity} x {formatCurrency(item.price)}
+                  {item.quantity} x{' '}
+                  <Price amount={item.price} className='font-normal' />
                 </span>
-                <span className='text-sm md:text-base text-primary font-bold'>
-                  {formatCurrency(itemTotal)}
-                </span>
+
+                <Price
+                  amount={itemTotal}
+                  className='text-sm md:text-base text-primary font-normal'
+                />
               </div>
             </div>
           )

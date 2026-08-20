@@ -2,6 +2,8 @@
 
 import { FormEvent, useState, useMemo } from 'react'
 import { LoaderCircle, Pencil, Plus } from 'lucide-react'
+import { priceToMinorUnits, minorUnitsToPrice } from '@/lib/utils/currency'
+import { businessConfig } from '@/config/business'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -86,11 +88,11 @@ export default function MenuItemEditor({
     item?.categoryId ?? item?.subcategory?.categoryId ?? categories[0]?.id ?? ''
   const initialSubcategoryId = item?.subcategoryId ?? 'none'
 
-  const [ selectedCategoryId , setSelectedCategoryId ] =
+  const [selectedCategoryId, setSelectedCategoryId] =
     useState(initialCategoryId)
-  const [ selectedSubcategoryId , setSelectedSubcategoryId ] =
+  const [selectedSubcategoryId, setSelectedSubcategoryId] =
     useState(initialSubcategoryId)
-  const [ imageFile , setImageFile ] = useState<File | undefined>()
+  const [imageFile, setImageFile] = useState<File | undefined>()
 
   const availableSubcategories = useMemo(() => {
     const found = categories.find((c) => c.id === selectedCategoryId)
@@ -136,7 +138,7 @@ export default function MenuItemEditor({
           id: item?.id,
           name: form.get('name') as string,
           description: form.get('description') as string,
-          price: Number(form.get('price')),
+          price: priceToMinorUnits(form.get('price') as string),
           image: item?.image ?? null,
           imageId: item?.imageId ?? null,
           imageFile,
@@ -175,7 +177,8 @@ export default function MenuItemEditor({
             {item ? (
               <Pencil className='size-3.5' />
             ) : (
-              <Plus className='size-3.5' />            )}
+              <Plus className='size-3.5' />
+            )}
             {item ? 'Edit' : 'New Article'}
           </Button>
         </DialogTrigger>
@@ -244,13 +247,19 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-price'>Price ($)</Label>
+            {/* Сега динамички го прикажуваме симболот од бизнис конфигурацијата */}
+            <Label htmlFor='item-price'>
+              Price ({businessConfig.currencySymbol})
+            </Label>
             <Input
               id='item-price'
               name='price'
               type='number'
-              step='1'
-              defaultValue={item?.price}
+              step='0.01' // 💡 Дозволува децимали како 6.50 или 120.5
+              defaultValue={
+                item?.price !== undefined ? minorUnitsToPrice(item.price) : ''
+              }
+              placeholder='0.00'
               required
             />
           </div>
@@ -278,7 +287,9 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2 sm:col-span-2'>
-            <Label htmlFor='item-ingredients'>              Ingredients (comma separated)
+            <Label htmlFor='item-ingredients'>
+              {' '}
+              Ingredients (comma separated)
             </Label>
             <Input
               id='item-ingredients'
@@ -299,7 +310,9 @@ export default function MenuItemEditor({
           </div>
 
           <div className='space-y-2'>
-            <Label htmlFor='item-dietary'>Nutrition labels (with a comma)</Label>
+            <Label htmlFor='item-dietary'>
+              Nutrition labels (with a comma)
+            </Label>
             <Input
               id='item-dietary'
               name='dietary'

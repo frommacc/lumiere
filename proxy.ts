@@ -8,7 +8,7 @@ const isAdminRoute = (pathname: string) => pathname.startsWith('/admin')
 const isKitchenRoute = (pathname: string) => pathname.startsWith('/kitchen')
 const isStaffRoute = (pathname: string) => pathname.startsWith('/staff')
 
-// Changed to /login and /register
+// Auth Routes: /login, /register, /reset-password, /forgot-password
 const isAuthRoute = (pathname: string) =>
   pathname === '/login' ||
   pathname === '/register' ||

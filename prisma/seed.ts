@@ -1,882 +1,656 @@
 import { prisma } from '@/lib/prisma'
+import { Role, UserStatus, ReviewStatus } from '../lib/generated/prisma'
 
 async function main() {
-  console.log('🌱 Започнува сеење на категории, подкатегории и мени артикли...')
+  console.log('Cleaning up database...')
+  await prisma.scheduleOverride.deleteMany()
+  await prisma.workingHours.deleteMany()
+  await prisma.reservation.deleteMany()
+  await prisma.table.deleteMany()
+  await prisma.tableType.deleteMany()
+  await prisma.review.deleteMany()
+  await prisma.orderItem.deleteMany()
+  await prisma.order.deleteMany()
+  await prisma.menuItem.deleteMany()
+  await prisma.subcategory.deleteMany()
+  await prisma.category.deleteMany()
+  await prisma.session.deleteMany()
+  await prisma.account.deleteMany()
+  await prisma.user.deleteMany()
 
-  // ==========================================
-  // 1. КАТЕГОРИИ (8 Категории)
-  // ==========================================
-  const categories = [
-    {
-      id: 'appetizer',
-      slug: 'appetizer',
-      name: 'Предјадења',
-      description:
-        'Софистицирани предјадења за почеток на вашето гастрономско искуство.',
-      image:
-        'https://res.cloudinary.com/labellamk/image/upload/v1785336342/categories/z9lhzsrlxyb1mizgwog2.webp',
-      imageId: 'categories/z9lhzsrlxyb1mizgwog2',
-      displayOrder: 1,
-      isPublished: true,
+  console.log('Creating users...')
+  const admin = await prisma.user.create({
+    data: {
+      name: 'Alexander Wright',
+      email: 'admin@lumiere.com',
+      emailVerified: true,
+      role: Role.ADMIN,
+      status: UserStatus.ACTIVE,
+      phone: '+1234567890',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
     },
-    {
-      id: 'main',
-      slug: 'main',
-      name: 'Главни Јадења',
-      description:
-        'Премиум парчиња месо, свежа риба и специјалитети подготвени од врвни готвачи.',
-      image:
-        'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
+  })
+
+  const user = await prisma.user.create({
+    data: {
+      name: 'Sophia Bennett',
+      email: 'sophia@gmail.com',
+      emailVerified: true,
+      role: Role.USER,
+      status: UserStatus.ACTIVE,
+      phone: '+1987654321',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
     },
-    {
-      id: 'dessert',
-      slug: 'dessert',
-      name: 'Десерти',
-      description:
-        'Уникатни слатки задоволства и деконструирани класични десерти.',
-      image:
-        'https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-    },
-    {
-      id: 'wine',
-      slug: 'wine',
-      name: 'Вина',
-      description: 'Селекција на ексклузивни домашни и светски етикети.',
-      image:
-        'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 4,
-      isPublished: true,
-    },
-    {
-      id: 'salads',
+  })
+
+  console.log('Creating 8 categories, subcategories, and 20 menu items...')
+
+  // 1. SALADS
+  const saladsCat = await prisma.category.create({
+    data: {
       slug: 'salads',
-      name: 'Салати',
-      description:
-        'Свежи органски зеленчуци со артизанални дресинзи и зреени сирења.',
-      image:
-        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
+      name: 'Salads',
+      description: 'Fresh organic salads with premium artisanal dressings.',
+      image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd',
+      displayOrder: 1,
+      subcategories: {
+        create: [
+          {
+            slug: 'fresh-organic-salads',
+            name: 'Fresh Organic Salads',
+            displayOrder: 1,
+          },
+          { slug: 'warm-salads', name: 'Warm Salads', displayOrder: 2 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  })
+  const freshSaladsSub = saladsCat.subcategories.find(
+    (s) => s.slug === 'fresh-organic-salads',
+  )!
+
+  // 2. SOUPS
+  const soupsCat = await prisma.category.create({
+    data: {
+      slug: 'soups-and-broths',
+      name: 'Soups & Broths',
+      description: 'Gourmet cream soups and traditional warm broths.',
+      image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd',
+      displayOrder: 2,
+      subcategories: {
+        create: [
+          { slug: 'cream-soups', name: 'Cream Soups', displayOrder: 1 },
+          {
+            slug: 'traditional-broths',
+            name: 'Traditional Broths',
+            displayOrder: 2,
+          },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  })
+  const creamSoupsSub = soupsCat.subcategories.find(
+    (s) => s.slug === 'cream-soups',
+  )!
+
+  // 3. STARTERS
+  const startersCat = await prisma.category.create({
+    data: {
+      slug: 'starters',
+      name: 'Starters',
+      description: 'Exquisite cold and warm starters crafted to perfection.',
+      image: 'https://images.unsplash.com/photo-1541529086526-db283c563270',
+      displayOrder: 3,
+      subcategories: {
+        create: [
+          { slug: 'cold-starters', name: 'Cold Starters', displayOrder: 1 },
+          { slug: 'warm-starters', name: 'Warm Starters', displayOrder: 2 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  })
+  const coldStartersSub = startersCat.subcategories.find(
+    (s) => s.slug === 'cold-starters',
+  )!
+  const warmStartersSub = startersCat.subcategories.find(
+    (s) => s.slug === 'warm-starters',
+  )!
+
+  // 4. MAIN COURSES
+  const mainsCat = await prisma.category.create({
+    data: {
+      slug: 'main-courses',
+      name: 'Main Courses',
+      description: 'Prime meat cuts and wild-caught fresh seafood.',
+      image: 'https://images.unsplash.com/photo-1544025162-d76694265947',
+      displayOrder: 4,
+      subcategories: {
+        create: [
+          { slug: 'meat-specials', name: 'Meat Specials', displayOrder: 1 },
+          { slug: 'fish-and-seafood', name: 'Fish & Seafood', displayOrder: 2 },
+        ],
+      },
+    },
+    include: { subcategories: true },
+  })
+  const meatSub = mainsCat.subcategories.find(
+    (s) => s.slug === 'meat-specials',
+  )!
+  const seaSub = mainsCat.subcategories.find(
+    (s) => s.slug === 'fish-and-seafood',
+  )!
+
+  // 5. DESSERTS
+  const dessertsCat = await prisma.category.create({
+    data: {
+      slug: 'desserts',
+      name: 'Desserts',
+      description: 'Artisanal sweet creations prepared in-house daily.',
+      image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87',
       displayOrder: 5,
-      isPublished: true,
+      subcategories: {
+        create: [
+          {
+            slug: 'signature-desserts',
+            name: 'Signature Desserts',
+            displayOrder: 1,
+          },
+          {
+            slug: 'gelato-and-sorbet',
+            name: 'Gelato & Sorbet',
+            displayOrder: 2,
+          },
+        ],
+      },
     },
-    {
-      id: 'soups',
-      slug: 'soups',
-      name: 'Супи & Чорби',
+    include: { subcategories: true },
+  })
+  const customDessertsSub = dessertsCat.subcategories.find(
+    (s) => s.slug === 'signature-desserts',
+  )!
+  const sorbetSub = dessertsCat.subcategories.find(
+    (s) => s.slug === 'gelato-and-sorbet',
+  )!
+
+  // 6. WINES
+  const winesCat = await prisma.category.create({
+    data: {
+      slug: 'wines',
+      name: 'Wines',
       description:
-        'Богати кремасти супи и традиционални бујони со префинет вкус.',
-      image:
-        'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
+        'Handpicked local reserves and internationally acclaimed vintages.',
+      image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3',
       displayOrder: 6,
-      isPublished: true,
+      subcategories: {
+        create: [
+          { slug: 'red-wines', name: 'Red Wines', displayOrder: 1 },
+          { slug: 'white-wines', name: 'White Wines', displayOrder: 2 },
+        ],
+      },
     },
-    {
-      id: 'cocktails',
-      slug: 'cocktails',
-      name: 'Авторски Коктели',
-      description:
-        'Уникатни миксолошки креации со премиум дестилати и свежи билки.',
-      image:
-        'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
+    include: { subcategories: true },
+  })
+  const redWinesSub = winesCat.subcategories.find(
+    (s) => s.slug === 'red-wines',
+  )!
+  const whiteWinesSub = winesCat.subcategories.find(
+    (s) => s.slug === 'white-wines',
+  )!
+
+  // 7. SIGNATURE COCKTAILS
+  const cocktailsCat = await prisma.category.create({
+    data: {
+      slug: 'signature-cocktails',
+      name: 'Signature Cocktails',
+      description: 'Unique mixology creations crafted by our head bartender.',
+      image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
       displayOrder: 7,
-      isPublished: true,
+      subcategories: {
+        create: [
+          {
+            slug: 'craft-cocktails',
+            name: 'Craft Signature Cocktails',
+            displayOrder: 1,
+          },
+          {
+            slug: 'classic-cocktails',
+            name: 'Classic Cocktails',
+            displayOrder: 2,
+          },
+        ],
+      },
     },
-    {
-      id: 'drinks',
-      slug: 'drinks',
-      name: 'Безалкохолни Пијалоци',
+    include: { subcategories: true },
+  })
+  const sigCocktailsSub = cocktailsCat.subcategories.find(
+    (s) => s.slug === 'craft-cocktails',
+  )!
+
+  // 8. NON-ALCOHOLIC BEVERAGES
+  const nonAlcCat = await prisma.category.create({
+    data: {
+      slug: 'non-alcoholic-beverages',
+      name: 'Non-Alcoholic Beverages',
       description:
-        'Свежо цедени сокови, премиум кафе, чаеви и флаширана минерална вода.',
-      image:
-        'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
+        'Fresh squeezed juices, artisanal lemonades, and specialty coffee.',
+      image: 'https://images.unsplash.com/photo-1534778101976-62847782c213',
       displayOrder: 8,
-      isPublished: true,
+      subcategories: {
+        create: [
+          {
+            slug: 'fresh-juices-and-lemonades',
+            name: 'Fresh Juices & Lemonades',
+            displayOrder: 1,
+          },
+          {
+            slug: 'coffee-and-hot-drinks',
+            name: 'Coffee & Hot Drinks',
+            displayOrder: 2,
+          },
+        ],
+      },
     },
-  ]
+    include: { subcategories: true },
+  })
+  const juicesSub = nonAlcCat.subcategories.find(
+    (s) => s.slug === 'fresh-juices-and-lemonades',
+  )!
+  const hotDrinksSub = nonAlcCat.subcategories.find(
+    (s) => s.slug === 'coffee-and-hot-drinks',
+  )!
 
-  for (const category of categories) {
-    await prisma.category.upsert({
-      where: { id: category.id },
-      update: category,
-      create: category,
+  // TOTAL 20 MENU ITEMS
+  await prisma.menuItem.createMany({
+    data: [
+      // Salads (2)
+      {
+        name: 'Lumière Burrata Salad',
+        description:
+          'Fresh artisanal burrata, wild arugula, vine tomatoes, pine nuts, and pesto dressing.',
+        price: 480,
+        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd',
+        displayOrder: 1,
+        isPopular: true,
+        isOrderable: true,
+        ingredients: ['Burrata', 'Arugula', 'Cherry Tomatoes', 'Pine Nuts'],
+        allergens: ['Dairy', 'Nuts'],
+        dietary: ['Vegetarian'],
+        categoryId: saladsCat.id,
+        subcategoryId: freshSaladsSub.id,
+      },
+      {
+        name: 'Grilled Chicken Caesar',
+        description:
+          'Crisp iceberg lettuce, grilled chicken breast, herb croutons, parmesan, and Caesar dressing.',
+        price: 390,
+        image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Chicken Breast', 'Iceberg', 'Parmesan', 'Croutons'],
+        allergens: ['Gluten', 'Dairy', 'Eggs'],
+        dietary: [],
+        categoryId: saladsCat.id,
+        subcategoryId: freshSaladsSub.id,
+      },
+
+      // Soups (2)
+      {
+        name: 'Porcini & Truffle Cream Soup',
+        description:
+          'Velvety soup crafted from wild porcini mushrooms infused with black truffle oil.',
+        price: 320,
+        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd',
+        displayOrder: 1,
+        isPopular: true,
+        isOrderable: true,
+        ingredients: [
+          'Porcini Mushrooms',
+          'Heavy Cream',
+          'Black Truffle',
+          'Butter',
+        ],
+        allergens: ['Dairy'],
+        dietary: ['Vegetarian'],
+        categoryId: soupsCat.id,
+        subcategoryId: creamSoupsSub.id,
+      },
+      {
+        name: 'Roasted Pumpkin Cream Soup',
+        description:
+          'Silky roasted butternut squash soup finished with toasted pumpkin seeds and olive oil.',
+        price: 280,
+        image: 'https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Pumpkin', 'Pumpkin Seeds', 'Coconut Milk'],
+        allergens: [],
+        dietary: ['Vegan', 'Gluten-Free'],
+        categoryId: soupsCat.id,
+        subcategoryId: creamSoupsSub.id,
+      },
+
+      // Starters (3)
+      {
+        name: 'Atlantic Salmon Tartare',
+        description:
+          'Fresh Atlantic salmon, avocado mousse, capers, lemon juice, and buttered brioche.',
+        price: 580,
+        image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb',
+        displayOrder: 1,
+        isExclusive: true,
+        isOrderable: true,
+        ingredients: ['Salmon', 'Avocado', 'Capers', 'Lemon'],
+        allergens: ['Fish', 'Gluten'],
+        dietary: ['Keto'],
+        categoryId: startersCat.id,
+        subcategoryId: coldStartersSub.id,
+      },
+      {
+        name: 'Lumière Bruschetta',
+        description:
+          'Toasted sourdough bread topped with vine cherry tomatoes, basil, and fresh mozzarella.',
+        price: 320,
+        image: 'https://images.unsplash.com/photo-1572695157366-5e585ab2b69f',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Tomato', 'Basil', 'Mozzarella'],
+        allergens: ['Gluten', 'Dairy'],
+        dietary: ['Vegetarian'],
+        categoryId: startersCat.id,
+        subcategoryId: coldStartersSub.id,
+      },
+      {
+        name: 'Baked Feta with Honey & Chili',
+        description:
+          'Oven-baked sheep feta in a clay dish with oregano, wildflower honey, and black olives.',
+        price: 390,
+        image: 'https://images.unsplash.com/photo-1559847844-5315695dadae',
+        displayOrder: 3,
+        isOrderable: true,
+        ingredients: ['Sheep Feta', 'Honey', 'Olives'],
+        allergens: ['Dairy'],
+        dietary: ['Vegetarian'],
+        categoryId: startersCat.id,
+        subcategoryId: warmStartersSub.id,
+      },
+
+      // Main Courses (4)
+      {
+        name: 'Red Wine Beef Tenderloin',
+        description:
+          '250g prime beef tenderloin served with red wine demi-glace and truffle mashed potatoes.',
+        price: 1450,
+        image: 'https://images.unsplash.com/photo-1558030006-450675393462',
+        displayOrder: 1,
+        isPopular: true,
+        isExclusive: true,
+        isSpecial: true,
+        isOrderable: true,
+        ingredients: ['Beef Tenderloin', 'Red Wine', 'Truffle', 'Butter'],
+        allergens: ['Dairy'],
+        dietary: ['Gluten-Free'],
+        origin: 'Local Organic Farm',
+        preparation: 'Grilled to preference',
+        pairing: 'Vranec Barrique Reserve',
+        categoryId: mainsCat.id,
+        subcategoryId: meatSub.id,
+      },
+      {
+        name: 'Pork Tenderloin in Mushroom Sauce',
+        description:
+          'Succulent pork medallion served with wild porcini sauce and herb-roasted potatoes.',
+        price: 720,
+        image: 'https://images.unsplash.com/photo-1432139555190-58524dae6a55',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Pork Tenderloin', 'Porcini Mushrooms', 'Cream'],
+        allergens: ['Dairy'],
+        dietary: [],
+        categoryId: mainsCat.id,
+        subcategoryId: meatSub.id,
+      },
+      {
+        name: 'Grilled Salmon Filet',
+        description:
+          'Fresh Atlantic salmon filet drizzled with lemon butter, served alongside grilled vegetables.',
+        price: 980,
+        image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2',
+        displayOrder: 3,
+        isOrderable: true,
+        ingredients: ['Salmon', 'Zucchini', 'Bell Peppers'],
+        allergens: ['Fish'],
+        dietary: ['Gluten-Free', 'Keto'],
+        categoryId: mainsCat.id,
+        subcategoryId: seaSub.id,
+      },
+      {
+        name: 'Grilled Adriatic Calamari',
+        description:
+          'Char-grilled squid rings tossed in olive oil, garlic, and fresh parsley dressing.',
+        price: 820,
+        image: 'https://images.unsplash.com/photo-1599488615731-7e5c2823ff28',
+        displayOrder: 4,
+        isOrderable: true,
+        ingredients: ['Squid', 'Olive Oil', 'Garlic', 'Parsley'],
+        allergens: ['Seafood'],
+        dietary: ['Gluten-Free'],
+        categoryId: mainsCat.id,
+        subcategoryId: seaSub.id,
+      },
+
+      // Desserts (3)
+      {
+        name: 'Lumière Molten Lava Cake',
+        description:
+          'Warm dark chocolate cake with a gooey center, served with Madagascar vanilla ice cream.',
+        price: 340,
+        image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c',
+        displayOrder: 1,
+        isPopular: true,
+        isOrderable: true,
+        ingredients: ['Belgian Chocolate', 'Eggs', 'Vanilla Ice Cream'],
+        allergens: ['Gluten', 'Dairy', 'Eggs'],
+        dietary: ['Vegetarian'],
+        categoryId: dessertsCat.id,
+        subcategoryId: customDessertsSub.id,
+      },
+      {
+        name: 'Classic Venetian Tiramisu',
+        description:
+          'Traditional Italian tiramisu with whipped mascarpone cream, espresso, and cocoa.',
+        price: 290,
+        image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Mascarpone', 'Ladyfingers', 'Espresso'],
+        allergens: ['Gluten', 'Dairy', 'Eggs'],
+        dietary: ['Vegetarian'],
+        categoryId: dessertsCat.id,
+        subcategoryId: customDessertsSub.id,
+      },
+      {
+        name: 'Lemon & Mint Sorbet',
+        description:
+          'Refreshing dairy-free house-made sorbet made from organic lemons and fresh mint.',
+        price: 240,
+        image: 'https://images.unsplash.com/photo-1560008511-11c63416e52d',
+        displayOrder: 3,
+        isOrderable: true,
+        ingredients: ['Lemon', 'Fresh Mint', 'Sugar'],
+        allergens: [],
+        dietary: ['Vegan', 'Gluten-Free'],
+        categoryId: dessertsCat.id,
+        subcategoryId: sorbetSub.id,
+      },
+
+      // Wines (2)
+      {
+        name: 'Vranec Barrique Reserve (0.75l)',
+        description:
+          'Full-bodied premium red wine with notes of dried plum, dark chocolate, and oak.',
+        price: 1800,
+        image: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb',
+        displayOrder: 1,
+        isExclusive: true,
+        isOrderable: true,
+        ingredients: ['Vranec Grapes'],
+        allergens: ['Sulfites'],
+        dietary: ['Vegan'],
+        origin: 'Tikves Region, Macedonia',
+        categoryId: winesCat.id,
+        subcategoryId: redWinesSub.id,
+      },
+      {
+        name: 'Chardonnay Special Selection (0.75l)',
+        description:
+          'Crisp white wine featuring citrus undertones, white tea aromas, and ripe pear.',
+        price: 1400,
+        image: 'https://images.unsplash.com/photo-1558001373-7b93ee48ffa0',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Chardonnay Grapes'],
+        allergens: ['Sulfites'],
+        dietary: ['Vegan'],
+        origin: 'Macedonia',
+        categoryId: winesCat.id,
+        subcategoryId: whiteWinesSub.id,
+      },
+
+      // Signature Cocktails (2)
+      {
+        name: 'Lumière Smoked Old Fashioned',
+        description:
+          'Bourbon whiskey, Angostura bitters, caramelized sugar syrup, and oakwood smoke.',
+        price: 450,
+        image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
+        displayOrder: 1,
+        isPopular: true,
+        isSpecial: true,
+        isOrderable: true,
+        ingredients: ['Bourbon', 'Angostura', 'Orange Peel', 'Oak Smoke'],
+        allergens: [],
+        dietary: [],
+        categoryId: cocktailsCat.id,
+        subcategoryId: sigCocktailsSub.id,
+      },
+      {
+        name: 'Elderflower Botanical Tonic',
+        description:
+          'Cucumber-infused gin, elderflower liqueur, fresh lemon, and botanical tonic.',
+        price: 420,
+        image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Gin', 'Elderflower Liqueur', 'Cucumber', 'Tonic'],
+        allergens: [],
+        dietary: [],
+        categoryId: cocktailsCat.id,
+        subcategoryId: sigCocktailsSub.id,
+      },
+
+      // Non-Alcoholic Beverages (2)
+      {
+        name: 'Raspberry House Lemonade',
+        description:
+          'Freshly squeezed lemons with wild raspberry puree and fresh basil leaves.',
+        price: 220,
+        image: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859',
+        displayOrder: 1,
+        isOrderable: true,
+        ingredients: ['Lemon', 'Raspberries', 'Basil'],
+        allergens: [],
+        dietary: ['Vegan', 'Gluten-Free'],
+        categoryId: nonAlcCat.id,
+        subcategoryId: juicesSub.id,
+      },
+      {
+        name: 'Arabica Premium Espresso',
+        description:
+          '100% Arabica espresso with a velvety crema and rich roasted hazelnut notes.',
+        price: 120,
+        image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04',
+        displayOrder: 2,
+        isOrderable: true,
+        ingredients: ['Arabica Coffee Beans'],
+        allergens: [],
+        dietary: ['Vegan'],
+        categoryId: nonAlcCat.id,
+        subcategoryId: hotDrinksSub.id,
+      },
+    ],
+  })
+
+  console.log('Creating table types and tables...')
+  const vipType = await prisma.tableType.create({
+    data: {
+      slug: 'vip-booth',
+      name: 'VIP Booth',
+      description: 'Private and intimate seating area.',
+    },
+  })
+
+  const mainHallType = await prisma.tableType.create({
+    data: {
+      slug: 'main-hall',
+      name: 'Main Hall',
+      description: 'Spacious dining tables in the central room.',
+    },
+  })
+
+  await prisma.table.createMany({
+    data: [
+      { number: 'T-01', capacity: 2, tableTypeId: mainHallType.id },
+      { number: 'T-02', capacity: 4, tableTypeId: mainHallType.id },
+      { number: 'VIP-01', capacity: 6, tableTypeId: vipType.id },
+    ],
+  })
+
+  console.log('Creating reviews...')
+  await prisma.review.create({
+    data: {
+      name: 'Sophia Bennett',
+      role: 'Food Critic',
+      text: 'The atmosphere is incredible! The Burrata salad and Beef Tenderloin were perfection.',
+      rating: 5,
+      status: ReviewStatus.APPROVED,
+      userId: user.id,
+    },
+  })
+
+  console.log('Creating working hours and schedule overrides...')
+  for (let day = 0; day <= 6; day++) {
+    const isSunday = day === 0
+    await prisma.workingHours.create({
+      data: {
+        dayOfWeek: day,
+        isWorking: true,
+        slots: isSunday
+          ? [{ open: '12:00', close: '22:00' }]
+          : [{ open: '09:00', close: '00:00' }],
+      },
     })
   }
 
-  console.log('✅ Категориите се успешно внесени/ажурирани.')
+  await prisma.scheduleOverride.create({
+    data: {
+      dateString: '2026-12-31',
+      isWorking: true,
+      slots: [{ open: '18:00', close: '04:00' }],
+      reason: 'New Year Gala Event',
+    },
+  })
 
-  // ==========================================
-  // 2. ПОДКАТЕГОРИИ (Subcategories)
-  // Почитува @@unique([categoryId, slug])
-  // ==========================================
-  const subcategories = [
-    // --- Предјадења ---
-    {
-      id: 'sub-cold-appetizers',
-      slug: 'cold-appetizers',
-      name: 'Ладни Предјадења',
-      description: 'Ладни специјалитети и карпача',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'appetizer',
-    },
-    {
-      id: 'sub-hot-appetizers',
-      slug: 'hot-appetizers',
-      name: 'Топли Предјадења',
-      description: 'Топли артизанални предјадења и рижото',
-      displayOrder: 2,
-      isPublished: true,
-      categoryId: 'appetizer',
-    },
-
-    // --- Главни Јадења ---
-    {
-      id: 'sub-meat-specialties',
-      slug: 'meat-specialties',
-      name: 'Месни Специјалитети',
-      description: 'Премиум стек и одлежано месо',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'main',
-    },
-    {
-      id: 'sub-fish-seafood',
-      slug: 'fish-seafood',
-      name: 'Риба и Морски Плодови',
-      description: 'Свежа риба од дневниот улов',
-      displayOrder: 2,
-      isPublished: true,
-      categoryId: 'main',
-    },
-
-    // --- Десерти ---
-    {
-      id: 'sub-signature-desserts',
-      slug: 'signature-desserts',
-      name: 'Авторски Десерти',
-      description: 'Слатки задоволства од слаткарот',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'dessert',
-    },
-
-    // --- Вина ---
-    {
-      id: 'sub-red-wines',
-      slug: 'red-wines',
-      name: 'Црвени Вина',
-      description: 'Премиум црвени вина и резерви',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'wine',
-    },
-    {
-      id: 'sub-white-wines',
-      slug: 'white-wines',
-      name: 'Бели Вина',
-      description: 'Освежителни и елегантни бели вина',
-      displayOrder: 2,
-      isPublished: true,
-      categoryId: 'wine',
-    },
-    {
-      id: 'sub-sparkling-wines',
-      slug: 'sparkling-wines',
-      name: 'Шампањ & Пенливи Вина',
-      description: 'Француски шампањ и пенливи етикети',
-      displayOrder: 3,
-      isPublished: true,
-      categoryId: 'wine',
-    },
-
-    // --- Салати ---
-    {
-      id: 'sub-fresh-salads',
-      slug: 'fresh-salads',
-      name: 'Свежи Органски Салати',
-      description: 'Сезонски органски салати',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'salads',
-    },
-
-    // --- Супи ---
-    {
-      id: 'sub-creamy-soups',
-      slug: 'creamy-soups',
-      name: 'Крем Супи',
-      description: 'Богати кремасти супи',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'soups',
-    },
-
-    // --- Коктели ---
-    {
-      id: 'sub-craft-cocktails',
-      slug: 'craft-cocktails',
-      name: 'Занаетчиски Коктели',
-      description: 'Миксолошки авторски пијалаци',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'cocktails',
-    },
-
-    // --- Безалкохолни Пијалоци (Ново) ---
-    {
-      id: 'sub-soft-drinks',
-      slug: 'soft-drinks',
-      name: 'Освежителни Напитоци',
-      description: 'Свежо цедени сокови и природни лимонади',
-      displayOrder: 1,
-      isPublished: true,
-      categoryId: 'drinks',
-    },
-    {
-      id: 'sub-coffee-tea',
-      slug: 'coffee-tea',
-      name: 'Кафе & Топли Пијалоци',
-      description: 'Премиум Arabica кафе и органски чаеви',
-      displayOrder: 2,
-      isPublished: true,
-      categoryId: 'drinks',
-    },
-    {
-      id: 'sub-water',
-      slug: 'water',
-      name: 'Вода & Минерална Вода',
-      description: 'Изворска и газирана природна вода',
-      displayOrder: 3,
-      isPublished: true,
-      categoryId: 'drinks',
-    },
-  ]
-
-  for (const subcategory of subcategories) {
-    await prisma.subcategory.upsert({
-      where: { id: subcategory.id },
-      update: subcategory,
-      create: subcategory,
-    })
-  }
-
-  console.log('✅ Подкатегориите се успешно внесени/ажурирани.')
-
-  // ==========================================
-  // 3. МЕНИ АРТИКЛИ (19 Артикли)
-  // ==========================================
-  const menuItems = [
-    // --- APPETIZERS ---
-    {
-      id: 'app-carpaccio',
-      name: 'Карпачо од Лосос',
-      description:
-        'Тенко исечен див лосос, прелиен со инфузија од цитруси, капари, див копар и никулци од ротквица.',
-      price: 980,
-      image:
-        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'appetizer',
-      subcategoryId: 'sub-cold-appetizers',
-      ingredients: [
-        'Див лосос',
-        'Лимонов сок',
-        'Капари',
-        'Див копар',
-        'Маслиново масло',
-        'Никулци од ротквица',
-      ],
-      allergens: ['Риба'],
-      dietary: ['Keto', 'Gluten-Free', 'High-Protein'],
-      origin: 'Осло, Норвешка',
-      preparation:
-        'Ладно мариниран 12 часа во цитрусен дресинг со цеден бергамот.',
-      pairing: 'Château de l’Hermitage (2020)',
-    },
-    {
-      id: 'app-risotto',
-      name: 'Тартуф Рижото',
-      description:
-        'Кремасто Arborio ориз со свежи црни тартуфи, 24-месечен Пармезан и маслиново масло со бели тартуфи.',
-      price: 1200,
-      image:
-        'https://images.unsplash.com/photo-1546549032-9571cd6b27df?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: false,
-      isSpecial: true,
-      categoryId: 'appetizer',
-      subcategoryId: 'sub-hot-appetizers',
-      ingredients: [
-        'Arborio ориз',
-        'Свеж црн тартуф',
-        'Пармезан (Parmigiano Reggiano)',
-        'Путер од Алпите',
-        'Бело вино',
-      ],
-      allergens: ['Лактоза'],
-      dietary: ['Vegetarian', 'Gluten-Free'],
-      origin: 'Пиемонт, Италија',
-      preparation:
-        'Бавно готвено во зеленчуков бујон и дотерано со пармезан одлежан 24 месеци.',
-      pairing: 'Barolo DOCG (2018)',
-    },
-    {
-      id: 'app-burrata',
-      name: 'Бурата со Печени Смокви',
-      description:
-        'Свежа италијанска Бурата со карамелизирани смокви, тостирани пињоли и редукција од балсамико отлежано 12 години.',
-      price: 890,
-      image:
-        'https://images.unsplash.com/photo-1592417817098-8f3d6ef23a85?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'appetizer',
-      subcategoryId: 'sub-cold-appetizers',
-      ingredients: [
-        'Свежа Бурата',
-        'Диви смокви',
-        'Пињоли',
-        'Балсамико од Модена',
-        'Босилек',
-      ],
-      allergens: ['Лактоза', 'Јаткасти плодови'],
-      dietary: ['Vegetarian', 'Gluten-Free'],
-      origin: 'Пулија, Италија',
-      preparation: 'Смокви карамелизирани на топол мед и свеж босилек.',
-      pairing: 'Château de l’Hermitage',
-    },
-
-    // --- MAIN COURSES ---
-    {
-      id: 'main-duck',
-      name: 'Паткини Гради со Портокал',
-      description:
-        'Печени паткини гради со крцкава кожа, придружени со пире од сладок компир и редукција од портокал и ѕвездест анис.',
-      price: 1650,
-      image:
-        'https://images.unsplash.com/photo-1518492104633-130d0cc84637?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: false,
-      isSpecial: true,
-      categoryId: 'main',
-      subcategoryId: 'sub-meat-specialties',
-      ingredients: [
-        'Паткини гради',
-        'Сладок компир (Batat)',
-        'Свеж сок од портокал',
-        'Ѕвездест анис',
-        'Мајчина душица',
-      ],
-      allergens: [],
-      dietary: ['Gluten-Free', 'High-Protein'],
-      origin: 'Бордо, Франција',
-      preparation:
-        'Sous-vide печење 4 часа на 58°C и завршница на француски туч.',
-      pairing: 'Pinot Noir Reserve',
-    },
-    {
-      id: 'main-wagyu',
-      name: 'Wagyu Стек (А5)',
-      description:
-        'Премиум А5 јапонски Wagyu стек, подготвен на традиционален начин со чадена морска сол, путер од билки и аспарагус на скара.',
-      price: 3800,
-      image:
-        'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'main',
-      subcategoryId: 'sub-meat-specialties',
-      ingredients: [
-        'А5 Wagyu говедско',
-        'Чадена морска сол (Maldon)',
-        'Француски путер со билки',
-        'Зелен аспарагус',
-      ],
-      allergens: ['Лактоза'],
-      dietary: ['Keto', 'Gluten-Free', 'High-Protein'],
-      origin: 'Мијазаки, Јапонија',
-      preparation:
-        'Кратоко печење на ќумур од јапонски даб (Binchotan) со контрола на температура.',
-      pairing: 'Аурелијан Резерва (2018)',
-    },
-    {
-      id: 'main-seabass',
-      name: 'Див Бранцин во Сол',
-      description:
-        'Филе од див бранцин печен во оклоп од морска сол, сервиран со сотиран спанаќ, чери домати и путер од капари.',
-      price: 2100,
-      image:
-        'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: false,
-      categoryId: 'main',
-      subcategoryId: 'sub-fish-seafood',
-      ingredients: [
-        'Див Бранцин',
-        'Морска сол од Пиран',
-        'Млад спанаќ',
-        'Чери домати',
-        'Капари',
-      ],
-      allergens: ['Риба', 'Лактоза'],
-      dietary: ['Keto', 'Gluten-Free'],
-      origin: 'Јадранско Море, Хрватска',
-      preparation:
-        'Цела риба печена во оклоп од морска сол и белки за да ја задржи сочноста.',
-      pairing: 'Chablis Premier Cru',
-    },
-
-    // --- DESSERTS ---
-    {
-      id: 'des-baklava',
-      name: 'Деконструирана Баклава',
-      description:
-        'Крцкави кори со шеќерен сируп, фин крем од ф’стаци од Сицилија и домашна топка сладолед од мед и смокви.',
-      price: 680,
-      image:
-        'https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'dessert',
-      subcategoryId: 'sub-signature-desserts',
-      ingredients: [
-        'Рачно печени кори',
-        'Бронте ф’стаци',
-        'Мед од планина Бистра',
-        'Диви смокви',
-        'Млечен крем',
-      ],
-      allergens: ['Глутен', 'Јаткасти плодови', 'Лактоза'],
-      dietary: ['Vegetarian'],
-      origin: 'Бронте (Сицилија) & Македонија',
-      preparation:
-        'Специјално деконструирани кори печени на ниска температура со путер од козјо млеко.',
-      pairing: 'Порто Винтаж (2015)',
-    },
-    {
-      id: 'des-gold',
-      name: 'Златен Десерт',
-      description:
-        'Сфера од темно белгиско чоколадо, полнета со богат мус од лешник и украсена со 24-каратно јадливо злато.',
-      price: 950,
-      image:
-        'https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'dessert',
-      subcategoryId: 'sub-signature-desserts',
-      ingredients: [
-        '70% Темно белгиско чоколадо',
-        'Лешник од Пјемонт',
-        '24K Јадливо злато во ливчиња',
-        'Ванила од Мадагаскар',
-      ],
-      allergens: ['Лактоза', 'Јаткасти плодови', 'Соја'],
-      dietary: ['Vegetarian'],
-      origin: 'Бруге, Белгија',
-      preparation:
-        'Темперирана сфера од чоколадо со топла редукција од карамела и зачини.',
-      pairing: 'Espresso Martini со темна ванила',
-    },
-    {
-      id: 'des-souffle',
-      name: 'Чоколадно Суфле (Lava)',
-      description:
-        'Топло чоколадно суфле со течна средина од 72% какао, придружено со топка сладолед од артизанална ванила.',
-      price: 580,
-      image:
-        'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'dessert',
-      subcategoryId: 'sub-signature-desserts',
-      ingredients: [
-        '72% Еквадорско какао',
-        'Јајца од слободен одгледот',
-        'Француски путер',
-        'Ванила Бурбон',
-      ],
-      allergens: ['Глутен', 'Јајца', 'Лактоза'],
-      dietary: ['Vegetarian'],
-      origin: 'Еквадор & Франција',
-      preparation:
-        'Печено по нарачка точно 11 минути за совршена течна средина.',
-      pairing: 'Порто Резерва',
-    },
-
-    // --- WINES ---
-    {
-      id: 'wine-aurelian',
-      name: 'Аурелијан Резерва',
-      description:
-        'Суво црвено вино, сортен Cabernet Sauvignon 2018. Комплексно тело со ноти на шумско овошје, темен чоколадо и француски даб.',
-      price: 4500,
-      image:
-        'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: false,
-      categoryId: 'wine',
-      subcategoryId: 'sub-red-wines',
-      ingredients: ['Грозје Каберне Совињон 100%'],
-      allergens: ['Сулфити'],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Тиквешки Регион, Македонија',
-      preparation:
-        'Одлежано 24 месеци во нови француски дабови буриња (Barrique).',
-      pairing: 'Премиум Wagyu Стек & Зреени сирења',
-    },
-    {
-      id: 'wine-hermitage',
-      name: 'Château de l’Hermitage',
-      description:
-        'Француско суво бело вино со овошни ноти на праска, цитрусен цвет и блага минералност во финишот.',
-      price: 790,
-      image:
-        'https://res.cloudinary.com/labellamk/image/upload/v1785338087/menu-items/kv832guv2ulrdwaz1hfe.webp',
-      imageId: 'menu-items/kv832guv2ulrdwaz1hfe',
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: false,
-      isSpecial: true,
-      categoryId: 'wine',
-      subcategoryId: 'sub-white-wines',
-      ingredients: ['Грозје Совињон Блан 100%'],
-      allergens: ['Сулфити'],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Долина на Лоара, Франција',
-      preparation:
-        'Ферментација во инокс резервоари со контролирана температура.',
-      pairing: 'Карпачо од Лосос & Свежи остриги',
-    },
-    {
-      id: 'wine-dom-perignon',
-      name: 'Dom Pérignon Vintage',
-      description:
-        'Премиум француски шампањ со исклучителна елеганција, ноти на печен бриош, суво овошје и фина перлажа.',
-      price: 18500,
-      image:
-        'https://images.unsplash.com/photo-1569919659476-f0852f6834b7?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'wine',
-      subcategoryId: 'sub-sparkling-wines',
-      ingredients: ['Chardonnay', 'Pinot Noir'],
-      allergens: ['Сулфити'],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Шампања, Франција',
-      preparation:
-        'Одлежано во визбите минимум 8 години пред пуштање во промет.',
-      pairing: 'Карпачо од Лосос & Свеж Кавијар',
-    },
-
-    // --- SALADS ---
-    {
-      id: 'salad-burrata-beet',
-      name: 'Бурата со Печена Цвекло',
-      description:
-        'Карпачо од црвена и жолта цвекло со свежи лисја спанаќ, тостирани бадеми и дресинг од див мед.',
-      price: 720,
-      image:
-        'https://images.unsplash.com/photo-1540420773420-3366772f4999?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'salads',
-      subcategoryId: 'sub-fresh-salads',
-      ingredients: [
-        'Органска цвекло',
-        'Млад спанаќ',
-        'Тостиран бадем',
-        'Див мед',
-        'Козјо сирење',
-      ],
-      allergens: ['Лактоза', 'Јаткасти плодови'],
-      dietary: ['Vegetarian', 'Gluten-Free'],
-      origin: 'Пелагонија, Македонија',
-      preparation:
-        'Цвеклото се пече во фолија со морска сол и мајчина душица 2 часа.',
-      pairing: 'Château de l’Hermitage',
-    },
-
-    // --- SOUPS ---
-    {
-      id: 'soup-lobster-bisque',
-      name: 'Крем Супа од Јастог',
-      description:
-        'Кадифена кремаста супа од јастог со коњак, француска павлака и крцкав кроасан со билки.',
-      price: 850,
-      image:
-        'https://images.unsplash.com/photo-1547592166-23ac45744acd?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'soups',
-      subcategoryId: 'sub-creamy-soups',
-      ingredients: [
-        'Свеж јастог',
-        'Коњак VSOP',
-        'Француска павлака',
-        'Целер',
-        'Шафран',
-      ],
-      allergens: ['Морски плодови', 'Лактоза', 'Глутен'],
-      dietary: ['High-Protein'],
-      origin: 'Бретања, Франција',
-      preparation:
-        'Бавно редуциран бујон од оклоп на јастог со коњак и свежи зачини.',
-      pairing: 'Chablis Premier Cru',
-    },
-
-    // --- COCKTAILS ---
-    {
-      id: 'cocktail-smoked-old-fashioned',
-      name: 'Smoked Bourbon Old Fashioned',
-      description:
-        'Премиум Бурбон виски, сируп од јавор, ангостура битер и чаден дабов чип во стаклено ѕвоно.',
-      price: 650,
-      image:
-        'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: true,
-      isSpecial: true,
-      categoryId: 'cocktails',
-      subcategoryId: 'sub-craft-cocktails',
-      ingredients: [
-        'Woodford Reserve Bourbon',
-        'Органски јаворов сируп',
-        'Angostura Bitters',
-        'Портокалова кора',
-      ],
-      allergens: [],
-      dietary: ['Vegan'],
-      origin: 'Кентаки, САД',
-      preparation:
-        'Инфузиран со чад од американски бела даб непосредно пред сервирање.',
-      pairing: 'Златен Десерт',
-    },
-    {
-      id: 'cocktail-truffle-negroni',
-      name: 'Тартуф Негрони',
-      description:
-        'Занаетчиски џин инфузиран со бел тартуф, Campari и Sweet Vermouth отлежан во дабово буре.',
-      price: 780,
-      image:
-        'https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: false,
-      categoryId: 'cocktails',
-      subcategoryId: 'sub-craft-cocktails',
-      ingredients: [
-        'Dry Gin со бел тартуф',
-        'Campari',
-        'Carpano Antica Formula Vermouth',
-      ],
-      allergens: [],
-      dietary: ['Vegan'],
-      origin: 'Фиренца, Италија',
-      preparation: 'Fat-washed џин со масло од бели тартуфи 48 часа.',
-      pairing: 'Тартуф Рижото',
-    },
-
-    // --- DRINKS (Нови безалкохолни пијалоци) ---
-    {
-      id: 'drink-fresh-citrus',
-      name: 'Занаетчиски Цитрус Микс',
-      description:
-        'Свежо цеден сок од црвен грејпфрут, сицилијански портокал, лимета и свеж ѓумбир.',
-      price: 320,
-      image:
-        'https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 1,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: true,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'drinks',
-      subcategoryId: 'sub-soft-drinks',
-      ingredients: [
-        'Црвен грејпфрут',
-        'Сицилијански портокал',
-        'Лимета',
-        'Ѓумбир',
-      ],
-      allergens: [],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Сицилија, Италија',
-      preparation: 'Свежно цедено непосредно пред сервирање.',
-      pairing: 'Карпачо од Лосос',
-    },
-    {
-      id: 'drink-specialty-espresso',
-      name: 'Single Origin Espresso',
-      description:
-        '100% Arabica кафе од регионот Yirgacheffe во Етиопија со ноти на јасмин и бергамот.',
-      price: 180,
-      image:
-        'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 2,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: true,
-      isSpecial: false,
-      categoryId: 'drinks',
-      subcategoryId: 'sub-coffee-tea',
-      ingredients: ['100% Arabica кафе зрна'],
-      allergens: [],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Јиргачеф, Етиопија',
-      preparation: 'Екстракција од 28 секунди на 93°C.',
-      pairing: 'Чоколадно Суфле (Lava)',
-    },
-    {
-      id: 'drink-evian-water',
-      name: 'Evian Минерална Вода (0.75l)',
-      description:
-        'Природна минерална вода од француските Алпи во стаклено пакување.',
-      price: 290,
-      image:
-        'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?q=80&w=800&auto=format&fit=crop',
-      imageId: null,
-      displayOrder: 3,
-      isPublished: true,
-      isAvailable: true,
-      isOrderable: false,
-      isPopular: false,
-      isExclusive: false,
-      isSpecial: false,
-      categoryId: 'drinks',
-      subcategoryId: 'sub-water',
-      ingredients: ['Природна изворска вода'],
-      allergens: [],
-      dietary: ['Vegan', 'Gluten-Free'],
-      origin: 'Евијан-ле-Бен, Франција',
-      preparation: 'Сервирана добро ладена во кристален букaл.',
-      pairing: 'Сите главно јадења',
-    },
-  ]
-
-  for (const item of menuItems) {
-    await prisma.menuItem.upsert({
-      where: { id: item.id },
-      update: item,
-      create: item,
-    })
-  }
-
-  console.log('✅ Сите 19 мени артикли се успешно додадени/ажурирани!')
+  console.log('English seed completed successfully!')
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error('❌ Грешка при извршување на seed:', e)
-    await prisma.$disconnect()
+  .catch((e) => {
+    console.error(e)
     process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
   })

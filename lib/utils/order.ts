@@ -41,10 +41,6 @@ export function getStatusStepIndex(status: OrderStatus): number {
   }
 }
 
-export function formatCurrency(amount: number): string {
-  return `${amount.toLocaleString('en-US')} $`
-}
-
 export function formatPaymentMethod(method: PaymentMethod): string {
   switch (method) {
     case PaymentMethod.CARD:
@@ -57,7 +53,5 @@ export function formatPaymentMethod(method: PaymentMethod): string {
 }
 
 export function formatDeliveryMethod(method: DeliveryMethod): string {
-  return method === DeliveryMethod.PICKUP
-    ? 'Personal training'
-    : 'Delivery to address'
+  return method === DeliveryMethod.PICKUP ? 'Pickup' : 'Delivery to address'
 }

@@ -17,6 +17,7 @@ import { BackofficeHeader } from '@/components/backoffice/BackofficeHeader'
 import { requireRouteAccess } from '@/lib/authorization'
 import { OrderStatus, Role } from '@/lib/generated/prisma'
 import { getAdminDashboard } from '@/lib/db/backoffice/dashboard.services'
+import { Price } from '@/components/shared/Price'
 
 // Translation and colors for order statuses
 const orderStatusMap: Record<
@@ -61,7 +62,9 @@ export default async function AdminDashboardPage() {
   const kpiMetrics = [
     {
       label: 'Daily Traffic',
-      value: `${dashboard.todayRevenue.toLocaleString('en-US')} day.`,
+      value: (
+        <Price amount={dashboard.todayRevenue} className='font-semibold' />
+      ),
       Icon: Banknote,
       href: '/admin/orders',
       highlight: true,
@@ -229,10 +232,7 @@ export default async function AdminDashboardPage() {
                       </div>
 
                       <div className='flex items-center justify-between sm:flex-col sm:items-end'>
-                        <span className='font-display text-base font-bold text-on-surface'>
-                          {' '}
-                          {order.total.toLocaleString('en-US')} day.
-                        </span>
+                        <Price amount={order.total} className='font-semibold' />
                         <span className='flex items-center gap-1 text-[11px] text-outline'>
                           <Clock className='size-3' />
                           {new Date(order.createdAt).toLocaleTimeString(

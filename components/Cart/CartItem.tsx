@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { CartItem as CartItemType } from '@/types/default'
 import { useCartStore } from '@/store/useCartStore'
 import { Minus, Plus, X } from 'lucide-react'
+import { Price } from '../shared/Price'
 
 interface CartItemProps {
   item: CartItemType
@@ -34,7 +35,9 @@ export function CartItem({ item }: CartItemProps) {
           </h3>
         </div>
 
-        <div className='flex items-center gap-8'>          {/* Quantity control */}
+        <div className='flex items-center gap-8'>
+          {' '}
+          {/* Quantity control */}
           <div className='flex items-center border border-outline-variant/30 px-3 py-1 gap-4'>
             <button
               className='text-muted-foreground hover:text-primary transition-colors p-1'
@@ -54,14 +57,12 @@ export function CartItem({ item }: CartItemProps) {
               <Plus size={16} />
             </button>
           </div>
-
           <div className='text-right min-w-20'>
-            <p className='font-mono text-xl font-semibold text-foreground'>
-              {(menuItem.price * quantity).toLocaleString()}
-            </p>
-            <p className='text-[10px] text-outline uppercase font-semibold'>
-              $
-            </p>
+            <Price
+              amount={menuItem.price * quantity}
+              className='text-xl font-semibold text-foreground'
+              symbolClassName='text-muted-foreground'
+            />
           </div>
         </div>
       </div>
